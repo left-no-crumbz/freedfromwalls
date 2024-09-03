@@ -20,7 +20,7 @@ class _JournalScreenState extends State<JournalScreen> {
       theme: ThemeData(
         fontFamily: "Inter",
       ),
-      home: Scaffold(
+      home: const Scaffold(
         appBar: CustomAppBar(),
       ),
     );

@@ -1,6 +1,6 @@
 # freedfromwalls
 
-A new Flutter project.
+FreedFromWalls is a journal/mood tracker app.
 
 ## Getting Started
 
