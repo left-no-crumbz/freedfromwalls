@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './assets/widgets/custom_appbar.dart';
+import './assets/widgets/screen_title.dart';
 
 class JournalScreen extends StatefulWidget {
   const JournalScreen({super.key});
@@ -22,6 +23,18 @@ class _JournalScreenState extends State<JournalScreen> {
       ),
       home: const Scaffold(
         appBar: CustomAppBar(),
+        body: Center(
+          child: Column(
+            children: <Widget>[
+              ScreenTitle(
+                title: "Journal",
+              ),
+              SizedBox(
+                height: 16,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
