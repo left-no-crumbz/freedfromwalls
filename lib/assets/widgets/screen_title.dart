@@ -11,9 +11,9 @@ class ScreenTitle extends StatelessWidget {
       alignment: Alignment.center,
       margin: const EdgeInsets.only(
         top: 16,
+        bottom: 16, // Size system should be multiples of 8 if possible
       ),
-      // 90% of the parent container they say?
-      width: MediaQuery.of(context).size.width * .9,
+      width: MediaQuery.of(context).size.width * .9, // 90% width
       height: 30,
       decoration: BoxDecoration(
         color: backgroundColor,
