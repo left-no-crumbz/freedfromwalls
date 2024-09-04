@@ -21,13 +21,13 @@ class _BreatherPageState extends State<BreatherPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: "Inter",
-        scaffoldBackgroundColor: scaffoldBackgroundColor,
-      ),
-      home: Scaffold(
-        body: Center(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          fontFamily: "Inter",
+          scaffoldBackgroundColor: scaffoldBackgroundColor,
+        ),
+        home: Scaffold(
+            body: Center(
           child: Column(
             children: <Widget>[
               const ScreenTitle(
@@ -35,7 +35,6 @@ class _BreatherPageState extends State<BreatherPage> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width * .9, // 90% width
-                height: MediaQuery.of(context).size.width * .9,
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5),
@@ -75,39 +74,373 @@ class _BreatherPageState extends State<BreatherPage> {
                       height: 2,
                       color: dividerColor,
                     ),
-                    const Column(
-                      children: [
-                        Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Text(
-                                "Highlight:",
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.bold),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 16, bottom: 8),
+                                child: Text(
+                                  "Highlight:",
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                ),
                               ),
-                            ),
-                            Expanded(
-                              child: SizedBox(),
-                            ),
-                          ],
-                        ),
-                        UnorderedList(texts: [
-                          "Sample 1",
-                          "Sample 2",
-                          "Sample 3",
-                          "Sample 4",
-                          "Sample 5",
-                        ])
-                      ],
+                            ],
+                          ),
+                          UnorderedList(texts: [
+                            "Sample 1",
+                            "Sample 2",
+                            "Sample 3",
+                          ]),
+                        ],
+                      ),
+                    ),
+                    const Divider(
+                      height: 2,
+                      color: dividerColor,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.only(left: 16, bottom: 8),
+                                child: Text(
+                                  "Notes:",
+                                  style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+                          UnorderedList(texts: [
+                            "Sample 1",
+                            "Sample 2",
+                            "Sample 3",
+                          ]),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
+              const SizedBox(height: 16),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  width: MediaQuery.of(context).size.width * .9, // 90% width
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: dividerColor)),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 30,
+                        alignment: Alignment.centerLeft,
+                        padding: const EdgeInsets.only(left: 16, right: 4),
+                        child: const Text("How do you feel right now?",
+                            style: TextStyle(fontSize: 12)),
+                      ),
+                      const Divider(
+                        height: 2,
+                        color: dividerColor,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            top: 16, left: 8, right: 8, bottom: 8),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                          "lib/assets/images/emotions-happy.png",
+                                          fit: BoxFit.cover),
+                                      const Text(
+                                        "YAY",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const Text(
+                                        "(happy)",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                        child: Radio(
+                                          value: 10,
+                                          groupValue: Icons.currency_yen_sharp,
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                          "lib/assets/images/emotions-sad.png",
+                                          fit: BoxFit.cover),
+                                      const Text(
+                                        "HUHU",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const Text(
+                                        "(sad)",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                        child: Radio(
+                                          value: 10,
+                                          groupValue: Icons.currency_yen_sharp,
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                          "lib/assets/images/emotions-angry.png",
+                                          fit: BoxFit.cover),
+                                      const Text(
+                                        "GRAH",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const Text(
+                                        "(angry)",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                        child: Radio(
+                                          value: 10,
+                                          groupValue: Icons.currency_yen_sharp,
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                          "lib/assets/images/emotions-neutral.png",
+                                          fit: BoxFit.cover),
+                                      const Text(
+                                        "MEH",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const Text(
+                                        "(neutral)",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                        child: Radio(
+                                          value: 10,
+                                          groupValue: Icons.currency_yen_sharp,
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                          "lib/assets/images/emotions-love.png",
+                                          fit: BoxFit.cover),
+                                      const Text(
+                                        "YIE",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const Text(
+                                        "(in love)",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                        child: Radio(
+                                          value: 10,
+                                          groupValue: Icons.currency_yen_sharp,
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            Row(
+                              // 2nd Row
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                          "lib/assets/images/emotions-tired.png",
+                                          fit: BoxFit.cover),
+                                      const Text(
+                                        "SIGH",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const Text(
+                                        "(tired)",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                        child: Radio(
+                                          value: 10,
+                                          groupValue: Icons.currency_yen_sharp,
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                          "lib/assets/images/emotions-energetic.png",
+                                          fit: BoxFit.cover),
+                                      const Text(
+                                        "WOAH",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const Text(
+                                        "(energetic)",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                        child: Radio(
+                                          value: 10,
+                                          groupValue: Icons.currency_yen_sharp,
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                          "lib/assets/images/emotions-curious.png",
+                                          fit: BoxFit.cover),
+                                      const Text(
+                                        "UHM",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const Text(
+                                        "(curious)",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                        child: Radio(
+                                          value: 10,
+                                          groupValue: Icons.currency_yen_sharp,
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                          "lib/assets/images/emotions-embarrassed.png",
+                                          fit: BoxFit.cover),
+                                      const Text(
+                                        "WOMP",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const Text(
+                                        "(embarrassed)",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                        child: Radio(
+                                          value: 10,
+                                          groupValue: Icons.currency_yen_sharp,
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Column(
+                                    children: [
+                                      Image.asset(
+                                          "lib/assets/images/emotions-scared.png",
+                                          fit: BoxFit.cover),
+                                      const Text(
+                                        "AAA",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const Text(
+                                        "(scared)",
+                                        style: TextStyle(fontSize: 8),
+                                      ),
+                                      const SizedBox(
+                                        height: 30,
+                                        child: Radio(
+                                          value: 10,
+                                          groupValue: Icons.currency_yen_sharp,
+                                          onChanged: null,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
             ],
           ),
-        ),
-      ),
-    );
+        )));
   }
 }
