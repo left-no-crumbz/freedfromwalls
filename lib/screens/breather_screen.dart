@@ -73,6 +73,24 @@ class _BreatherPageState extends State<BreatherPage> {
                       height: 2,
                       color: dividerColor,
                     ),
+                    const Column(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Text(
+                                "Highlight:",
+                                style: TextStyle(fontSize: 12),
+                              ),
+                            ),
+                            Expanded(
+                              child: SizedBox(),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
