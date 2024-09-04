@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../assets/widgets/screen_title.dart';
+import '../assets/widgets/unordered_list.dart';
 
 class BreatherPage extends StatefulWidget {
   const BreatherPage({super.key});
@@ -40,6 +41,7 @@ class _BreatherPageState extends State<BreatherPage> {
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(color: dividerColor)),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // A container was needed to reduce the margin
                     // of the IconButton (i h8 flutter)
@@ -81,7 +83,8 @@ class _BreatherPageState extends State<BreatherPage> {
                               padding: EdgeInsets.all(16),
                               child: Text(
                                 "Highlight:",
-                                style: TextStyle(fontSize: 12),
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.bold),
                               ),
                             ),
                             Expanded(
@@ -89,6 +92,13 @@ class _BreatherPageState extends State<BreatherPage> {
                             ),
                           ],
                         ),
+                        UnorderedList(texts: [
+                          "Sample 1",
+                          "Sample 2",
+                          "Sample 3",
+                          "Sample 4",
+                          "Sample 5",
+                        ])
                       ],
                     ),
                   ],
