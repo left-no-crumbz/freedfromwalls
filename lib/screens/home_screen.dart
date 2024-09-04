@@ -40,8 +40,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
+
+    /// Width of the screen
     final height = MediaQuery.of(context).size.height;
+
+    /// Height of the screen
     final isSmallScreen = width < 450;
+
+    /// Checks if the screen is small
 
     return Material(
       color: const Color.fromRGBO(241, 243, 244, 1),
@@ -51,7 +57,7 @@ class _HomePageState extends State<HomePage> {
             children: <Widget>[
               Container(
                 width: width,
-                height: isSmallScreen ? height * 0.10 : height * 0.12,
+                height: isSmallScreen ? height * 0.15 : height * 0.17,
                 margin: const EdgeInsets.all(10.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
