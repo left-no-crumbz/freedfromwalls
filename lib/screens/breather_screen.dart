@@ -43,7 +43,7 @@ class _BreatherPageState extends State<BreatherPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     // A container was needed to reduce the margin
-                    // of the IconButton (i h8 flutter)
+                    // of the IconButton
                     Container(
                       height: 30,
                       alignment: Alignment.centerLeft,

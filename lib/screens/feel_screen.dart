@@ -9,6 +9,7 @@ class FeelPage extends StatefulWidget {
 }
 
 class _FeelPageState extends State<FeelPage> {
+  static const dividerColor = Color(0xFF423e3d);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +19,6 @@ class _FeelPageState extends State<FeelPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const ScreenTitle(title: "FULFEELMENT"),
-              // Motivational Text Container with vertical numbered circles
               Container(
                 padding: const EdgeInsets.all(16.0),
                 margin: const EdgeInsets.only(bottom: 16.0),
@@ -34,6 +34,7 @@ class _FeelPageState extends State<FeelPage> {
                       offset: const Offset(0, 3), // changes position of shadow
                     ),
                   ],
+                  border: Border.all(color: dividerColor),
                 ),
                 child: Column(
                   crossAxisAlignment:
