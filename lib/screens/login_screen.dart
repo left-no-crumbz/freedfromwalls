@@ -19,8 +19,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Colors.grey[100],
         body: ListView(
           children: [
-            Expanded(
-                child: Column(
+            Column(
               children: [
                 // Title Text
                 Container(
@@ -81,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ],
-            )),
+            ),
 
             // Login Button
             Container(

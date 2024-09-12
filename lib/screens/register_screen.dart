@@ -19,8 +19,7 @@ class _RegisterPageState extends State<RegisterPage> {
         backgroundColor: Colors.grey[100],
         body: ListView(
           children: [
-            Expanded(
-                child: Column(
+            Column(
               children: [
                 // Title Text
                 Container(
@@ -72,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ],
-            )),
+            ),
 
             // Login Button
             Container(

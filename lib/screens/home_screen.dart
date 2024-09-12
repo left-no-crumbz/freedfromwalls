@@ -178,8 +178,7 @@ class _HomePageState extends State<HomePage> {
             ),
 
             ///Button to Breather Page
-            Expanded(
-                child: Container(
+            Container(
               margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
               child: ElevatedButton(
                   onPressed: () {
@@ -206,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   )),
-            ))
+            )
           ],
         ),
       ),

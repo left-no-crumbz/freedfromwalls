@@ -239,13 +239,16 @@ class _ListPageState extends State<ListPage> {
 
     return Scaffold(
       backgroundColor: scaffoldBackgroundColor,
-      body: Column(
+      body: ListView(
         children: [
-          screenTitle(),
-          Expanded(
-            child: Padding(
+          Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: ListView(
+              child: screenTitle()),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: SizedBox(
+              height: 620,
+              child: Column(
                 children: [
                   buildSection(
                       dayTitle,
