@@ -124,6 +124,7 @@ class _BreatherPageState extends State<BreatherPage> {
                           UnorderedList(
                             controllers: _highlightControllers,
                             isEditing: _isEditing,
+                            textColor: Colors.black,
                           ),
                         ],
                       ),
@@ -152,6 +153,7 @@ class _BreatherPageState extends State<BreatherPage> {
                           UnorderedList(
                             controllers: _noteControllers,
                             isEditing: _isEditing,
+                            textColor: Colors.black,
                           ),
                         ],
                       ),
