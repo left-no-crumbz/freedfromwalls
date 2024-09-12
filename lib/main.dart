@@ -31,10 +31,10 @@ class AppState extends StatefulWidget {
   const AppState({super.key});
 
   @override
-  State<AppState> createState() => _AppStateStates();
+  State<AppState> createState() => AppStateStates();
 }
 
-class _AppStateStates extends State<AppState> {
+class AppStateStates extends State<AppState> {
   int _currentPageIndex = 0;
 
   void onBottomNavItemTap(int index) {

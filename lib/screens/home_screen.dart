@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
+import '../main.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -52,160 +54,160 @@ class _HomePageState extends State<HomePage> {
     return Material(
       color: const Color.fromRGBO(241, 243, 244, 1),
       child: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(left: 6, right: 6),
-          child: Column(
-            children: <Widget>[
-              Container(
-                width: width,
-                height: isSmallScreen ? height * 0.15 : height * 0.17,
-                margin: const EdgeInsets.all(10.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Home',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: isSmallScreen ? 16 : 20,
-                              ),
-                            ),
-                            Text(
-                              'Your Virtual Diary. Virtual Therapy. Virtual Company.',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: isSmallScreen ? 8 : 10,
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                setState(() {});
-                              },
-                              icon: const Icon(
-                                Icons.settings,
-                                color: Colors.black,
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                setState(() {});
-                              },
-                              icon: const Icon(
-                                Icons.edit,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    const Expanded(
-                      child: Text(''),
-                    ),
-                    Text(
-                      _currentDate,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: isSmallScreen ? 12 : 14,
-                      ),
-                    ),
-                    Text(
-                      _currentDay,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: isSmallScreen ? 12 : 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: width,
-                height: 360,
-                alignment: Alignment.center,
-                margin: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    width: 1.0,
-                    color: Colors.black,
-                  ),
-                  borderRadius: BorderRadius.circular(5),
-                ),
-                child: TableCalendar(
-                  focusedDay: today,
-                  firstDay: DateTime(2000, 1, 1),
-                  lastDay: DateTime(2050, 1, 1),
-                  headerStyle: const HeaderStyle(
-                    titleCentered: true,
-                    formatButtonVisible: false,
-                    headerMargin: EdgeInsets.only(bottom: 10),
-                  ),
-                  calendarStyle: CalendarStyle(
-                    selectedDecoration: const BoxDecoration(
-                      color: Colors.black,
-                      shape: BoxShape.circle,
-                    ),
-                    selectedTextStyle: const TextStyle(color: Colors.white),
-                    todayDecoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
-                      shape: BoxShape.circle,
-                    ),
-                    todayTextStyle: const TextStyle(color: Colors.white),
-                    weekendTextStyle: const TextStyle(color: Colors.red),
-                  ),
-                  availableGestures: AvailableGestures.all,
-                  selectedDayPredicate: (day) => isSameDay(day, today),
-                  onDaySelected: _onSelectedDay,
-                ),
-              ),
-              ListView(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
+        child: Column(
+          children: <Widget>[
+            ///Intro--something
+            Container(
+              width: width,
+              height: isSmallScreen ? height * 0.15 : height * 0.17,
+              margin: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  buildJournalEntryButton(
-                    context,
-                    Colors.yellow,
-                    'View your journal entry today!',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Home',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: isSmallScreen ? 16 : 20,
+                            ),
+                          ),
+                          Text(
+                            'Your Virtual Diary. Virtual Therapy. Virtual Company.',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: isSmallScreen ? 8 : 10,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          IconButton(
+                            onPressed: () {
+                              setState(() {});
+                            },
+                            icon: const Icon(
+                              Icons.settings,
+                              color: Colors.black,
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {});
+                            },
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
-                  buildJournalEntryButton(
-                    context,
-                    Colors.redAccent,
-                    'Yesterday...',
+                  const Expanded(
+                    child: Text(''),
                   ),
-                  buildJournalEntryButton(
-                    context,
-                    Colors.green,
-                    'One year ago...',
+                  Text(
+                    _currentDate,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: isSmallScreen ? 12 : 14,
+                    ),
                   ),
-                  buildJournalEntryButton(
-                    context,
-                    Colors.orange,
-                    'Selected Date: ${today.toString().split(" ")[0]}',
-                  ),
-                  buildJournalEntryButton(
-                    context,
-                    Colors.blue,
-                    'Yep.',
+                  Text(
+                    _currentDay,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: isSmallScreen ? 12 : 14,
+                    ),
                   ),
                 ],
-              )
-            ],
-          ),
+              ),
+            ),
+
+            ///Calendar
+            Container(
+              width: width,
+              height: 360,
+              alignment: Alignment.center,
+              margin: const EdgeInsets.all(10.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(
+                  width: 1.0,
+                  color: Colors.black,
+                ),
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: TableCalendar(
+                focusedDay: today,
+                firstDay: DateTime(2000, 1, 1),
+                lastDay: DateTime(2050, 1, 1),
+                headerStyle: const HeaderStyle(
+                  titleCentered: true,
+                  formatButtonVisible: false,
+                  headerMargin: EdgeInsets.only(bottom: 10),
+                ),
+                calendarStyle: CalendarStyle(
+                  selectedDecoration: const BoxDecoration(
+                    color: Colors.black,
+                    shape: BoxShape.circle,
+                  ),
+                  selectedTextStyle: const TextStyle(color: Colors.white),
+                  todayDecoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.3),
+                    shape: BoxShape.circle,
+                  ),
+                  todayTextStyle: const TextStyle(color: Colors.white),
+                  weekendTextStyle: const TextStyle(color: Colors.red),
+                ),
+                availableGestures: AvailableGestures.all,
+                selectedDayPredicate: (day) => isSameDay(day, today),
+                onDaySelected: _onSelectedDay,
+              ),
+            ),
+
+            ///Button to Breather Page
+            Expanded(
+                child: Container(
+              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              child: ElevatedButton(
+                  onPressed: () {
+                    context
+                        .findAncestorStateOfType<AppStateStates>()
+                        ?.onBottomNavItemTap(2);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      padding: EdgeInsets.all(20),
+                      backgroundColor: Color(0xff2d2d2d)),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset("lib/assets/images/emotions-happy.png",
+                            fit: BoxFit.cover),
+                        const Text(
+                          "View your journal entry today!",
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                        )
+                      ],
+                    ),
+                  )),
+            ))
+          ],
         ),
       ),
     );
