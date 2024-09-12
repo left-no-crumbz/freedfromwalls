@@ -56,7 +56,7 @@ class UnorderedListItem extends StatelessWidget {
                     style: TextStyle(fontSize: 12, color: textColor),
                     decoration: InputDecoration(
                       border: InputBorder.none,
-                      hintStyle: TextStyle(color: textColor),
+                      hintStyle: TextStyle(fontSize: 12, color: textColor),
                       hintText: "Enter text here",
                     ))
                 : Text(

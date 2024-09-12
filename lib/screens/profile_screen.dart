@@ -11,6 +11,17 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   static const dividerColor = Color(0xFF423e3d);
   static const scaffoldBackgroundColor = Color(0xFFF1F3F4);
+  bool _isEditing = false;
+
+  // ALL ABOUT NICKNAME
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController ageController = TextEditingController();
+  final TextEditingController bdayController = TextEditingController();
+  final TextEditingController nationalityController = TextEditingController();
+  final TextEditingController religionController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController contactNumberController = TextEditingController();
+  final TextEditingController emailAddressController = TextEditingController();
 
   final TextEditingController mottoController = TextEditingController();
   final TextEditingController foodController = TextEditingController();
@@ -40,7 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width * .9, // 90% width
-                  height: 760,
+                  height: 770,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5),
@@ -64,14 +75,15 @@ class _ProfilePageState extends State<ProfilePage> {
                               padding: EdgeInsets.zero,
                               onPressed: () {
                                 setState(() {
-                                  // TODO: Add functionality here
+                                  _isEditing = !_isEditing;
                                 });
                               },
                               constraints: const BoxConstraints.tightFor(
                                 width: 24,
                                 height: 24,
                               ),
-                              icon: const Icon(Icons.edit_note),
+                              icon: Icon(
+                                  _isEditing ? Icons.check : Icons.edit_note),
                             ),
                           ],
                         ),
@@ -99,7 +111,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ),
                                   const SizedBox(
                                       width: 24), // Increased spacing
-                                  const Expanded(
+                                  Expanded(
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -107,43 +119,87 @@ class _ProfilePageState extends State<ProfilePage> {
                                           MainAxisAlignment.start,
                                       children: [
                                         // TODO: Refactor into TextField
-                                        Text(
-                                          "SURNAME,",
-                                          style: TextStyle(
-                                            fontSize:
-                                                14, // Larger text for name
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Text(
-                                          "First Name Second Name Middle Name",
-                                          style: TextStyle(fontSize: 14),
+                                        EditableTextField(
+                                          controller: nameController,
+                                          maxLines: 3,
+                                          hintText:
+                                              "SURNAME, First Name Second Name Middle Name",
+                                          isEditing: _isEditing,
                                         ),
 
-                                        SizedBox(height: 8),
-                                        Text("Age"),
-                                        SizedBox(height: 8),
-                                        Text("Birthday"),
+                                        SizedBox(
+                                          height: 20,
+                                          child: EditableTextField(
+                                            controller: ageController,
+                                            hintText: "Age",
+                                            isEditing: _isEditing,
+                                          ),
+                                        ),
+
+                                        SizedBox(
+                                          height: 30,
+                                          child: EditableTextField(
+                                            controller: bdayController,
+                                            hintText: "Birthday",
+                                            isEditing: _isEditing,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 6),
-                              const Text("Nationality"),
+                              SizedBox(
+                                height: 20,
+                                child: EditableTextField(
+                                  controller: nationalityController,
+                                  hintText: "Nationality",
+                                  isEditing: _isEditing,
+                                ),
+                              ),
                               const SizedBox(height: 8),
-                              const Text("Religion"),
+                              SizedBox(
+                                height: 20,
+                                child: EditableTextField(
+                                  controller: religionController,
+                                  hintText: "Religion",
+                                  isEditing: _isEditing,
+                                ),
+                              ),
                               const SizedBox(height: 8), // Increased spacing
-                              const Text("Address"),
+                              SizedBox(
+                                height: 20,
+                                child: EditableTextField(
+                                  controller: addressController,
+                                  hintText: "Address",
+                                  isEditing: _isEditing,
+                                ),
+                              ),
                               const SizedBox(height: 8), // Increased spacing
-                              const Text("Contact Number"),
+                              SizedBox(
+                                height: 20,
+                                child: EditableTextField(
+                                  controller: contactNumberController,
+                                  hintText: "Contact Number",
+                                  isEditing: _isEditing,
+                                ),
+                              ),
                               const SizedBox(height: 8), // Increased spacing
-                              const Text("Email Address"),
+                              SizedBox(
+                                height: 20,
+                                child: EditableTextField(
+                                  controller: emailAddressController,
+                                  hintText: "Email Address",
+                                  isEditing: _isEditing,
+                                ),
+                              ),
                               const SizedBox(height: 24), // Increased spacing
                               Container(
                                 width: MediaQuery.of(context).size.width *
                                     .8, // 80% width
-                                height: MediaQuery.of(context).size.height * .5,
+                                height:
+                                    MediaQuery.of(context).size.height * .48,
                                 decoration: BoxDecoration(
                                   color: Colors.black12,
                                   borderRadius: BorderRadius.circular(5),
@@ -169,42 +225,31 @@ class _ProfilePageState extends State<ProfilePage> {
                                         height: 2,
                                         color: dividerColor,
                                       ),
-                                      const SizedBox(
-                                          height: 8), // Increased spacing
-                                      TextField(
+                                      const SizedBox(height: 8),
+
+                                      EditableTextField(
                                         controller: mottoController,
-                                        decoration: const InputDecoration(
-                                          labelText: 'Personal Motto',
-                                          labelStyle:
-                                              TextStyle(color: Colors.black38),
-                                          border: InputBorder.none,
-                                        ),
+                                        isEditing: _isEditing,
+                                        labelText: "Personal Motto",
                                       ),
+
                                       const SizedBox(
                                           height: 8), // Increased spacing
                                       Row(
                                         children: [
                                           Expanded(
-                                            child: TextField(
+                                            child: EditableTextField(
                                               controller: foodController,
-                                              decoration: const InputDecoration(
-                                                labelText: 'Favorite Food',
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black38),
-                                                border: InputBorder.none,
-                                              ),
+                                              isEditing: _isEditing,
+                                              labelText: "Favorite Food",
                                             ),
                                           ),
                                           const SizedBox(width: 16),
                                           Expanded(
-                                            child: TextField(
+                                            child: EditableTextField(
                                               controller: drinkController,
-                                              decoration: const InputDecoration(
-                                                labelText: 'Favorite Drink',
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black38),
-                                                border: InputBorder.none,
-                                              ),
+                                              isEditing: _isEditing,
+                                              labelText: "Favorite Drink",
                                             ),
                                           ),
                                         ],
@@ -214,26 +259,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                       Row(
                                         children: [
                                           Expanded(
-                                            child: TextField(
+                                            child: EditableTextField(
                                               controller: filmController,
-                                              decoration: const InputDecoration(
-                                                labelText: 'Favorite Film',
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black38),
-                                                border: InputBorder.none,
-                                              ),
+                                              isEditing: _isEditing,
+                                              labelText: "Favorite Film",
                                             ),
                                           ),
                                           const SizedBox(width: 16),
                                           Expanded(
-                                            child: TextField(
+                                            child: EditableTextField(
                                               controller: showController,
-                                              decoration: const InputDecoration(
-                                                labelText: 'Favorite Show',
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black38),
-                                                border: InputBorder.none,
-                                              ),
+                                              isEditing: _isEditing,
+                                              labelText: "Favorite Show",
                                             ),
                                           ),
                                         ],
@@ -243,26 +280,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                       Row(
                                         children: [
                                           Expanded(
-                                            child: TextField(
+                                            child: EditableTextField(
                                               controller: songController,
-                                              decoration: const InputDecoration(
-                                                labelText: 'Favorite Song',
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black38),
-                                                border: InputBorder.none,
-                                              ),
+                                              isEditing: _isEditing,
+                                              labelText: "Favorite Song",
                                             ),
                                           ),
                                           const SizedBox(width: 16),
                                           Expanded(
-                                            child: TextField(
+                                            child: EditableTextField(
                                               controller: bookController,
-                                              decoration: const InputDecoration(
-                                                labelText: 'Favorite Book',
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black38),
-                                                border: InputBorder.none,
-                                              ),
+                                              isEditing: _isEditing,
+                                              labelText: "Favorite Book",
                                             ),
                                           ),
                                         ],
@@ -272,28 +301,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                       Row(
                                         children: [
                                           Expanded(
-                                            child: TextField(
+                                            child: EditableTextField(
                                               controller: gameController,
-                                              decoration: const InputDecoration(
-                                                labelText: 'Favorite Game',
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black38),
-                                                border: InputBorder.none,
-                                              ),
+                                              isEditing: _isEditing,
+                                              labelText: "Favorite Game",
                                             ),
                                           ),
                                           const SizedBox(width: 16),
                                           Expanded(
-                                            child: TextField(
+                                            child: EditableTextField(
                                               controller: colorController,
-                                              style: const TextStyle(
-                                                  fontWeight: FontWeight.bold),
-                                              decoration: const InputDecoration(
-                                                labelText: 'Favorite Color',
-                                                labelStyle: TextStyle(
-                                                    color: Colors.black38),
-                                                border: InputBorder.none,
-                                              ),
+                                              isEditing: _isEditing,
+                                              labelText: "Favorite Color",
                                             ),
                                           ),
                                         ],
@@ -314,6 +333,50 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class EditableTextField extends StatelessWidget {
+  final TextEditingController controller;
+  final bool isEditing;
+  final String? hintText;
+  final String? labelText;
+  final int? maxLines;
+  final FontWeight? fontWeight;
+
+  const EditableTextField({
+    Key? key,
+    required this.controller,
+    required this.isEditing,
+    this.hintText,
+    this.labelText,
+    this.maxLines,
+    this.fontWeight,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      enabled: isEditing,
+      maxLines: maxLines ?? 1,
+      style: TextStyle(
+        fontSize: 14,
+        fontWeight: fontWeight ?? FontWeight.normal,
+        color: Colors.black,
+      ),
+      decoration: InputDecoration(
+        border: InputBorder.none,
+        hintText: hintText,
+        labelText: labelText,
+        hintStyle: TextStyle(
+          fontSize: 14,
+          fontWeight: fontWeight ?? FontWeight.normal,
+          color: Colors.black38,
+        ),
+        labelStyle: const TextStyle(color: Colors.black38),
       ),
     );
   }

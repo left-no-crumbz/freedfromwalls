@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     return Material(
       color: const Color.fromRGBO(241, 243, 244, 1),
       child: Center(
-        child: Column(
+        child: ListView(
           children: <Widget>[
             ///Intro--something
             Container(
