@@ -17,31 +17,45 @@ class _ListPageState extends State<ListPage> {
   static const containerPadding = EdgeInsets.all(1);
   static const containerMargin = EdgeInsets.only(bottom: 20);
 
-  bool _isEditing = false;
-  void _toggleEditMode() {
+  bool _isEditingDay = false;
+  bool _isEditingMonth = false;
+  bool _isEditingYear = false;
+
+  void _toggleEditMode(int sectionIndex) {
     setState(() {
-      _isEditing = !_isEditing;
+      if (sectionIndex == 0) {
+        _isEditingDay = !_isEditingDay;
+      } else if (sectionIndex == 1) {
+        _isEditingMonth = !_isEditingMonth;
+      } else {
+        _isEditingYear = !_isEditingYear;
+      }
+      // TODO: Save data to database when editing is done
     });
-    // TODO: Save data to database when editing is done
   }
 
   final List<TextEditingController> _endOfDayControllers = [];
   final List<TextEditingController> _endOfMonthControllers = [];
   final List<TextEditingController> _endOfYearControllers = [];
-
+  final List<TextEditingController> _endOfDayBlackListControllers = [];
+  final List<TextEditingController> _endOfMonthBlackListControllers = [];
+  final List<TextEditingController> _endOfYearBlackListControllers = [];
   @override
   void initState() {
     super.initState();
     for (var text in [
-      "Sample 1",
-      "Sample 2",
-      "Sample 3",
-      "Sample 4",
-      "Sample 5"
+      "Enter text here",
+      "Enter text here",
+      "Enter text here",
+      "Enter text here",
+      "Enter text here",
     ]) {
       _endOfDayControllers.add(TextEditingController(text: text));
       _endOfMonthControllers.add(TextEditingController(text: text));
       _endOfYearControllers.add(TextEditingController(text: text));
+      _endOfDayBlackListControllers.add(TextEditingController(text: text));
+      _endOfMonthBlackListControllers.add(TextEditingController(text: text));
+      _endOfYearBlackListControllers.add(TextEditingController(text: text));
     }
   }
 
@@ -130,8 +144,14 @@ class _ListPageState extends State<ListPage> {
     );
   }
 
-  Widget buildSection(String title, int itemCount, bool isBucketList,
-      List<TextEditingController> controller) {
+  Widget buildSection(
+      String title,
+      int itemCount,
+      bool isBucketList,
+      List<TextEditingController> bucketListController,
+      List<TextEditingController> blackListController,
+      bool isEditing,
+      int editIndex) {
     final backgroundColor =
         isBucketList ? Colors.white : const Color(0xff2d2d2d);
     final textColor = isBucketList ? Colors.black : Colors.white;
@@ -165,10 +185,10 @@ class _ListPageState extends State<ListPage> {
                   IconButton(
                     iconSize: 20,
                     padding: EdgeInsets.zero,
-                    onPressed: _toggleEditMode,
+                    onPressed: () => _toggleEditMode(editIndex),
                     constraints:
                         const BoxConstraints.tightFor(width: 20, height: 20),
-                    icon: _isEditing
+                    icon: isEditing
                         ? Icon(
                             Icons.check,
                             color: iconColor,
@@ -186,12 +206,16 @@ class _ListPageState extends State<ListPage> {
               color: lineColor,
             ),
             const SizedBox(height: 10),
-            // TODO: Refactor this to use UnorderedList widget
-            UnorderedList(
-              controllers: controller,
-              isEditing: _isEditing,
-              textColor: textColor,
-            ),
+            isBucketList
+                ? UnorderedList(
+                    controllers: bucketListController,
+                    isEditing: isEditing,
+                    textColor: textColor,
+                  )
+                : UnorderedList(
+                    controllers: blackListController,
+                    isEditing: isEditing,
+                    textColor: textColor),
             const SizedBox(height: 10),
           ],
         ),
@@ -224,11 +248,29 @@ class _ListPageState extends State<ListPage> {
               child: ListView(
                 children: [
                   buildSection(
-                      dayTitle, 5, isBucketListSelected, _endOfDayControllers),
-                  buildSection(monthTitle, 5, isBucketListSelected,
-                      _endOfMonthControllers),
-                  buildSection(yearTitle, 5, isBucketListSelected,
-                      _endOfYearControllers),
+                      dayTitle,
+                      5,
+                      isBucketListSelected,
+                      _endOfDayControllers,
+                      _endOfDayBlackListControllers,
+                      _isEditingDay,
+                      0),
+                  buildSection(
+                      monthTitle,
+                      5,
+                      isBucketListSelected,
+                      _endOfMonthControllers,
+                      _endOfMonthBlackListControllers,
+                      _isEditingMonth,
+                      1),
+                  buildSection(
+                      yearTitle,
+                      5,
+                      isBucketListSelected,
+                      _endOfYearControllers,
+                      _endOfYearBlackListControllers,
+                      _isEditingYear,
+                      2),
                 ],
               ),
             ),

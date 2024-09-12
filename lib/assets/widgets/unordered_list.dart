@@ -55,10 +55,10 @@ class UnorderedListItem extends StatelessWidget {
                     controller: controller,
                     style: TextStyle(fontSize: 12, color: textColor),
                     decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText:
-                            "Sample ${controller.text[controller.text.length - 1]}"),
-                  )
+                      border: InputBorder.none,
+                      hintStyle: TextStyle(color: textColor),
+                      hintText: "Enter text here",
+                    ))
                 : Text(
                     controller.text,
                     style: TextStyle(fontSize: 12, color: textColor),
