@@ -25,7 +25,7 @@ class _FeelPageState extends State<FeelPage> {
                 width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   color: Colors.white, // Background color of the container
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(5),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.2),

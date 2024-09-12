@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
       color: const Color.fromRGBO(241, 243, 244, 1),
       child: Center(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.only(left: 6, right: 6),
           child: Column(
             children: <Widget>[
               Container(
@@ -143,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                     width: 1.0,
                     color: Colors.black,
                   ),
-                  borderRadius: BorderRadius.circular(15.0),
+                  borderRadius: BorderRadius.circular(5),
                 ),
                 child: TableCalendar(
                   focusedDay: today,
