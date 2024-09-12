@@ -1,40 +1,65 @@
 import 'package:flutter/material.dart';
 
 class UnorderedList extends StatelessWidget {
-  final List<String> texts;
-  const UnorderedList({super.key, required this.texts});
+  final List<TextEditingController> controllers;
+  final bool isEditing;
+
+  const UnorderedList({
+    Key? key,
+    required this.controllers,
+    required this.isEditing,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgetList = <Widget>[];
-    for (var text in texts) {
-      widgetList.add(UnorderedListItem(text: text));
-      widgetList.add(const SizedBox(
-        height: 4,
-      ));
-    }
-    return Column(children: widgetList);
+    return Column(
+      children: controllers
+          .map((controller) => UnorderedListItem(
+                controller: controller,
+                isEditing: isEditing,
+              ))
+          .toList(),
+    );
   }
 }
 
 class UnorderedListItem extends StatelessWidget {
-  const UnorderedListItem({super.key, required this.text});
-  final String text;
+  final TextEditingController controller;
+  final bool isEditing;
+
+  const UnorderedListItem({
+    Key? key,
+    required this.controller,
+    required this.isEditing,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-            padding: EdgeInsets.only(left: 32),
-            child: Text("•", style: TextStyle(fontSize: 12))),
+          padding: EdgeInsets.only(left: 32),
+          child: Text("•", style: TextStyle(fontSize: 12)),
+        ),
         const SizedBox(width: 8),
         Expanded(
-            child: Text(
-          text,
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
-        )),
+          child: SizedBox(
+            height: 20,
+            child: isEditing
+                ? TextField(
+                    controller: controller,
+                    style: TextStyle(fontSize: 12),
+                    decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText:
+                            "Sample ${controller.text[controller.text.length - 1]}"),
+                  )
+                : Text(
+                    controller.text,
+                    style: TextStyle(fontSize: 12),
+                  ),
+          ),
+        ),
       ],
     );
   }

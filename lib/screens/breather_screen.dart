@@ -17,6 +17,37 @@ class _BreatherPageState extends State<BreatherPage> {
   static const scaffoldBackgroundColor = Color(0xFFF1F3F4);
 
   final date = DateFormat("yMMMMd").format(DateTime.now());
+  bool _isEditing = false;
+
+  final List<TextEditingController> _highlightControllers = [];
+  final List<TextEditingController> _noteControllers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    for (var text in ["Sample 1", "Sample 2", "Sample 3"]) {
+      _highlightControllers.add(TextEditingController(text: text));
+      _noteControllers.add(TextEditingController(text: text));
+    }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _highlightControllers) {
+      controller.dispose();
+    }
+    for (var controller in _noteControllers) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  void _toggleEditMode() {
+    setState(() {
+      _isEditing = !_isEditing;
+    });
+    // TODO: Save data to database when editing is done
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +59,13 @@ class _BreatherPageState extends State<BreatherPage> {
         ),
         home: Scaffold(
             body: Center(
-          child: Column(
+          child: ListView(
+            padding: const EdgeInsets.only(left: 16, right: 16),
             children: <Widget>[
               const ScreenTitle(
                 title: "BREATHER",
               ),
               Container(
-                width: MediaQuery.of(context).size.width * .9, // 90% width
                 decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(5),
@@ -58,14 +89,12 @@ class _BreatherPageState extends State<BreatherPage> {
                           IconButton(
                             iconSize: 20,
                             padding: EdgeInsets.zero,
-                            onPressed: () {
-                              setState(() {
-                                //   TODO: Add functionality here
-                              });
-                            },
+                            onPressed: _toggleEditMode,
                             constraints: const BoxConstraints.tightFor(
                                 width: 20, height: 20),
-                            icon: const Icon(Icons.edit_note),
+                            icon: _isEditing
+                                ? Icon(Icons.check)
+                                : Icon(Icons.edit_note),
                           ),
                         ],
                       ),
@@ -74,11 +103,11 @@ class _BreatherPageState extends State<BreatherPage> {
                       height: 2,
                       color: dividerColor,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(left: 16, bottom: 8),
@@ -91,11 +120,10 @@ class _BreatherPageState extends State<BreatherPage> {
                               ),
                             ],
                           ),
-                          UnorderedList(texts: [
-                            "Sample 1",
-                            "Sample 2",
-                            "Sample 3",
-                          ]),
+                          UnorderedList(
+                            controllers: _highlightControllers,
+                            isEditing: _isEditing,
+                          ),
                         ],
                       ),
                     ),
@@ -103,11 +131,11 @@ class _BreatherPageState extends State<BreatherPage> {
                       height: 2,
                       color: dividerColor,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          Row(
+                          const Row(
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(left: 16, bottom: 8),
@@ -120,11 +148,10 @@ class _BreatherPageState extends State<BreatherPage> {
                               ),
                             ],
                           ),
-                          UnorderedList(texts: [
-                            "Sample 1",
-                            "Sample 2",
-                            "Sample 3",
-                          ]),
+                          UnorderedList(
+                            controllers: _noteControllers,
+                            isEditing: _isEditing,
+                          ),
                         ],
                       ),
                     ),
