@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(FreedFromWallsLogin());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+  runApp(FreedFromWallsLogin());
+}
 
 class FreedFromWallsLogin extends StatelessWidget {
   const FreedFromWallsLogin({super.key});

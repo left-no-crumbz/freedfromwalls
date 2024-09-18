@@ -6,8 +6,9 @@ import 'screens/list_screen.dart';
 import 'screens/breather_screen.dart';
 import 'screens/feel_screen.dart';
 import 'screens/profile_screen.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(const FreedFromWallsApp());
+void main() => runApp(FreedFromWallsApp());
 
 class FreedFromWallsApp extends StatelessWidget {
   const FreedFromWallsApp({super.key});
