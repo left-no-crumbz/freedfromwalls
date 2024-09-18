@@ -374,7 +374,7 @@ class EditableTextField extends StatelessWidget {
         hintStyle: TextStyle(
           fontSize: 14,
           fontWeight: fontWeight ?? FontWeight.normal,
-          color: Colors.black38,
+          color: Colors.black.withOpacity(0.6),
         ),
         labelStyle: const TextStyle(color: Colors.black38),
       ),
