@@ -17,69 +17,77 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
         backgroundColor: Colors.grey[100],
-        body: ListView(
+        resizeToAvoidBottomInset: false,
+        body: Column(
           children: [
-            Column(
-              children: [
-                // Title Text
-                Container(
-                  margin: EdgeInsets.only(top: 20, left: 20, right: 20),
-                  child: Text(
-                    "FreedFromWalls",
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-                  ),
-                ),
+            SizedBox(
+              height: 10,
+            ),
 
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Text(
-                    "LOG IN",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                  ),
-                ),
+            Container(
+              margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+              child: Text(
+                "FreedFromWalls",
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+            ),
 
-                //Inputs
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: "Email Address",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
-                ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Text(
+                "LOG IN",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
+            ),
 
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: TextField(
-                    obscureText: true,
-                    decoration: InputDecoration(
-                      labelText: "Password",
-                      border: OutlineInputBorder(),
-                    ),
-                  ),
+            //Inputs
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: "Email Address",
+                  border: OutlineInputBorder(),
                 ),
+              ),
+            ),
 
-                // Remember me checkbox
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Row(
-                    children: [
-                      Checkbox(
-                        value: isChecked,
-                        activeColor:
-                            isChecked ? Color(0xff2d2d2d) : Colors.white,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            isChecked = value!;
-                          });
-                        },
-                      ),
-                      Text("Remember me"),
-                    ],
-                  ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: "Password",
+                  border: OutlineInputBorder(),
                 ),
-              ],
+              ),
+            ),
+
+            // Remember me checkbox
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              child: Row(
+                children: [
+                  Checkbox(
+                    value: isChecked,
+                    activeColor:
+                        isChecked ? Color(0xff2d2d2d) : Colors.white,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        isChecked = value!;
+                      });
+                    },
+                  ),
+                  Text("Remember me"),
+                ],
+              ),
+            ),
+
+            //Space
+            Flexible(
+              fit: FlexFit.loose,
+              child: SizedBox(
+                height: height * 0.10,
+              ),
             ),
 
             // Login Button
@@ -105,13 +113,14 @@ class _LoginPageState extends State<LoginPage> {
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
-                      fontSize: 24),
+                      fontSize: 17
+                  ),
                 ),
               ),
             ),
 
             Container(
-              height: height * 0.36,
+              height: height * 0.33,
               width: width,
               decoration: BoxDecoration(
                 color: Color(0xff2d2d2d),
@@ -137,7 +146,8 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           child: Text(
                             "Not a member? Sign up now.",
-                            style: TextStyle(color: Colors.white, fontSize: 16),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white, fontSize: 12),
                           ),
                         ),
                       )
