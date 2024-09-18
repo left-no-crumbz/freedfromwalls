@@ -154,7 +154,7 @@ class _FeelPage extends State<FeelPage> {
             children: [
               ScreenTitle(title: "FULFEELMENT"),
               Container(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(2.0), //16
                 margin: EdgeInsets.symmetric(vertical: 5.0),
                 width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
