@@ -44,11 +44,12 @@ class _ListPageState extends State<ListPage> {
   void initState() {
     super.initState();
     for (var text in [
-      "Enter text here",
-      "Enter text here",
-      "Enter text here",
-      "Enter text here",
-      "Enter text here",
+      // Instantiated empty strings
+      "",
+      "",
+      "",
+      "",
+      "",
     ]) {
       _endOfDayControllers.add(TextEditingController(text: text));
       _endOfMonthControllers.add(TextEditingController(text: text));

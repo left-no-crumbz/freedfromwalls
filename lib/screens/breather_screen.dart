@@ -27,9 +27,10 @@ class _BreatherPageState extends State<BreatherPage> {
   void initState() {
     super.initState();
     for (var text in [
-      "Enter text here",
-      "Enter text here",
-      "Enter text here"
+      // Instantiated empty strings
+      "",
+      "",
+      ""
     ]) {
       _highlightControllers.add(TextEditingController(text: text));
       _noteControllers.add(TextEditingController(text: text));

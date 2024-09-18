@@ -50,19 +50,15 @@ class UnorderedListItem extends StatelessWidget {
         Expanded(
           child: SizedBox(
             height: 20,
-            child: isEditing
-                ? TextField(
-                    controller: controller,
-                    style: TextStyle(fontSize: 12, color: textColor),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintStyle: TextStyle(fontSize: 12, color: textColor),
-                      hintText: "Enter text here",
-                    ))
-                : Text(
-                    controller.text,
-                    style: TextStyle(fontSize: 12, color: textColor),
-                  ),
+            child: TextField(
+                controller: controller,
+                style: TextStyle(fontSize: 12, color: textColor),
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  hintStyle: TextStyle(
+                      fontSize: 12, color: textColor.withOpacity(0.6)),
+                  hintText: "Enter text here",
+                )),
           ),
         ),
       ],
