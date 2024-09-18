@@ -53,7 +53,7 @@ class UnorderedListItem extends StatelessWidget {
             child: TextField(
                 controller: controller,
                 style: TextStyle(fontSize: 12, color: textColor),
-                // text is read-only when not editing
+                // text is read-only when not editing.
                 readOnly: !isEditing,
                 decoration: InputDecoration(
                   border: InputBorder.none,
