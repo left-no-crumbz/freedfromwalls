@@ -147,15 +147,13 @@ class _FeelPage extends State<FeelPage> {
     int winCount = _calculateWinCount();
 
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Center(
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
               ScreenTitle(title: "FULFEELMENT"),
               Container(
-                padding: EdgeInsets.all(8.0), //From 2, to 8
-                margin: EdgeInsets.symmetric(vertical: 5.0),
+                padding: EdgeInsets.all(16.0),
                 width: MediaQuery.of(context).size.width * 0.9,
                 decoration: BoxDecoration(
                   color: Colors.white,
