@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
             Container(
               width: width,
               height: isSmallScreen ? height * 0.15 : height * 0.17,
-              margin: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -140,7 +140,7 @@ class _HomePageState extends State<HomePage> {
               width: width,
               height: 360,
               alignment: Alignment.center,
-              margin: const EdgeInsets.all(10.0),
+              margin: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
 
             ///Button to Breather Page
             Container(
-              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
               child: ElevatedButton(
                   onPressed: () {
                     context
