@@ -8,7 +8,31 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  bool isChecked = false;
+  bool _isShown1 = false; // Password visibility
+  bool _isShown2 = false; // Confirm password visibility
+
+  //Controllers
+  final TextEditingController _confPassController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+
+  //Register function
+  void _register() {
+    String confirmPass = _confPassController.text;
+    String password = _passController.text;
+
+    if (password == confirmPass) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FreedFromWallsApp(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Error: Please confirm your password."),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +78,24 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: TextField(
-                obscureText: true,
+                obscureText: _isShown1 ? false : true,
+                controller: _passController,
                 decoration: InputDecoration(
                   labelText: "Password",
                   border: OutlineInputBorder(),
+                  suffixIcon: Container(
+                    margin: EdgeInsets.only(right: 5),
+                    child: IconButton(
+                      icon: Icon(
+                        _isShown1 ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isShown1 = !_isShown1;
+                        });
+                      },
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -65,10 +103,24 @@ class _RegisterPageState extends State<RegisterPage> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: TextField(
-                obscureText: true,
+                obscureText: _isShown2 ? false : true,
+                controller: _confPassController,
                 decoration: InputDecoration(
-                  labelText: "Confirm Password",
+                  labelText: "ConfirmPassword",
                   border: OutlineInputBorder(),
+                  suffixIcon: Container(
+                    margin: EdgeInsets.only(right: 5),
+                    child: IconButton(
+                      icon: Icon(
+                        _isShown2 ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isShown2 = !_isShown2;
+                        });
+                      },
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -77,7 +129,7 @@ class _RegisterPageState extends State<RegisterPage> {
             Flexible(
               fit: FlexFit.loose,
               child: SizedBox(
-                height: height * 0.10,
+                height: height,
               ),
             ),
 
@@ -87,14 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
               height: width * 0.35,
               margin: EdgeInsets.symmetric(vertical: 15),
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FreedFromWallsApp(),
-                    ),
-                  );
-                },
+                onPressed: _register,
                 style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
                     padding: EdgeInsets.all(20),

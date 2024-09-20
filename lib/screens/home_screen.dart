@@ -64,56 +64,32 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Home',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: isSmallScreen ? 16 : 20,
-                            ),
-                          ),
-                          Text(
-                            'Your Virtual Diary. Virtual Therapy. Virtual Company.',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: isSmallScreen ? 8 : 10,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        'Home',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: isSmallScreen ? 16 : 20,
+                        ),
                       ),
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {});
-                            },
-                            icon: const Icon(
-                              Icons.settings,
-                              color: Colors.black,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {});
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        'Your Virtual Diary. Virtual Therapy. Virtual Company.',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: isSmallScreen ? 8 : 10,
+                        ),
                       ),
                     ],
                   ),
-                  const Expanded(
-                    child: Text(''),
+                  Flexible(
+                    fit: FlexFit.loose,
+                      child: SizedBox(
+                        height: height,
+                      )
                   ),
                   Text(
                     _currentDate,
@@ -211,28 +187,4 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-}
-
-Widget buildJournalEntryButton(BuildContext context, Color color, String text) {
-  return SizedBox(
-    height: 70,
-    child: Card(
-      color: const Color.fromRGBO(66, 62, 61, 1),
-      margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-      child: Center(
-        child: ListTile(
-          leading: Icon(
-            Icons.circle,
-            color: color,
-          ),
-          title: Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
 }
