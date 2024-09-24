@@ -27,7 +27,7 @@ class _BreatherPageState extends State<BreatherPage> {
   void initState() {
     super.initState();
     for (var text in [
-      // Instantiated empty strings
+      // Instantiated empty string
       "",
       "",
       ""

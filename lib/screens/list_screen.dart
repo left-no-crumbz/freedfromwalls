@@ -40,6 +40,7 @@ class _ListPageState extends State<ListPage> {
   final List<TextEditingController> _endOfDayBlackListControllers = [];
   final List<TextEditingController> _endOfMonthBlackListControllers = [];
   final List<TextEditingController> _endOfYearBlackListControllers = [];
+
   @override
   void initState() {
     super.initState();
