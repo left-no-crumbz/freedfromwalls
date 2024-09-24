@@ -8,12 +8,42 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool isChecked = false;
+  bool _isChecked = false; // Remember me button
+  bool _isShown = false; // Password visibility
+
+  //Controllers
+  final TextEditingController _userController = TextEditingController();
+  final TextEditingController _passController = TextEditingController();
+
+  //Temporary username and pass
+  final String _username = 'Kyle';
+  final String _password = 'admin12345';
+
+  //login function
+  void _login() {
+    String email = _userController.text;
+    String password = _passController.text;
+
+    if (email == _username && password == _password) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => FreedFromWallsApp(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Incorrect email or password"),
+      ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    //Height and width of the Screen
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
+
 
     return Scaffold(
         backgroundColor: Colors.grey[100],
@@ -44,6 +74,7 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: TextField(
+                controller: _userController,
                 decoration: InputDecoration(
                   labelText: "Email Address",
                   border: OutlineInputBorder(),
@@ -54,12 +85,26 @@ class _LoginPageState extends State<LoginPage> {
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: TextField(
-                obscureText: true,
+                obscureText: _isShown ? false : true,
+                controller: _passController,
                 decoration: InputDecoration(
                   labelText: "Password",
                   border: OutlineInputBorder(),
-                ),
+                  suffixIcon: Container(
+                    margin: EdgeInsets.only(right: 5),
+                    child: IconButton(
+                      icon: Icon(
+                        _isShown ? Icons.visibility : Icons.visibility_off,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _isShown = !_isShown;
+                        });
+                      },
+                                    ),
+                  ),
               ),
+            ),
             ),
 
             // Remember me checkbox
@@ -68,12 +113,12 @@ class _LoginPageState extends State<LoginPage> {
               child: Row(
                 children: [
                   Checkbox(
-                    value: isChecked,
+                    value: _isChecked,
                     activeColor:
-                        isChecked ? Color(0xff2d2d2d) : Colors.white,
+                        _isChecked ? Color(0xff2d2d2d) : Colors.white,
                     onChanged: (bool? value) {
                       setState(() {
-                        isChecked = value!;
+                        _isChecked = value!;
                       });
                     },
                   ),
@@ -86,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
             Flexible(
               fit: FlexFit.loose,
               child: SizedBox(
-                height: height * 0.10,
+                height: height,
               ),
             ),
 
@@ -96,14 +141,7 @@ class _LoginPageState extends State<LoginPage> {
               height: width * 0.35,
               margin: EdgeInsets.symmetric(vertical: 15),
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FreedFromWallsApp(),
-                    ),
-                  );
-                },
+                onPressed: _login,
                 style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
                     padding: EdgeInsets.all(20),
