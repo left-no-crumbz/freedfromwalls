@@ -65,29 +65,7 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
                 onTap: () {
                   showModalBottomSheet(
                       context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          padding: const EdgeInsets.all(16),
-                          height: 700,
-                          width: MediaQuery.of(context).size.width,
-                          child: Column(
-                            children: [
-                              Column(
-                                children: [
-                                  const Text(
-                                    "How do you feel right now?",
-                                    style: TextStyle(fontSize: 20),
-                                  ),
-                                  const Text(
-                                    "Please select one emotion below.",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        );
-                      });
+                      builder: (BuildContext context) => EmotionBottomSheet());
                 },
                 child: Container(
                   height: 50,
@@ -113,13 +91,167 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
                   Text(
                     "Click the question mark to choose an emotion",
                     style: const TextStyle(fontSize: 10),
-                  )
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class Emotion extends StatefulWidget {
+  final String imagePath;
+  final String title;
+  final String name;
+  const Emotion(
+      {super.key,
+      required this.title,
+      required this.name,
+      required this.imagePath});
+
+  @override
+  State<Emotion> createState() => _EmotionState();
+}
+
+class _EmotionState extends State<Emotion> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.pop(context);
+      },
+      child: Column(
+        children: [
+          Image.asset(
+            widget.imagePath,
+            width: 60,
+            height: 60,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            widget.title,
+            style: const TextStyle(fontSize: 10),
+          ),
+          Text(
+            "(${widget.name})",
+            style: const TextStyle(fontSize: 10),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class EmotionBottomSheet extends StatefulWidget {
+  const EmotionBottomSheet({super.key});
+
+  @override
+  State<EmotionBottomSheet> createState() => _EmotionBottomSheetState();
+}
+
+class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      height: MediaQuery.of(context).size.height *
+          0.8, // Increased height for better spacing
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        children: [
+          // Title
+          Text(
+            "How do you feel right now?",
+            style: TextStyle(fontSize: 20),
+          ),
+          Text(
+            "Please select one emotion below.",
+            style: TextStyle(fontSize: 12),
+          ),
+          SizedBox(height: 16), // Added spacing after title
+          // Emotions grid
+          Expanded(
+            child: Column(
+              mainAxisAlignment:
+                  MainAxisAlignment.spaceEvenly, // Even spacing between rows
+              children: [
+                // 1st row of emotions
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.spaceEvenly, // Even spacing in row
+                    children: [
+                      Emotion(
+                          title: "YAY",
+                          name: "happy",
+                          imagePath: "lib/assets/images/emotions-happy.png"),
+                      Emotion(
+                          title: "HUHU",
+                          name: "sad",
+                          imagePath: "lib/assets/images/emotions-sad.png"),
+                      Emotion(
+                          title: "GRAH",
+                          name: "angry",
+                          imagePath: "lib/assets/images/emotions-angry.png")
+                    ],
+                  ),
+                ),
+                // 2nd row of emotions
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.spaceEvenly, // Even spacing in row
+                    children: [
+                      Emotion(
+                          title: "SIGH",
+                          name: "tired",
+                          imagePath: "lib/assets/images/emotions-tired.png"),
+                      Emotion(
+                          title: "WOAH",
+                          name: "energetic",
+                          imagePath:
+                              "lib/assets/images/emotions-energetic.png"),
+                      Emotion(
+                          title: "MEH",
+                          name: "neutral",
+                          imagePath: "lib/assets/images/emotions-neutral.png"),
+                      Emotion(
+                          title: "YIE",
+                          name: "in love",
+                          imagePath: "lib/assets/images/emotions-love.png"),
+                    ],
+                  ),
+                ),
+                // 3rd row of emotions
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.spaceEvenly, // Even spacing in row
+                    children: [
+                      Emotion(
+                          title: "UHM",
+                          name: "curious",
+                          imagePath: "lib/assets/images/emotions-curious.png"),
+                      Emotion(
+                          title: "WOMP",
+                          name: "embarrassed",
+                          imagePath:
+                              "lib/assets/images/emotions-embarrassed.png"),
+                      Emotion(
+                          title: "AAA",
+                          name: "scared",
+                          imagePath: "lib/assets/images/emotions-scared.png")
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -196,8 +196,11 @@ class _HomePageState extends State<HomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Image.asset("lib/assets/images/emotions-happy.png",
-                            fit: BoxFit.cover),
+                        Image.asset(
+                          "lib/assets/images/emotions-happy.png",
+                          width: 40,
+                          height: 40,
+                        ),
                         const Text(
                           "View your journal entry today!",
                           style: TextStyle(fontSize: 12, color: Colors.white),
