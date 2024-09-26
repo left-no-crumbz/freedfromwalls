@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../assets/widgets/title_description.dart';
+import './journal_entry.dart';
 
 class BreatherPage extends StatefulWidget {
   const BreatherPage({super.key});
@@ -12,9 +13,18 @@ class BreatherPage extends StatefulWidget {
 void main() => runApp(const BreatherPage());
 
 class _BreatherPageState extends State<BreatherPage> {
+  String _currentJournalEntry = "";
+
+  void _updateJournalEntry(String entry) {
+    setState(() {
+      _currentJournalEntry = entry;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -25,11 +35,26 @@ class _BreatherPageState extends State<BreatherPage> {
           const Title(title: "Your Journal"),
           const SizedBox(height: 8),
           ScrollableCalendar(initialDate: DateTime.now()),
+          const SizedBox(height: 16),
+          JournalEntryContainer(
+            journalEntry: _currentJournalEntry,
+          ),
+          const SizedBox(height: 16),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => JournalEntryScreen(
+                onJournalEntryChanged: _updateJournalEntry,
+                initialEntry: _currentJournalEntry,
+              ),
+            ),
+          );
+        },
+        child: Icon(_currentJournalEntry.isEmpty ? Icons.add : Icons.edit),
       ),
     );
   }
@@ -355,6 +380,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
   }
 }
 
+// TODO: Refactor in a way that each date would store its state
 class ScrollableCalendar extends StatefulWidget {
   final DateTime initialDate;
 
@@ -485,5 +511,47 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+}
+
+class JournalEntryContainer extends StatelessWidget {
+  final String journalEntry;
+
+  const JournalEntryContainer({
+    Key? key,
+    required this.journalEntry,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      width: MediaQuery.of(context).size.width * 1,
+      margin: const EdgeInsets.only(left: 16, right: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xffD7D5EE),
+        border: Border.all(color: const Color(0xff000000)),
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Journal Entry",
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Text(
+                journalEntry.isEmpty ? "No entry yet" : journalEntry,
+                style: const TextStyle(fontSize: 12),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
