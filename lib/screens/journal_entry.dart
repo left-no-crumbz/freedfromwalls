@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../assets/widgets/last_edited_info.dart';
 
 class JournalEntryScreen extends StatefulWidget {
-  final Function(String) onJournalEntryChanged;
+  final Function(String, DateTime, DateTime) onJournalEntryChanged;
   final String initialEntry;
+  final DateTime Function() getCurrentTime;
+  final DateTime? initialCreationDate;
+  final DateTime? initialEditedDate;
 
   const JournalEntryScreen({
     Key? key,
     required this.onJournalEntryChanged,
     this.initialEntry = "",
+    required this.getCurrentTime,
+    this.initialCreationDate,
+    this.initialEditedDate,
   }) : super(key: key);
 
   @override
@@ -16,19 +23,24 @@ class JournalEntryScreen extends StatefulWidget {
 }
 
 class _JournalEntryScreenState extends State<JournalEntryScreen> {
-  final DateTime rawDate = DateTime.now();
+  late DateTime editedDate;
+  late final DateTime creationDate;
   late final TextEditingController _journalEntryController;
   List<String> notes = [];
 
   @override
   void initState() {
     super.initState();
+    creationDate = widget.initialCreationDate ?? widget.getCurrentTime();
+    editedDate = widget.initialEditedDate ?? creationDate;
     _journalEntryController = TextEditingController(text: widget.initialEntry);
     _journalEntryController.addListener(_onJournalEntryChanged);
   }
 
   void _onJournalEntryChanged() {
-    widget.onJournalEntryChanged(_journalEntryController.text);
+    editedDate = widget.getCurrentTime();
+    widget.onJournalEntryChanged(
+        _journalEntryController.text, creationDate, editedDate);
   }
 
   @override
@@ -53,6 +65,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
   void editNote(int index, String newNote) {
     setState(() {
       notes[index] = newNote;
+      editedDate = DateTime.now();
     });
   }
 
@@ -82,23 +95,8 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Last edited",
-                      style: const TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontSize: 10,
-                          color: const Color(0xff746F6F)),
-                    ),
-                    Text(
-                      "${DateFormat("yMMMMd").format(rawDate)} | ${DateFormat("jm").format(rawDate)}",
-                      style: const TextStyle(
-                          fontSize: 10, color: const Color(0xff746F6F)),
-                    ),
-                  ],
-                ),
+                LastEditedInfo(
+                    creationDate: creationDate, editedDate: editedDate),
                 Container(
                   height: 45,
                   padding:
@@ -109,7 +107,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    "${DateFormat("yMd").format(rawDate)}",
+                    "${DateFormat("yMd").format(creationDate)}",
                     style: const TextStyle(
                         fontSize: 12, color: const Color(0xffD7D5EE)),
                   ),
