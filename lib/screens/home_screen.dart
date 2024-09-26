@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-
 import '../main.dart';
 
 class HomePage extends StatefulWidget {
@@ -42,21 +41,15 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-
-    /// Width of the screen
     final height = MediaQuery.of(context).size.height;
-
-    /// Height of the screen
     final isSmallScreen = width < 450;
-
-    /// Checks if the screen is small
 
     return Material(
       color: const Color.fromRGBO(241, 243, 244, 1),
       child: Center(
-        child: ListView(
-          children: <Widget>[
-            ///Intro--something
+        child: Column(
+          children: [
+            //Intro--something
             Container(
               width: width,
               height: isSmallScreen ? height * 0.15 : height * 0.17,
@@ -79,7 +72,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Text(
-                            'Your Virtual Diary. Virtual Therapy. Virtual Company.',
+                            'Your Virtual Diary, Your Virtual Company.',
                             style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
@@ -88,108 +81,73 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                      Row(
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {});
-                            },
-                            icon: const Icon(
-                              Icons.settings,
-                              color: Colors.black,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () {
-                              setState(() {});
-                            },
-                            icon: const Icon(
-                              Icons.edit,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
+
+                      IconButton(
+                          onPressed: () {  },
+                          icon: Icon(Icons.settings),
+                      )
                     ],
-                  ),
-                  const Expanded(
-                    child: Text(''),
-                  ),
-                  Text(
-                    _currentDate,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: isSmallScreen ? 12 : 14,
-                    ),
-                  ),
-                  Text(
-                    _currentDay,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: isSmallScreen ? 12 : 14,
-                    ),
                   ),
                 ],
               ),
             ),
 
-            ///Calendar
+            //Calendar
             Container(
               width: width,
-              height: 360,
+              height: height * 0.6,
               alignment: Alignment.center,
               margin: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(
-                  width: 1.0,
-                  color: Colors.black,
-                ),
-                borderRadius: BorderRadius.circular(15.0),
+                color: Colors.transparent,
               ),
               child: TableCalendar(
-                focusedDay: today,
-                firstDay: DateTime(2000, 1, 1),
-                lastDay: DateTime(2050, 1, 1),
-                headerStyle: const HeaderStyle(
-                  titleCentered: true,
-                  formatButtonVisible: false,
-                  headerMargin: EdgeInsets.only(bottom: 10),
-                ),
-                calendarStyle: CalendarStyle(
-                  selectedDecoration: const BoxDecoration(
-                    color: Colors.black,
-                    shape: BoxShape.circle,
+                  focusedDay: today,
+                  firstDay: DateTime(2000, 1, 1),
+                  lastDay: DateTime.now(),
+                  headerStyle: const HeaderStyle(
+                      titleCentered: true,
+                      formatButtonVisible: false,
+                      headerMargin: EdgeInsets.only(bottom: 10),
                   ),
-                  selectedTextStyle: const TextStyle(color: Colors.white),
-                  todayDecoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
-                    shape: BoxShape.circle,
+                  calendarStyle: CalendarStyle(
+                    selectedDecoration: const BoxDecoration(
+                        color: Colors.black,
+                        shape: BoxShape.circle,
+                    ),
+                    defaultDecoration: BoxDecoration(
+                      color: const Color(0xFFD6D6D6),
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.black
+                      )
+                    ),
+                    weekendDecoration: BoxDecoration(
+                        color: const Color(0xFFD6D6D6),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            width: 1,
+                            color: Colors.black
+                        )
+                    ),
+                    selectedTextStyle: const TextStyle(color: Colors.white),
+                    weekendTextStyle: const TextStyle(color: Colors.black),
+                    todayDecoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.3),
+                        shape: BoxShape.circle,
+                    ),
+                    todayTextStyle: const TextStyle(color: Colors.white),
                   ),
-                  todayTextStyle: const TextStyle(color: Colors.white),
-                  weekendTextStyle: const TextStyle(color: Colors.red),
-                ),
-                availableGestures: AvailableGestures.all,
-                selectedDayPredicate: (day) => isSameDay(day, today),
-                onDaySelected: _onSelectedDay,
-              ),
-            ),
-
-            ///Button to Breather Page
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              child: ElevatedButton(
-                  onPressed: () {
-                    context
-                        .findAncestorStateOfType<AppStateStates>()
-                        ?.onBottomNavItemTap(2);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5),
+                  availableGestures: AvailableGestures.all,
+                  selectedDayPredicate: (day) => isSameDay(day, today),
+                  onDaySelected: _onSelectedDay,
+                  daysOfWeekStyle: DaysOfWeekStyle(
+                      weekdayStyle: TextStyle(
+                        color: Colors.transparent
                       ),
+                    weekendStyle: TextStyle(
+                        color: Colors.transparent
                       padding: EdgeInsets.all(20),
                       backgroundColor: Color(0xff2d2d2d)),
                   child: Center(
@@ -207,35 +165,13 @@ class _HomePageState extends State<HomePage> {
                         )
                       ],
                     ),
-                  )),
-            )
+                  ),
+                  rowHeight: height * 0.07,
+              ),
+            ),
           ],
         ),
       ),
     );
   }
-}
-
-Widget buildJournalEntryButton(BuildContext context, Color color, String text) {
-  return SizedBox(
-    height: 70,
-    child: Card(
-      color: const Color.fromRGBO(66, 62, 61, 1),
-      margin: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 10.0),
-      child: Center(
-        child: ListTile(
-          leading: Icon(
-            Icons.circle,
-            color: color,
-          ),
-          title: Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ),
-    ),
-  );
 }
