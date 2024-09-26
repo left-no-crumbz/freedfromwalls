@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
-import '../main.dart';
+// import '../main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,8 +12,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime today = DateTime.now();
-  late String _currentDate;
-  late String _currentDay;
+  // late String _currentDate;
+  // late String _currentDay;
 
   @override
   void initState() {
@@ -81,10 +81,9 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-
                       IconButton(
-                          onPressed: () {  },
-                          icon: Icon(Icons.settings),
+                        onPressed: () {},
+                        icon: Icon(Icons.settings),
                       )
                     ],
                   ),
@@ -102,71 +101,45 @@ class _HomePageState extends State<HomePage> {
                 color: Colors.transparent,
               ),
               child: TableCalendar(
-                  focusedDay: today,
-                  firstDay: DateTime(2000, 1, 1),
-                  lastDay: DateTime.now(),
-                  headerStyle: const HeaderStyle(
-                      titleCentered: true,
-                      formatButtonVisible: false,
-                      headerMargin: EdgeInsets.only(bottom: 10),
+                rowHeight: height * 0.07,
+                focusedDay: today,
+                firstDay: DateTime(2000, 1, 1),
+                lastDay: DateTime.now(),
+                headerStyle: const HeaderStyle(
+                  titleCentered: true,
+                  formatButtonVisible: false,
+                  headerMargin: EdgeInsets.only(bottom: 10),
+                ),
+                calendarStyle: CalendarStyle(
+                  selectedDecoration: const BoxDecoration(
+                    color: Colors.black,
+                    shape: BoxShape.circle,
                   ),
-                  calendarStyle: CalendarStyle(
-                    selectedDecoration: const BoxDecoration(
-                        color: Colors.black,
-                        shape: BoxShape.circle,
-                    ),
-                    defaultDecoration: BoxDecoration(
+                  defaultDecoration: BoxDecoration(
                       color: const Color(0xFFD6D6D6),
                       shape: BoxShape.circle,
-                      border: Border.all(
-                        width: 1,
-                        color: Colors.black
-                      )
-                    ),
-                    weekendDecoration: BoxDecoration(
-                        color: const Color(0xFFD6D6D6),
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                            width: 1,
-                            color: Colors.black
-                        )
-                    ),
-                    selectedTextStyle: const TextStyle(color: Colors.white),
-                    weekendTextStyle: const TextStyle(color: Colors.black),
-                    todayDecoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.3),
-                        shape: BoxShape.circle,
-                    ),
-                    todayTextStyle: const TextStyle(color: Colors.white),
+                      border: Border.all(width: 1, color: Colors.black)),
+                  weekendDecoration: BoxDecoration(
+                      color: const Color(0xFFD6D6D6),
+                      shape: BoxShape.circle,
+                      border: Border.all(width: 1, color: Colors.black)),
+                  selectedTextStyle: const TextStyle(color: Colors.white),
+                  weekendTextStyle: const TextStyle(color: Colors.black),
+                  todayDecoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.3),
+                    shape: BoxShape.circle,
                   ),
-                  availableGestures: AvailableGestures.all,
-                  selectedDayPredicate: (day) => isSameDay(day, today),
-                  onDaySelected: _onSelectedDay,
-                  daysOfWeekStyle: DaysOfWeekStyle(
-                      weekdayStyle: TextStyle(
-                        color: Colors.transparent
-                      ),
-                    weekendStyle: TextStyle(
-                        color: Colors.transparent
-                      padding: EdgeInsets.all(20),
+                  todayTextStyle: const TextStyle(color: Colors.white),
+                ),
+                availableGestures: AvailableGestures.all,
+                selectedDayPredicate: (day) => isSameDay(day, today),
+                onDaySelected: _onSelectedDay,
+                daysOfWeekStyle: DaysOfWeekStyle(
+                  weekdayStyle: TextStyle(color: Colors.transparent),
+                  weekendStyle: TextStyle(
+                      color: Colors.transparent,
                       backgroundColor: Color(0xff2d2d2d)),
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(
-                          "lib/assets/images/emotions-happy.png",
-                          width: 40,
-                          height: 40,
-                        ),
-                        const Text(
-                          "View your journal entry today!",
-                          style: TextStyle(fontSize: 12, color: Colors.white),
-                        )
-                      ],
-                    ),
-                  ),
-                  rowHeight: height * 0.07,
+                ),
               ),
             ),
           ],
