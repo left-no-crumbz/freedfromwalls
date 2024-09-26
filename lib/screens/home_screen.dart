@@ -12,8 +12,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   DateTime today = DateTime.now();
-  // late String _currentDate;
-  // late String _currentDay;
+  late String _currentDate;
+  late String _currentDay;
 
   @override
   void initState() {
