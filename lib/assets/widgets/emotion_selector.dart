@@ -1,208 +1,302 @@
 import 'package:flutter/material.dart';
+import './custom_title.dart';
 
-class EmotionSelector extends StatefulWidget {
-  const EmotionSelector({super.key});
+class EmotionSelectorContainer extends StatefulWidget {
+  const EmotionSelectorContainer({super.key});
 
   @override
-  State<EmotionSelector> createState() => _EmotionSelectorState();
+  State<EmotionSelectorContainer> createState() =>
+      _EmotionSelectorContainerState();
 }
 
-class _EmotionSelectorState extends State<EmotionSelector> {
-  static const dividerColor = Color(0xFF423e3d);
-  String? _selectedEmotion;
-  bool _isEditing = false;
+class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
+  String _selectedTitle = "";
+  String _selectedName = "";
+  String _selectedImagePath = "";
+  Color _selectedColor = Colors.white;
 
-  void _toggleEditMode() {
-    setState(() {
-      _isEditing = !_isEditing;
-    });
-    // TODO: Save data to database when editing is done
-  }
-
-  void _updateSelectedEmotion(String? value) {
-    setState(() {
-      if (_isEditing) {
-        _selectedEmotion = value;
-      }
-    });
+  void _showEmotionBottomSheet() {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) => EmotionBottomSheet(
+              onEmotionSelected: (title, name, color, imagePath) {
+                setState(() {
+                  _selectedTitle = title;
+                  _selectedName = name;
+                  _selectedColor = color;
+                  _selectedImagePath = imagePath;
+                });
+              },
+            ));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width * .9,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(color: dividerColor),
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const CustomTitle(title: "Today"),
+        Container(
+          margin: const EdgeInsets.only(left: 16, right: 16),
+          padding: const EdgeInsets.all(16),
+          width: MediaQuery.of(context).size.width * 1,
+          height: 100,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(color: Colors.black),
+              color: _selectedColor),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: _showEmotionBottomSheet,
+                child: Container(
+                  height: 50,
+                  width: 50,
+                  child: _selectedImagePath.isEmpty
+                      ? const Icon(
+                          Icons.question_mark,
+                          color: Colors.white,
+                        )
+                      : Image.asset(_selectedImagePath),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.black),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _selectedTitle.isEmpty
+                          ? "Start selecting what you feel."
+                          : "Your word of the day is $_selectedTitle",
+                      style: const TextStyle(fontSize: 14),
+                    ),
+                    Text(
+                      _selectedTitle.isEmpty
+                          ? "Click the question mark to choose an emotion"
+                          : "Seems like you are $_selectedName. Share what you feel in the journal.",
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Emotion extends StatelessWidget {
+  final String imagePath;
+  final String title;
+  final String name;
+  final Color color;
+  final Function(String, String, Color, String) onSelect;
+
+  const Emotion({
+    Key? key,
+    required this.title,
+    required this.name,
+    required this.imagePath,
+    required this.color,
+    required this.onSelect,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        onSelect(title, name, color, imagePath);
+        Navigator.pop(context);
+        // on tap of an emotion, the color, icon, and text of the emotion selector
+        // should change
+      },
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            height: 30,
-            alignment: Alignment.centerLeft,
-            padding: const EdgeInsets.only(left: 16, right: 4),
-            child: Row(children: [
-              const Text(
-                "How do you feel right now?",
-                style: TextStyle(fontSize: 12),
-              ),
-              const Expanded(child: SizedBox()),
-              IconButton(
-                iconSize: 20,
-                padding: EdgeInsets.zero,
-                onPressed: _toggleEditMode,
-                constraints:
-                    const BoxConstraints.tightFor(width: 20, height: 20),
-                icon: _isEditing ? Icon(Icons.check) : Icon(Icons.edit_note),
-              ),
-            ]),
+          Image.asset(
+            imagePath,
+            width: 60,
+            height: 60,
           ),
-          const Divider(
-            height: 2,
-            color: dividerColor,
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: const TextStyle(fontSize: 10),
           ),
-          Padding(
-            padding:
-                const EdgeInsets.only(top: 16, left: 8, right: 8, bottom: 8),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    EmotionSelection(
-                      imagePath: "lib/assets/images/emotions-happy.png",
-                      title: "YAY",
-                      emotionName: "happy",
-                      groupValue: _selectedEmotion,
-                      onChanged: _updateSelectedEmotion,
-                    ),
-                    EmotionSelection(
-                      imagePath: "lib/assets/images/emotions-sad.png",
-                      title: "HUHU",
-                      emotionName: "sad",
-                      groupValue: _selectedEmotion,
-                      onChanged: _updateSelectedEmotion,
-                    ),
-                    EmotionSelection(
-                      imagePath: "lib/assets/images/emotions-angry.png",
-                      title: "GRAH",
-                      emotionName: "angry",
-                      groupValue: _selectedEmotion,
-                      onChanged: _updateSelectedEmotion,
-                    ),
-                    EmotionSelection(
-                      imagePath: "lib/assets/images/emotions-neutral.png",
-                      title: "MEH",
-                      emotionName: "neutral",
-                      groupValue: _selectedEmotion,
-                      onChanged: _updateSelectedEmotion,
-                    ),
-                    EmotionSelection(
-                      imagePath: "lib/assets/images/emotions-love.png",
-                      title: "YIE",
-                      emotionName: "in love",
-                      groupValue: _selectedEmotion,
-                      onChanged: _updateSelectedEmotion,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Row(
-                  children: [
-                    EmotionSelection(
-                      imagePath: "lib/assets/images/emotions-tired.png",
-                      title: "SIGH",
-                      emotionName: "tired",
-                      groupValue: _selectedEmotion,
-                      onChanged: _updateSelectedEmotion,
-                    ),
-                    EmotionSelection(
-                      imagePath: "lib/assets/images/emotions-energetic.png",
-                      title: "WOAH",
-                      emotionName: "energetic",
-                      groupValue: _selectedEmotion,
-                      onChanged: _updateSelectedEmotion,
-                    ),
-                    EmotionSelection(
-                      imagePath: "lib/assets/images/emotions-curious.png",
-                      title: "UHM",
-                      emotionName: "curious",
-                      groupValue: _selectedEmotion,
-                      onChanged: _updateSelectedEmotion,
-                    ),
-                    EmotionSelection(
-                      imagePath: "lib/assets/images/emotions-embarrassed.png",
-                      title: "WOMP",
-                      emotionName: "embarrassed",
-                      groupValue: _selectedEmotion,
-                      onChanged: _updateSelectedEmotion,
-                    ),
-                    EmotionSelection(
-                      imagePath: "lib/assets/images/emotions-scared.png",
-                      title: "AAA",
-                      emotionName: "scared",
-                      groupValue: _selectedEmotion,
-                      onChanged: _updateSelectedEmotion,
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
+          Text(
+            "($name)",
+            style: const TextStyle(fontSize: 10),
+          )
         ],
       ),
     );
   }
 }
 
-class EmotionSelection extends StatefulWidget {
-  final String imagePath;
-  final String title;
-  final String emotionName;
-  final String? groupValue;
-  final ValueChanged<String?> onChanged;
-
-  const EmotionSelection({
-    super.key,
-    required this.imagePath,
-    required this.title,
-    required this.emotionName,
-    required this.groupValue,
-    required this.onChanged,
-  });
+class EmotionBottomSheet extends StatefulWidget {
+  final Function(String, String, Color, String) onEmotionSelected;
+  const EmotionBottomSheet({super.key, required this.onEmotionSelected});
 
   @override
-  State<EmotionSelection> createState() => _EmotionSelectionState();
+  State<EmotionBottomSheet> createState() => _EmotionBottomSheetState();
 }
 
-class _EmotionSelectionState extends State<EmotionSelection> {
+class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 1,
+    return Container(
+      padding: const EdgeInsets.all(16),
+      height: MediaQuery.of(context).size.height * 0.6,
+      width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
-          Image.asset(
-            widget.imagePath,
-            fit: BoxFit.cover,
+          // Title
+          const Text(
+            "How do you feel right now?",
+            style: const TextStyle(fontSize: 20),
           ),
-          Text(
-            widget.title,
-            style: TextStyle(fontSize: 8),
+          const Text(
+            "Please select one emotion below.",
+            style: const TextStyle(fontSize: 12),
           ),
-          Text(
-            "(${widget.emotionName})",
-            style: TextStyle(fontSize: 8),
-          ),
-          SizedBox(
-            height: 30,
-            child: Radio(
-              value: widget.emotionName,
-              groupValue: widget.groupValue,
-              onChanged: widget.onChanged,
+          const SizedBox(height: 16),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                // 1st row of emotions
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Emotion(
+                        title: "YAY",
+                        name: "happy",
+                        imagePath: "lib/assets/images/emotions-happy.png",
+                        color: Color(0xFFF8E9BB),
+                        onSelect: (title, name, color, imagePath) {
+                          widget.onEmotionSelected(
+                              title, name, color, imagePath);
+                        },
+                      ),
+                      Emotion(
+                        title: "HUHU",
+                        name: "sad",
+                        imagePath: "lib/assets/images/emotions-sad.png",
+                        color: Color(0xffe4edff),
+                        onSelect: (title, name, color, imagePath) {
+                          widget.onEmotionSelected(
+                              title, name, color, imagePath);
+                        },
+                      ),
+                      Emotion(
+                        title: "GRAH",
+                        name: "angry",
+                        imagePath: "lib/assets/images/emotions-angry.png",
+                        color: Color(0xFFfdb9b8),
+                        onSelect: (title, name, color, imagePath) {
+                          widget.onEmotionSelected(
+                              title, name, color, imagePath);
+                        },
+                      )
+                    ],
+                  ),
+                ),
+                // 2nd row of emotions
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Emotion(
+                        title: "SIGH",
+                        name: "tired",
+                        imagePath: "lib/assets/images/emotions-tired.png",
+                        color: Color(0xFFf0ffcd),
+                        onSelect: (title, name, color, imagePath) {
+                          widget.onEmotionSelected(
+                              title, name, color, imagePath);
+                        },
+                      ),
+                      Emotion(
+                        title: "WOAH",
+                        name: "energetic",
+                        imagePath: "lib/assets/images/emotions-energetic.png",
+                        color: Color(0xFFffdca0),
+                        onSelect: (title, name, color, imagePath) {
+                          widget.onEmotionSelected(
+                              title, name, color, imagePath);
+                        },
+                      ),
+                      Emotion(
+                        title: "MEH",
+                        name: "neutral",
+                        imagePath: "lib/assets/images/emotions-neutral.png",
+                        color: Color(0xFFfdf1de),
+                        onSelect: (title, name, color, imagePath) {
+                          widget.onEmotionSelected(
+                              title, name, color, imagePath);
+                        },
+                      ),
+                      Emotion(
+                        title: "YIE",
+                        name: "in love",
+                        imagePath: "lib/assets/images/emotions-love.png",
+                        color: Color(0xFFffdbe7),
+                        onSelect: (title, name, color, imagePath) {
+                          widget.onEmotionSelected(
+                              title, name, color, imagePath);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                // 3rd row of emotions
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.spaceEvenly, // Even spacing in row
+                    children: [
+                      Emotion(
+                        title: "UHM",
+                        name: "curious",
+                        imagePath: "lib/assets/images/emotions-curious.png",
+                        color: Color(0xFFcffdf8),
+                        onSelect: (title, name, color, imagePath) {
+                          widget.onEmotionSelected(
+                              title, name, color, imagePath);
+                        },
+                      ),
+                      Emotion(
+                        title: "WOMP",
+                        name: "embarrassed",
+                        imagePath: "lib/assets/images/emotions-embarrassed.png",
+                        color: Color(0xFFffc4c4),
+                        onSelect: (title, name, color, imagePath) {
+                          widget.onEmotionSelected(
+                              title, name, color, imagePath);
+                        },
+                      ),
+                      Emotion(
+                        title: "AAA",
+                        name: "scared",
+                        imagePath: "lib/assets/images/emotions-scared.png",
+                        color: Color(0xFFffccab),
+                        onSelect: (title, name, color, imagePath) {
+                          widget.onEmotionSelected(
+                              title, name, color, imagePath);
+                        },
+                      )
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
         ],

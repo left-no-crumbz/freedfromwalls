@@ -55,6 +55,7 @@ class AppStateStates extends State<AppState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: const CustomAppBar(),
       bottomNavigationBar: CustomBottomNavigationBar(
         onItemSelected: onBottomNavItemTap,
