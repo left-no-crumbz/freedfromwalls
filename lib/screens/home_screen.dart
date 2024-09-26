@@ -148,6 +148,22 @@ class _HomePageState extends State<HomePage> {
                       ),
                     weekendStyle: TextStyle(
                         color: Colors.transparent
+                      padding: EdgeInsets.all(20),
+                      backgroundColor: Color(0xff2d2d2d)),
+                  child: Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          "lib/assets/images/emotions-happy.png",
+                          width: 40,
+                          height: 40,
+                        ),
+                        const Text(
+                          "View your journal entry today!",
+                          style: TextStyle(fontSize: 12, color: Colors.white),
+                        )
+                      ],
                     ),
                   ),
                   rowHeight: height * 0.07,
