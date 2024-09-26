@@ -179,7 +179,8 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                       Emotion(
                         title: "YAY",
                         name: "happy",
-                        imagePath: "lib/assets/images/emotions-happy.png",
+                        imagePath:
+                            "lib/assets/images/emotions/emotions-happy.png",
                         color: Color(0xFFF8E9BB),
                         onSelect: (title, name, color, imagePath) {
                           widget.onEmotionSelected(
@@ -189,7 +190,8 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                       Emotion(
                         title: "HUHU",
                         name: "sad",
-                        imagePath: "lib/assets/images/emotions-sad.png",
+                        imagePath:
+                            "lib/assets/images/emotions/emotions-sad.png",
                         color: Color(0xffe4edff),
                         onSelect: (title, name, color, imagePath) {
                           widget.onEmotionSelected(
@@ -199,7 +201,8 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                       Emotion(
                         title: "GRAH",
                         name: "angry",
-                        imagePath: "lib/assets/images/emotions-angry.png",
+                        imagePath:
+                            "lib/assets/images/emotions/emotions-angry.png",
                         color: Color(0xFFfdb9b8),
                         onSelect: (title, name, color, imagePath) {
                           widget.onEmotionSelected(
@@ -217,7 +220,8 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                       Emotion(
                         title: "SIGH",
                         name: "tired",
-                        imagePath: "lib/assets/images/emotions-tired.png",
+                        imagePath:
+                            "lib/assets/images/emotions/emotions-tired.png",
                         color: Color(0xFFf0ffcd),
                         onSelect: (title, name, color, imagePath) {
                           widget.onEmotionSelected(
@@ -227,7 +231,8 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                       Emotion(
                         title: "WOAH",
                         name: "energetic",
-                        imagePath: "lib/assets/images/emotions-energetic.png",
+                        imagePath:
+                            "lib/assets/images/emotions/emotions-energetic.png",
                         color: Color(0xFFffdca0),
                         onSelect: (title, name, color, imagePath) {
                           widget.onEmotionSelected(
@@ -237,7 +242,8 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                       Emotion(
                         title: "MEH",
                         name: "neutral",
-                        imagePath: "lib/assets/images/emotions-neutral.png",
+                        imagePath:
+                            "lib/assets/images/emotions/emotions-neutral.png",
                         color: Color(0xFFfdf1de),
                         onSelect: (title, name, color, imagePath) {
                           widget.onEmotionSelected(
@@ -247,7 +253,8 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                       Emotion(
                         title: "YIE",
                         name: "in love",
-                        imagePath: "lib/assets/images/emotions-love.png",
+                        imagePath:
+                            "lib/assets/images/emotions/emotions-love.png",
                         color: Color(0xFFffdbe7),
                         onSelect: (title, name, color, imagePath) {
                           widget.onEmotionSelected(
@@ -266,7 +273,8 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                       Emotion(
                         title: "UHM",
                         name: "curious",
-                        imagePath: "lib/assets/images/emotions-curious.png",
+                        imagePath:
+                            "lib/assets/images/emotions/emotions-curious.png",
                         color: Color(0xFFcffdf8),
                         onSelect: (title, name, color, imagePath) {
                           widget.onEmotionSelected(
@@ -276,7 +284,8 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                       Emotion(
                         title: "WOMP",
                         name: "embarrassed",
-                        imagePath: "lib/assets/images/emotions-embarrassed.png",
+                        imagePath:
+                            "lib/assets/images/emotions/emotions-embarrassed.png",
                         color: Color(0xFFffc4c4),
                         onSelect: (title, name, color, imagePath) {
                           widget.onEmotionSelected(
@@ -286,7 +295,8 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                       Emotion(
                         title: "AAA",
                         name: "scared",
-                        imagePath: "lib/assets/images/emotions-scared.png",
+                        imagePath:
+                            "lib/assets/images/emotions/emotions-scared.png",
                         color: Color(0xFFffccab),
                         onSelect: (title, name, color, imagePath) {
                           widget.onEmotionSelected(
