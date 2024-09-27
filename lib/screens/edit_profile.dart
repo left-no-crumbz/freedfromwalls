@@ -84,7 +84,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
           ),
           SizedBox(height: 1, child: const Divider(color: Colors.black)),
-          const SizedBox(height: 16),
           AvatarSelector(
             initialAvatarPath: chosenImagePath,
             onAvatarSelected: (String path) {
@@ -133,45 +132,52 @@ class _AvatarSelectorState extends State<AvatarSelector> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Text(
-          "Choose Your Avatar",
-          style: const TextStyle(fontSize: 15),
-        ),
-        const SizedBox(height: 16),
-        Image.asset(
-          chosenImagePath,
-          height: 200,
-          width: 200,
-        ),
-        const SizedBox(height: 16),
-        SizedBox(
-          height: 100, // Set a fixed height for the ListView
-          child: ListView.builder(
-            itemCount: 12,
-            scrollDirection: Axis.horizontal,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      chosenImagePath = AvatarSelector.avatarList[index];
-                    });
-                    widget.onAvatarSelected(chosenImagePath);
-                  },
-                  child: Image.asset(
-                    AvatarSelector.avatarList[index],
-                    height: 80,
-                    width: 80,
-                  ),
-                ),
-              );
-            },
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black),
+        color: const Color(0xffD7D5EE),
+      ),
+      child: Column(
+        children: [
+          const Text(
+            "Choose Your Avatar",
+            style: const TextStyle(fontSize: 15),
           ),
-        ),
-      ],
+          const SizedBox(height: 16),
+          Image.asset(
+            chosenImagePath,
+            height: 200,
+            width: 200,
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 100, // Set a fixed height for the ListView
+            child: ListView.builder(
+              itemCount: 12,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        chosenImagePath = AvatarSelector.avatarList[index];
+                      });
+                      widget.onAvatarSelected(chosenImagePath);
+                    },
+                    child: Image.asset(
+                      AvatarSelector.avatarList[index],
+                      height: 80,
+                      width: 80,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
