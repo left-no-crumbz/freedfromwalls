@@ -7,7 +7,14 @@ class AppThemes {
     final double scaleFactor = width / 360; // Adjust 360 based on your baseline
     return baseFontSize * scaleFactor;
   }
-  
+
+  static double getResponsiveImageSize(BuildContext context, double baseImageSize) {
+    final double width = MediaQuery.of(context).size.width;
+    final double scaleFactor = width / 360; // Adjust 360 based on your baseline screen width
+    return baseImageSize * scaleFactor;
+  }
+
+
   // Sunrise Theme
   static final ThemeData sunriseTheme = ThemeData(
     brightness: Brightness.light,

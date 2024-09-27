@@ -29,61 +29,61 @@ class _HomePageState extends State<HomePage> {
     {
       'title': 'YAY',
       'name': 'happy',
-      'imagePath': 'lib/assets/images/emotions/emotions-happy.png',
+      'imagePath': 'lib/assets/images/emotions-happy.png',
       'color': Color(0xFFF8E9BB),
     },
     {
       'title': 'HUHU',
       'name': 'sad',
-      'imagePath': 'lib/assets/images/emotions/emotions-sad.png',
+      'imagePath': 'lib/assets/images/emotions-sad.png',
       'color': Color(0xffe4edff),
     },
     {
       'title': 'GRAH',
       'name': 'angry',
-      'imagePath': 'lib/assets/images/emotions/emotions-angry.png',
+      'imagePath': 'lib/assets/images/emotions-angry.png',
       'color': Color(0xFFfdb9b8),
     },
     {
       'title': 'SIGH',
       'name': 'tired',
-      'imagePath': 'lib/assets/images/emotions/emotions-tired.png',
+      'imagePath': 'lib/assets/images/emotions-tired.png',
       'color': Color(0xFFf0ffcd),
     },
     {
       'title': 'WOAH',
       'name': 'energetic',
-      'imagePath': 'lib/assets/images/emotions/emotions-energetic.png',
+      'imagePath': 'lib/assets/images/emotions-energetic.png',
       'color': Color(0xFFffdca0),
     },
     {
       'title': 'MEH',
       'name': 'neutral',
-      'imagePath': 'lib/assets/images/emotions/emotions-neutral.png',
+      'imagePath': 'lib/assets/images/emotions-neutral.png',
       'color': Color(0xFFfdf1de),
     },
     {
       'title': 'YIE',
       'name': 'in love',
-      'imagePath': 'lib/assets/images/emotions/emotions-love.png',
+      'imagePath': 'lib/assets/images/emotions-love.png',
       'color': Color(0xFFffdbe7),
     },
     {
       'title': 'UHM',
       'name': 'curious',
-      'imagePath': 'lib/assets/images/emotions/emotions-curious.png',
+      'imagePath': 'lib/assets/images/emotions-curious.png',
       'color': Color(0xFFcffdf8),
     },
     {
       'title': 'WOMP',
       'name': 'embarrassed',
-      'imagePath': 'lib/assets/images/emotions/emotions-embarrassed.png',
+      'imagePath': 'lib/assets/images/emotions-embarrassed.png',
       'color': Color(0xFFffc4c4),
     },
     {
       'title': 'AAA',
       'name': 'scared',
-      'imagePath': 'lib/assets/images/emotions/emotions-scared.png',
+      'imagePath': 'lib/assets/images/emotions-scared.png',
       'color': Color(0xFFffccab),
     },
   ];
@@ -230,10 +230,10 @@ class _HomePageState extends State<HomePage> {
             ),
 
             Container(
-              margin: const EdgeInsets.only(left: 16, right: 16, bottom: 15),
+              margin: const EdgeInsets.only(left: 16, right: 16, bottom: 18),
               padding: const EdgeInsets.all(16),
               width: MediaQuery.of(context).size.width * 1,
-              height: 100,
+              height: height * 0.12,
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(color: Colors.black),
@@ -242,8 +242,8 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 children: [
                   Container(
-                    height: 50,
-                    width: 50,
+                    height: AppThemes.getResponsiveImageSize(context, 50),
+                    width: AppThemes.getResponsiveImageSize(context, 50),
                     child: _selectedImagePath.isEmpty
                         ? const Icon(
                       Icons.question_mark,
@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                         : Image.asset(_selectedImagePath),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(100),
-                        color: Colors.black),
+                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -263,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           _selectedTitle.isEmpty
                               ? "Why don't you feel anything..."
-                              : "Your word of the day is $_selectedTitle",
+                              : "Your word of the month is $_selectedTitle",
                           style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 14)),
                         ),
                         Text(
@@ -302,6 +302,7 @@ class _HomePageState extends State<HomePage> {
                   height: height * 0.02,
                 ),
 
+                //5-Day Calendar
                 Container(
                   height: height * 0.5,
                   margin: EdgeInsets.symmetric(horizontal: width * 0.05),
