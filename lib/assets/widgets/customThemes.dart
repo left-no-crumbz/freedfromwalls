@@ -14,6 +14,31 @@ class AppThemes {
     return baseImageSize * scaleFactor;
   }
 
+  // Sunrise Theme
+  static final ThemeData defaultTheme = ThemeData(
+    brightness: Brightness.light,
+    primaryColor: Color(0xFFFFCC99), //Used for main color
+    cardColor: Color(0xFFC6541F), //Used for secondary color
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.black,
+      titleTextStyle: TextStyle(color: Colors.white),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Color(0xFFF8EACB),
+      selectedItemColor: Colors.black,
+      unselectedItemColor: Colors.grey,
+    ),
+    scaffoldBackgroundColor: Color(0xFFF8EACB),
+    textTheme: TextTheme(
+      bodyLarge: TextStyle(color: Colors.black),
+      displaySmall: TextStyle(color: Color(0xFFFFCC99)), //Used in grid view selected
+      displayMedium: TextStyle(color: Color(0xFFC6541F)), //Used in grid view unselected
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: Color(0xFFFFCC99),  // Gold
+    ),
+    iconTheme: IconThemeData(color: Colors.black),
+  );
 
   // Sunrise Theme
   static final ThemeData sunriseTheme = ThemeData(
