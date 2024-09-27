@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../assets/widgets/title_description.dart';
+import './edit_profile.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -20,7 +21,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   title: "Profile", description: "All about yourself"),
               const Expanded(child: SizedBox()),
               ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProfileScreen(),
+                    ),
+                  );
+                },
                 child: Text(
                   "EDIT",
                   style: const TextStyle(color: const Color(0xffD7D5EE)),
@@ -38,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
             width: 200,
           ),
           const SizedBox(height: 16),
-          const NameBio(),
+          const NameBio(name: "", bio: ""),
           const SizedBox(height: 16),
           const Favorite(keyStr: "Motto", value: "Favorite Motto"),
           const Favorite(keyStr: "Food", value: "Favorite Food"),
@@ -58,25 +66,28 @@ class _ProfilePageState extends State<ProfilePage> {
 }
 
 class NameBio extends StatefulWidget {
-  const NameBio({super.key});
+  final String name;
+  final String bio;
+  const NameBio({super.key, required this.name, required this.bio});
 
   @override
   State<NameBio> createState() => _NameBioState();
 }
 
 class _NameBioState extends State<NameBio> {
-  String? name;
-  String? bio;
+  // String? name;
+  // String? bio;
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
-          name ?? "Name",
+          (widget.name == "") ? "Name" : widget.name,
           style: const TextStyle(fontSize: 20),
         ),
         Text(
-          bio ?? "Bio",
+          (widget.bio == "") ? "Bio" : widget.bio,
           style: const TextStyle(fontSize: 14),
         )
       ],
