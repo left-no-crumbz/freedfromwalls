@@ -10,6 +10,21 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  String name = "Name";
+  String bio = "Bio";
+  String avatarPath = "lib/assets/images/avatars/avatar-1.png";
+  Map<String, String> favorites = {
+    "Motto": "Favorite Motto",
+    "Food": "Favorite Food",
+    "Drink": "Favorite Drink",
+    "Film": "Favorite Film",
+    "Show": "Favorite Show",
+    "Song": "Favorite Song",
+    "Game": "Favorite Game",
+    "Book": "Favorite Book",
+    "Color": "Favorite Color",
+  };
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,13 +36,26 @@ class _ProfilePageState extends State<ProfilePage> {
                   title: "Profile", description: "All about yourself"),
               const Expanded(child: SizedBox()),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
+                onPressed: () async {
+                  final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => EditProfileScreen(),
+                      builder: (context) => EditProfileScreen(
+                        name: name,
+                        bio: bio,
+                        avatarPath: avatarPath,
+                        favorites: favorites,
+                      ),
                     ),
                   );
+                  if (result != null) {
+                    setState(() {
+                      name = result['name'];
+                      bio = result['bio'];
+                      avatarPath = result['avatarPath'];
+                      favorites = Map<String, String>.from(result['favorites']);
+                    });
+                  }
                 },
                 child: Text(
                   "EDIT",
@@ -41,22 +69,16 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
           Image.asset(
-            "lib/assets/images/avatars/avatar-1.png",
+            avatarPath,
             height: 200,
             width: 200,
           ),
           const SizedBox(height: 16),
-          const NameBio(name: "", bio: ""),
+          NameBio(name: name, bio: bio),
           const SizedBox(height: 16),
-          const Favorite(keyStr: "Motto", value: "Favorite Motto"),
-          const Favorite(keyStr: "Food", value: "Favorite Food"),
-          const Favorite(keyStr: "Drink", value: "Favorite Drink"),
-          const Favorite(keyStr: "Film", value: "Favorite Film"),
-          const Favorite(keyStr: "Show", value: "Favorite Show"),
-          const Favorite(keyStr: "Song", value: "Favorite Song"),
-          const Favorite(keyStr: "Game", value: "Favorite Game"),
-          const Favorite(keyStr: "Book", value: "Favorite Book"),
-          const Favorite(keyStr: "Color", value: "Favorite Color"),
+          ...favorites.entries
+              .map((entry) => Favorite(keyStr: entry.key, value: entry.value))
+              .toList(),
           const Divider(color: Colors.grey),
           const SizedBox(height: 32)
         ],
@@ -75,19 +97,16 @@ class NameBio extends StatefulWidget {
 }
 
 class _NameBioState extends State<NameBio> {
-  // String? name;
-  // String? bio;
-
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
-          (widget.name == "") ? "Name" : widget.name,
+          widget.name,
           style: const TextStyle(fontSize: 20),
         ),
         Text(
-          (widget.bio == "") ? "Bio" : widget.bio,
+          widget.bio,
           style: const TextStyle(fontSize: 14),
         )
       ],

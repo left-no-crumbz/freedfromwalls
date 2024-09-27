@@ -1,11 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class EditProfileScreen extends StatelessWidget {
-  const EditProfileScreen({super.key});
+class EditProfileScreen extends StatefulWidget {
+  final String name;
+  final String bio;
+  final String avatarPath;
+  final Map<String, String> favorites;
+
+  const EditProfileScreen({
+    super.key,
+    required this.name,
+    required this.bio,
+    required this.avatarPath,
+    required this.favorites,
+  });
+
+  @override
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends State<EditProfileScreen> {
+  late TextEditingController nameController;
+  late TextEditingController bioController;
+  late String chosenImagePath;
+  late Map<String, TextEditingController> favoritesControllers;
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.name);
+    bioController = TextEditingController(text: widget.bio);
+    chosenImagePath = widget.avatarPath;
+    favoritesControllers = widget.favorites
+        .map((key, value) => MapEntry(key, TextEditingController(text: value)));
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         centerTitle: true,
         title: const Text(
@@ -15,7 +48,7 @@ class EditProfileScreen extends StatelessWidget {
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
       ),
-      body: Column(
+      body: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
@@ -30,7 +63,15 @@ class EditProfileScreen extends StatelessWidget {
                 ),
                 const Expanded(child: const SizedBox()),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context, {
+                      'name': nameController.text,
+                      'bio': bioController.text,
+                      'avatarPath': chosenImagePath,
+                      'favorites': favoritesControllers.map(
+                          (key, controller) => MapEntry(key, controller.text)),
+                    });
+                  },
                   child: Text(
                     "SAVE",
                     style: const TextStyle(color: const Color(0xffD7D5EE)),
@@ -44,7 +85,19 @@ class EditProfileScreen extends StatelessWidget {
           ),
           SizedBox(height: 1, child: const Divider(color: Colors.black)),
           const SizedBox(height: 16),
-          const AvatarSelector(),
+          AvatarSelector(
+            initialAvatarPath: chosenImagePath,
+            onAvatarSelected: (String path) {
+              setState(() {
+                chosenImagePath = path;
+              });
+            },
+          ),
+          PersonalContainer(
+            nameController: nameController,
+            bioController: bioController,
+            favoritesControllers: favoritesControllers,
+          )
         ],
       ),
     );
@@ -52,7 +105,15 @@ class EditProfileScreen extends StatelessWidget {
 }
 
 class AvatarSelector extends StatefulWidget {
-  const AvatarSelector({super.key});
+  final String initialAvatarPath;
+  final Function(String) onAvatarSelected;
+
+  const AvatarSelector({
+    super.key,
+    required this.initialAvatarPath,
+    required this.onAvatarSelected,
+  });
+
   static const int numberOfAvatars = 12;
   static final List<String> avatarList = List.generate(numberOfAvatars,
       (index) => "lib/assets/images/avatars/avatar-${index + 1}.png");
@@ -62,7 +123,13 @@ class AvatarSelector extends StatefulWidget {
 }
 
 class _AvatarSelectorState extends State<AvatarSelector> {
-  String chosenImagePath = "lib/assets/images/avatars/avatar-1.png";
+  late String chosenImagePath;
+
+  @override
+  void initState() {
+    super.initState();
+    chosenImagePath = widget.initialAvatarPath;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +159,7 @@ class _AvatarSelectorState extends State<AvatarSelector> {
                     setState(() {
                       chosenImagePath = AvatarSelector.avatarList[index];
                     });
+                    widget.onAvatarSelected(chosenImagePath);
                   },
                   child: Image.asset(
                     AvatarSelector.avatarList[index],
@@ -103,6 +171,145 @@ class _AvatarSelectorState extends State<AvatarSelector> {
             },
           ),
         ),
+      ],
+    );
+  }
+}
+
+class InformationField extends StatefulWidget {
+  final String? hintText;
+  final String? field;
+  final TextEditingController informationController;
+  final Icon? prefixIcon;
+  final bool readOnly;
+
+  const InformationField({
+    super.key,
+    required this.hintText,
+    required this.field,
+    required this.informationController,
+    this.prefixIcon,
+    this.readOnly = false,
+  });
+
+  @override
+  State<InformationField> createState() => _InformationFieldState();
+}
+
+class _InformationFieldState extends State<InformationField> {
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        widget.informationController.text = DateFormat('yMMMMd').format(picked);
+      });
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            widget.field ?? "Field",
+            style: const TextStyle(fontSize: 12, color: Color(0xffBABABA)),
+          ),
+          SizedBox(
+            height: 25,
+            child: TextField(
+              controller: widget.informationController,
+              readOnly: widget.readOnly,
+              onTap: widget.readOnly && widget.field == "Birthday"
+                  ? () => _selectDate(context)
+                  : null,
+              decoration: InputDecoration(
+                border: const UnderlineInputBorder(
+                    borderSide: BorderSide(color: Color(0xff000000))),
+                hintText: widget.hintText,
+                hintStyle: const TextStyle(fontSize: 15),
+                isDense: true,
+                prefixIconConstraints: BoxConstraints(maxWidth: 30),
+                prefixIcon: widget.prefixIcon != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: widget.prefixIcon,
+                      )
+                    : null,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class PersonalContainer extends StatelessWidget {
+  final TextEditingController nameController;
+  final TextEditingController bioController;
+  final Map<String, TextEditingController> favoritesControllers;
+
+  const PersonalContainer({
+    super.key,
+    required this.nameController,
+    required this.bioController,
+    required this.favoritesControllers,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        const SizedBox(height: 32),
+        const Align(
+            alignment: Alignment.center,
+            child: const Text("Personal Information")),
+        const SizedBox(height: 16),
+        InformationField(
+          hintText: "Name cannot be blank",
+          field: "Name",
+          informationController: nameController,
+        ),
+        const SizedBox(height: 16),
+        InformationField(
+          hintText: "Bio cannot be blank",
+          field: "Bio",
+          informationController: bioController,
+        ),
+        const SizedBox(height: 16),
+        InformationField(
+          hintText: "",
+          field: "Birthday",
+          informationController: TextEditingController(),
+          readOnly: true,
+          prefixIcon: const Icon(Icons.calendar_month, size: 20),
+        ),
+        const SizedBox(height: 32),
+        const Align(
+            alignment: Alignment.center,
+            child: const Text("Personal Preference")),
+        const SizedBox(height: 16),
+        ...favoritesControllers.entries
+            .map((entry) => Column(
+                  children: [
+                    InformationField(
+                      hintText: "Insert something here.",
+                      field: entry.key,
+                      informationController: entry.value,
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                ))
+            .toList(),
+        const SizedBox(height: 32),
       ],
     );
   }
