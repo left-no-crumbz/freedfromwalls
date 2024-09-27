@@ -18,6 +18,7 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
   List<DateTime> _dates = [];
   int _daysToGenerate = 365;
   int _threshold = 30;
+
   @override
   void initState() {
     super.initState();
@@ -28,6 +29,12 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToSelectedDate();
     });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
   }
 
   List<DateTime> _generateDates(DateTime initialDate, int daysToGenerate) {
@@ -46,7 +53,6 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
         curve: Curves.easeInOut);
   }
 
-  // unlimited date generator
   void _scrollListener() {
     if (_scrollController.position.pixels >=
         _scrollController.position.maxScrollExtent - _threshold) {
@@ -62,75 +68,93 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
     return Container(
       height: 120,
       child: ListView.builder(
-          controller: _scrollController,
-          scrollDirection: Axis.horizontal,
-          itemCount: _dates.length,
-          itemBuilder: (context, index) {
-            final date = _dates[index];
-            final isSelected = index == _selectedIndex;
-            return GestureDetector(
-              onTap: () {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              child: Container(
-                width: 100,
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                decoration: BoxDecoration(
-                    color: isSelected
-                        ? const Color(0xff56537C)
-                        : const Color(0xffEFEFEF),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xff000000)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      )
-                    ]),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      DateFormat("MMMM").format(date),
-                      style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: isSelected
-                              ? const Color(0xffD7D5EE)
-                              : const Color(0xff000000)),
-                    ),
-                    Text(
-                      DateFormat("dd").format(date),
-                      style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: isSelected
-                              ? const Color(0xffD7D5EE)
-                              : const Color(0xff000000)),
-                    ),
-                    Text(
-                      DateFormat("EEEE").format(date),
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: isSelected
-                            ? const Color(0xffD7D5EE)
-                            : const Color(0xff000000),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            );
-          }),
+        controller: _scrollController,
+        scrollDirection: Axis.horizontal,
+        itemCount: _dates.length,
+        itemBuilder: (context, index) {
+          final date = _dates[index];
+          final isSelected = index == _selectedIndex;
+          return DateWidget(
+            date: date,
+            isSelected: isSelected,
+            onTap: () {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+          );
+        },
+      ),
     );
   }
+}
+
+class DateWidget extends StatelessWidget {
+  final DateTime date;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const DateWidget({
+    Key? key,
+    required this.date,
+    required this.isSelected,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 100,
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          color: isSelected ? const Color(0xff56537C) : const Color(0xffEFEFEF),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: const Color(0xff000000)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            )
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              DateFormat("MMMM").format(date),
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: isSelected
+                    ? const Color(0xffD7D5EE)
+                    : const Color(0xff000000),
+              ),
+            ),
+            Text(
+              DateFormat("dd").format(date),
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: isSelected
+                    ? const Color(0xffD7D5EE)
+                    : const Color(0xff000000),
+              ),
+            ),
+            Text(
+              DateFormat("EEEE").format(date),
+              style: TextStyle(
+                fontSize: 12,
+                color: isSelected
+                    ? const Color(0xffD7D5EE)
+                    : const Color(0xff000000),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

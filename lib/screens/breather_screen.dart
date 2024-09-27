@@ -33,13 +33,14 @@ class _BreatherPageState extends State<BreatherPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TitleDescription(
+          const TitleDescription(
               title: "Breather", description: "Take a pause for a moment"),
           const EmotionSelectorContainer(),
           const SizedBox(height: 16),
           const Title(title: "Your Journal"),
           const SizedBox(height: 8),
-          ScrollableCalendar(initialDate: DateTime.now()),
+          RepaintBoundary(
+              child: ScrollableCalendar(initialDate: DateTime.now())),
           const SizedBox(height: 16),
           JournalEntryContainer(
             journalEntry: _currentJournalEntry,
