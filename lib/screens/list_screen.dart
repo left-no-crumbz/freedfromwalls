@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../assets/widgets/unordered_list.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -9,278 +8,356 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  bool isBucketListSelected = true;
+  bool isBucketListSelected = true; // To toggle between Bucketlisted and Blacklisted
+  String message = "Bucketlisted";
 
-  static const scaffoldBackgroundColor = Color(0xFFF1F3F4);
   static const borderColor = Color(0xff423e3d);
-  static const borderWidth = 5.0;
-  static const containerPadding = EdgeInsets.all(1);
-  static const containerMargin = EdgeInsets.only(bottom: 20);
 
-  bool _isEditingDay = false;
-  bool _isEditingMonth = false;
-  bool _isEditingYear = false;
+  // Separate lists and checkbox statuses for each category
+  List<String> _bucketList = [];
+  List<bool> _bucketListChecked = [];
 
-  void _toggleEditMode(int sectionIndex) {
-    setState(() {
-      if (sectionIndex == 0) {
-        _isEditingDay = !_isEditingDay;
-      } else if (sectionIndex == 1) {
-        _isEditingMonth = !_isEditingMonth;
-      } else {
-        _isEditingYear = !_isEditingYear;
-      }
-      // TODO: Save data to database when editing is done
-    });
-  }
+  List<String> _blackList = [];
+  List<bool> _blackListChecked = [];
 
-  final List<TextEditingController> _endOfDayControllers = [];
-  final List<TextEditingController> _endOfMonthControllers = [];
-  final List<TextEditingController> _endOfYearControllers = [];
-  final List<TextEditingController> _endOfDayBlackListControllers = [];
-  final List<TextEditingController> _endOfMonthBlackListControllers = [];
-  final List<TextEditingController> _endOfYearBlackListControllers = [];
-
-  @override
-  void initState() {
-    super.initState();
-    for (var text in [
-      // Instantiated empty strings
-      "",
-      "",
-      "",
-      "",
-      "",
-    ]) {
-      _endOfDayControllers.add(TextEditingController(text: text));
-      _endOfMonthControllers.add(TextEditingController(text: text));
-      _endOfYearControllers.add(TextEditingController(text: text));
-      _endOfDayBlackListControllers.add(TextEditingController(text: text));
-      _endOfMonthBlackListControllers.add(TextEditingController(text: text));
-      _endOfYearBlackListControllers.add(TextEditingController(text: text));
-    }
-  }
+  // Method to return the current list (Bucketlisted or Blacklisted)
+  List<String> get _currentList => isBucketListSelected ? _bucketList : _blackList;
+  List<bool> get _currentChecked => isBucketListSelected ? _bucketListChecked : _blackListChecked;
 
   Widget screenTitle() {
-    const backgroundColor = Color(0xff2d2d2d);
-    const selectedColor = Color(0xffd9d9d9);
-    const unselectedColor = Color(0xffffffff);
+    const selectedColor = Color(0xFF56537C);
+    const unselectedColor = Color(0xFFD7D5EE);
 
-    return Container(
-      alignment: Alignment.center,
-      margin: const EdgeInsets.only(top: 16, bottom: 16),
-      width: MediaQuery.of(context).size.width * .90,
-      height: 40,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(5),
-        border: Border.all(
-          color: borderColor,
-          width: borderWidth,
-        ),
-      ),
-      child: Row(
-        children: [
-          Expanded(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: SizedBox(
+            height: 28,
             child: GestureDetector(
               onTap: () {
                 setState(() {
                   isBucketListSelected = true;
+                  message = "Bucketlisted";
                 });
               },
-              child: Container(
-                alignment: Alignment.center,
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 200),
+                margin: const EdgeInsets.only(right: 2),
                 decoration: BoxDecoration(
                   color: isBucketListSelected ? selectedColor : unselectedColor,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(5),
-                    bottomLeft: Radius.circular(5),
-                  ),
-                  border: const Border(
-                    right: BorderSide(
-                      color: borderColor,
-                      width: borderWidth,
-                    ),
-                  ),
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: borderColor, width: 1.0),
+                  boxShadow: isBucketListSelected
+                      ? [BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2))]
+                      : null,
                 ),
-                child: Text(
-                  'BUCKETLIST'.toUpperCase(),
-                  style: const TextStyle(
-                    color: Color(0xff000000),
-                    fontFamily: "Inter",
-                    fontSize: 14,
+                child: Center(
+                  child: Text(
+                    'Bucketlisted',
+                    style: TextStyle(
+                      color: isBucketListSelected ? Colors.white : Color(0xff000000),
+                      fontFamily: "Inter",
+                      fontSize: 14,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-          Expanded(
+        ),
+        Expanded(
+          child: SizedBox(
+            height: 28,
             child: GestureDetector(
               onTap: () {
                 setState(() {
                   isBucketListSelected = false;
+                  message = "Blacklisted";
                 });
               },
-              child: Container(
-                alignment: Alignment.center,
+              child: AnimatedContainer(
+                duration: Duration(milliseconds: 200),
+                margin: const EdgeInsets.only(left: 2),
                 decoration: BoxDecoration(
                   color: isBucketListSelected ? unselectedColor : selectedColor,
-                  borderRadius: const BorderRadius.only(
-                    topRight: Radius.circular(5),
-                    bottomRight: Radius.circular(5),
-                  ),
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: borderColor, width: 1.0),
+                  boxShadow: !isBucketListSelected
+                      ? [BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2))]
+                      : null,
                 ),
-                child: Text(
-                  'BLACKLIST'.toUpperCase(),
-                  style: const TextStyle(
-                    color: Color(0xff000000),
-                    fontFamily: "Inter",
-                    fontSize: 14,
+                child: Center(
+                  child: Text(
+                    'Blacklisted',
+                    style: TextStyle(
+                      color: isBucketListSelected ? Color(0xff000000) : Colors.white,
+                      fontFamily: "Inter",
+                      fontSize: 14,
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
-  Widget buildSection(
-      String title,
-      int itemCount,
-      bool isBucketList,
-      List<TextEditingController> bucketListController,
-      List<TextEditingController> blackListController,
-      bool isEditing,
-      int editIndex) {
-    final backgroundColor =
-        isBucketList ? Colors.white : const Color(0xff2d2d2d);
-    final textColor = isBucketList ? Colors.black : Colors.white;
-    final lineColor = isBucketList ? Colors.grey : Colors.white;
-    final iconColor = isBucketList ? Colors.black : Colors.white;
+  void _showAddItemBottomSheet({String? currentItem, int? index}) {
+    final TextEditingController _textController = TextEditingController(text: currentItem);
 
-    return Expanded(
-      flex: 1,
-      child: Container(
-        padding: containerPadding,
-        margin: containerMargin,
-        decoration: BoxDecoration(
-          border: Border.all(color: borderColor),
-          borderRadius: BorderRadius.circular(5),
-          color: backgroundColor,
-        ),
-        width: MediaQuery.of(context).size.width * .90,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              alignment: Alignment.centerLeft,
-              padding: const EdgeInsets.only(left: 10, right: 3),
-              child: Row(
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(fontSize: 12, color: textColor),
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 16), // Add space here
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: TextField(
+                  controller: _textController,
+                  decoration: InputDecoration(
+                    labelText: 'Item Name',
+                    border: InputBorder.none,
                   ),
-                  const Expanded(child: SizedBox()),
-                  IconButton(
-                    iconSize: 20,
-                    padding: EdgeInsets.zero,
-                    onPressed: () => _toggleEditMode(editIndex),
-                    constraints:
-                        const BoxConstraints.tightFor(width: 20, height: 20),
-                    icon: isEditing
-                        ? Icon(
-                            Icons.check,
-                            color: iconColor,
-                          )
-                        : Icon(
-                            Icons.edit_note,
-                            color: iconColor,
-                          ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Divider(),
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
+                    child: Container(
+                      width: 50,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.black,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: Icon(
+                          Icons.send,
+                          color: Colors.white,
+                          size: 25,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            if (_textController.text.isNotEmpty) {
+                              if (index != null) {
+                                // Edit existing item
+                                _currentList[index] = _textController.text;
+                              } else {
+                                // Add new item
+                                if (isBucketListSelected) {
+                                  _bucketList.add(_textController.text);
+                                  _bucketListChecked.add(false);
+                                } else {
+                                  _blackList.add(_textController.text);
+                                  _blackListChecked.add(false);
+                                }
+                              }
+                            }
+                          });
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-            Divider(
-              height: 1,
-              color: lineColor,
-            ),
-            const SizedBox(height: 10),
-            isBucketList
-                ? UnorderedList(
-                    controllers: bucketListController,
-                    isEditing: isEditing,
-                    textColor: textColor,
-                  )
-                : UnorderedList(
-                    controllers: blackListController,
-                    isEditing: isEditing,
-                    textColor: textColor),
-            const SizedBox(height: 10),
-          ],
-        ),
-      ),
+            ],
+          ),
+        );
+      },
     );
+  }
+
+  void _editItem(int index) {
+    _showAddItemBottomSheet(currentItem: _currentList[index], index: index);
+  }
+
+  void _deleteItem(int index) {
+    setState(() {
+      if (isBucketListSelected) {
+        _bucketList.removeAt(index);
+        _bucketListChecked.removeAt(index);
+      } else {
+        _blackList.removeAt(index);
+        _blackListChecked.removeAt(index);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    String dayTitle = isBucketListSelected
-        ? 'By the end of each DAY, I must...'
-        : 'By the end of each DAY, I must not...';
-
-    String monthTitle = isBucketListSelected
-        ? 'By the end of each MONTH, I must...'
-        : 'By the end of each MONTH, I must not...';
-
-    String yearTitle = isBucketListSelected
-        ? 'By the end of each YEAR, I must...'
-        : 'By the end of each YEAR, I must not...';
-
     return Scaffold(
-      backgroundColor: scaffoldBackgroundColor,
-      body: ListView(
-        children: [
-          Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: screenTitle()),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SizedBox(
-              height: 620,
-              child: Column(
-                children: [
-                  buildSection(
-                      dayTitle,
-                      5,
-                      isBucketListSelected,
-                      _endOfDayControllers,
-                      _endOfDayBlackListControllers,
-                      _isEditingDay,
-                      0),
-                  buildSection(
-                      monthTitle,
-                      5,
-                      isBucketListSelected,
-                      _endOfMonthControllers,
-                      _endOfMonthBlackListControllers,
-                      _isEditingMonth,
-                      1),
-                  buildSection(
-                      yearTitle,
-                      5,
-                      isBucketListSelected,
-                      _endOfYearControllers,
-                      _endOfYearBlackListControllers,
-                      _isEditingYear,
-                      2),
-                ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      message,
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontFamily: 'Jua',
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Text(
+                      "Record the things you want to do over the year.",
+                      style: TextStyle(
+                        fontSize: 8,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: screenTitle(),
+            ),
+            // Checklist for Bucketlist or Blacklist based on selection
+            if (_currentList.isNotEmpty)
+              Container(
+                padding: EdgeInsets.only(left: 0.0, right: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _currentList.length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: Card(
+                            color: Colors.white,
+                            child: ListTile(
+                              leading: Checkbox(
+                                value: _currentChecked[index],
+                                onChanged: (bool? value) {
+                                  setState(() {
+                                    _currentChecked[index] = value ?? false;
+                                  });
+                                },
+                              ),
+                              title: Text(_currentList[index]),
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth: 25, // Adjust maxWidth as needed
+                                      maxHeight: 30, // Ensure the buttons are consistent in size
+                                    ),
+                                    child: IconButton(
+                                      iconSize: 20.0,
+                                      padding: EdgeInsets.zero,
+                                      icon: Icon(Icons.edit, color: Colors.black),
+                                      onPressed: () => _editItem(index),
+                                    ),
+                                  ),
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxWidth: 30, // Same width for consistency
+                                      maxHeight: 30,
+                                    ),
+                                    child: IconButton(
+                                      iconSize: 20.0,
+                                      padding: EdgeInsets.zero,
+                                      icon: Icon(Icons.delete, color: Colors.black),
+                                      onPressed: () => _deleteItem(index),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+
+            // Display the image and "No items here" text only if the current list is empty
+            if (_currentList.isEmpty)
+              Column(
+                children: [
+                  Transform.translate(
+                    offset: Offset(0, 50), // Adjust x and y values to move the image
+                    child: Container(
+                      width: 250,
+                      height: 250,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage(isBucketListSelected
+                              ? 'lib/assets/images/backgrounds/Default_Bucketlisted.png'
+                              : 'lib/assets/images/backgrounds/Default_Blacklisted.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Transform.translate(
+                    offset: Offset(0, 30), // Adjust x and y values to move the text
+                    child: Text(
+                      "No items here yet.\nShare the things you want to do!",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.black,
+                        fontFamily: 'Jua',
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+          ],
+        ),
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 30.0),
+        child: Container(
+          width: 55,
+          height: 55,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: Colors.black,
           ),
-        ],
+          child: FloatingActionButton(
+            onPressed: _showAddItemBottomSheet,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 26,
+            ),
+          ),
+        ),
       ),
     );
   }
