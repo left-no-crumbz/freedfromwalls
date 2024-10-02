@@ -1,7 +1,17 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import '../main.dart';
 import 'register_screen.dart';
-
+void main(){
+  AwesomeNotifications().initialize(null,
+    [
+      NotificationChannel(channelKey: 'basic_channel',
+        channelName: 'Basic Notifications',
+        channelDescription: 'Notification channel for basic tests',),
+    ],
+    debug: true,
+  );
+}
 class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();

@@ -6,7 +6,6 @@ import 'screens/list_screen.dart';
 import 'screens/breather_screen.dart';
 import 'screens/feel_screen.dart';
 import 'screens/profile_screen.dart';
-import 'package:flutter/services.dart';
 
 void main() => runApp(FreedFromWallsApp());
 

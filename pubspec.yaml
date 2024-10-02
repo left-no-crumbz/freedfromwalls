@@ -35,6 +35,9 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+
+  awesome_notifications: ^0.9.3+1
+
   provider: ^6.1.2
 dev_dependencies:
   flutter_test:
@@ -63,6 +66,7 @@ flutter:
     - lib/assets/images/
     - lib/assets/images/emotions/
     - lib/assets/images/avatars/
+    - lib/assets/images/backgrounds/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -85,6 +89,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+   - family: Jua
+     fonts:
+       - asset: lib/assets/fonts/Jua-Regular.ttf
    - family: Inter
      fonts:
        - asset: lib/assets/fonts/Inter_18pt-Black.ttf
