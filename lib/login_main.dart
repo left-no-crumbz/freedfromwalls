@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'assets/widgets/customThemes.dart';
+import 'assets/widgets/theme_provider.dart';
 import 'screens/login_screen.dart';
 import 'package:flutter/services.dart';
 
@@ -6,22 +9,24 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-  runApp(FreedFromWallsLogin());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(initialTheme: AppThemes.sunriseTheme),
+      child: FreedFromWallsLogin(),
+    ),
+  );
 }
 
 class FreedFromWallsLogin extends StatelessWidget {
   const FreedFromWallsLogin({super.key});
-  static const scaffoldBackgroundColor = Color(0xFFF1F3F4);
 
   @override
   Widget build(BuildContext context) {
+    var currentTheme = Provider.of<ThemeProvider>(context).theme;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: "Inter",
-        scaffoldBackgroundColor: scaffoldBackgroundColor,
-      ),
+      theme: currentTheme,
       home: LoginPage(),
     );
   }

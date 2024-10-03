@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
 import './assets/widgets/custom_appbar.dart';
 import './assets/widgets/custom_bottom_navigation_bar.dart';
+import 'assets/widgets/customThemes.dart';
+import 'assets/widgets/theme_provider.dart';
 import 'screens/home_screen.dart';
 import 'screens/list_screen.dart';
 import 'screens/breather_screen.dart';
 import 'screens/feel_screen.dart';
 import 'screens/profile_screen.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(FreedFromWallsApp());
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => ThemeProvider(initialTheme: AppThemes.sunriseTheme),
+      child: FreedFromWallsApp(),
+    ),
+  );
+}
 
 class FreedFromWallsApp extends StatelessWidget {
   const FreedFromWallsApp({super.key});
-  static const scaffoldBackgroundColor = Color(0xFFF1F3F4);
 
   @override
   Widget build(BuildContext context) {
+    var currentTheme = Provider.of<ThemeProvider>(context).theme;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: "Inter",
-        scaffoldBackgroundColor: scaffoldBackgroundColor,
-      ),
+      theme: currentTheme,
       home: const AppState(),
     );
   }

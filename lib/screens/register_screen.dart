@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freedfromwalls/screens/onboarding_screen.dart';
+import '../assets/widgets/customThemes.dart';
 import 'login_screen.dart';
 import '../main.dart';
 
@@ -62,7 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
                 "REGISTER",
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 18), fontWeight: FontWeight.w500, color: Colors.black),
               ),
             ),
 
@@ -176,7 +177,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
 
             Container(
-              width: width * 0.35,
+              width: width * 0.45,
               child: ElevatedButton(
                 onPressed: _register,
                 style: ElevatedButton.styleFrom(
@@ -192,7 +193,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 17
+                      fontSize: AppThemes.getResponsiveFontSize(context, 16)
                   ),
                 ),
               ),
@@ -207,16 +208,17 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
 
             Container(
-              height: height * 0.25,
+              height: height * 0.17,
+              margin: EdgeInsets.only(bottom: height * 0.01),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   CircleAvatar(
-                    radius: height * 0.10,
+                    radius: height * 0.09,
                     backgroundColor: Color(0xFF3A375E),
                   ),
                   CircleAvatar(
-                    radius: height * 0.08,
+                    radius: height * 0.075,
                     backgroundColor: Color(0xFF56537C),
                   ),
                   CircleAvatar(
@@ -224,7 +226,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     backgroundColor: Color(0xFF9C98CB),
                   ),
                   CircleAvatar(
-                    radius: height * 0.04,
+                    radius: height * 0.045,
                     backgroundColor: Color(0xFFD7D5EE),
                   ),
                 ],
@@ -235,7 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
               alignment: Alignment.bottomCenter,
               children: [
                 Container(
-                  height: height * 0.35,
+                  height: height * 0.30,
                   width: width,
                   decoration: BoxDecoration(
                     color: Color(0xFF3A375E),
@@ -243,7 +245,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 Container(
-                  height: height * 0.32,
+                  height: height * 0.27,
                   width: width * 0.85,
                   decoration: BoxDecoration(
                     color: Color(0xFF56537C),
@@ -251,7 +253,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 Container(
-                  height: height * 0.29,
+                  height: height * 0.24,
                   width: width * 0.75,
                   decoration: BoxDecoration(
                     color: Color(0xFF9C98CB),
@@ -259,7 +261,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 Container(
-                  height: height * 0.26,
+                  height: height * 0.21,
                   width: width * 0.65,
                   decoration: BoxDecoration(
                     color: Color(0xFFD7D5EE),
@@ -267,7 +269,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 Container(
-                  height: height * 0.23,
+                  height: height * 0.18,
                   width: width * 0.55,
                   decoration: BoxDecoration(
                     color: Color(0xFFEFEEFF),
@@ -275,7 +277,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 Container(
-                  height: height * 0.05,
+                  height: height * 0.07,
                   width: width * 0.50,
                   margin: EdgeInsets.only(bottom: 10),
                   decoration: BoxDecoration(
@@ -296,12 +298,12 @@ class _RegisterPageState extends State<RegisterPage> {
                           Text(
                             "Already have an account?",
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black, fontSize: 12),
+                            style: TextStyle(color: Colors.black, fontSize: AppThemes.getResponsiveFontSize(context, 12)),
                           ),
                           Text(
                             "Return to Login Page.",
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black, fontSize: 12),
+                            style: TextStyle(color: Colors.black, fontSize: AppThemes.getResponsiveFontSize(context, 12)),
                           )
                         ],
                       )
@@ -313,3 +315,4 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 }
+
