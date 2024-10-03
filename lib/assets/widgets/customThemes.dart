@@ -17,22 +17,22 @@ class AppThemes {
   // Sunrise Theme
   static final ThemeData defaultTheme = ThemeData(
     brightness: Brightness.light,
-    primaryColor: Color(0xFFFFCC99), //Used for main color
-    cardColor: Color(0xFFC6541F), //Used for secondary color
+    primaryColor: Color(0xFFD7D5EE), //Used for main color
+    cardColor: Color(0xFF56537C), //Used for secondary color
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.black,
       titleTextStyle: TextStyle(color: Colors.white),
     ),
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Color(0xFFF8EACB),
+      backgroundColor: Color(0xFFFFFFFF),
       selectedItemColor: Colors.black,
       unselectedItemColor: Colors.grey,
     ),
-    scaffoldBackgroundColor: Color(0xFFF8EACB),
+    scaffoldBackgroundColor: Color(0xFFFFFFFF),
     textTheme: TextTheme(
       bodyLarge: TextStyle(color: Colors.black),
-      displaySmall: TextStyle(color: Color(0xFFFFCC99)), //Used in grid view selected
-      displayMedium: TextStyle(color: Color(0xFFC6541F)), //Used in grid view unselected
+      displaySmall: TextStyle(color: Color(0xFFD7D5EE)), //Used in grid view selected
+      displayMedium: TextStyle(color: Color(0xFF56537C)), //Used in grid view unselected
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: Color(0xFFFFCC99),  // Gold

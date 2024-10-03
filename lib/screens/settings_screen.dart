@@ -18,6 +18,18 @@ class SettingsPage extends StatelessWidget {
       body: Column(
         children: [
           ListTile(
+            title: Text('Default'),
+            leading: Radio(
+              value: AppThemes.defaultTheme,
+              groupValue: Provider.of<ThemeProvider>(context).theme,
+              onChanged: (ThemeData? value) {
+                if (value != null) {
+                  Provider.of<ThemeProvider>(context, listen: false).swapTheme(value);
+                }
+              },
+            ),
+          ),
+          ListTile(
             title: Text('Sunrise'),
             leading: Radio(
               value: AppThemes.sunriseTheme,

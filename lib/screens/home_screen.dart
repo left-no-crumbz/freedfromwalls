@@ -29,73 +29,73 @@ class _HomePageState extends State<HomePage> {
     {
       'title': 'YAY',
       'name': 'happy',
-      'imagePath': 'lib/assets/images/emotions-happy.png',
+      'imagePath': 'lib/assets/images/emotions/emotions-happy.png',
       'color': Color(0xFFF8E9BB),
     },
     {
       'title': 'HUHU',
       'name': 'sad',
-      'imagePath': 'lib/assets/images/emotions-sad.png',
+      'imagePath': 'lib/assets/images/emotions/emotions-sad.png',
       'color': Color(0xffe4edff),
     },
     {
       'title': 'GRAH',
       'name': 'angry',
-      'imagePath': 'lib/assets/images/emotions-angry.png',
+      'imagePath': 'lib/assets/images/emotions/emotions-angry.png',
       'color': Color(0xFFfdb9b8),
     },
     {
       'title': 'SIGH',
       'name': 'tired',
-      'imagePath': 'lib/assets/images/emotions-tired.png',
+      'imagePath': 'lib/assets/images/emotions/emotions-tired.png',
       'color': Color(0xFFf0ffcd),
     },
     {
       'title': 'WOAH',
       'name': 'energetic',
-      'imagePath': 'lib/assets/images/emotions-energetic.png',
+      'imagePath': 'lib/assets/images/emotions/emotions-energetic.png',
       'color': Color(0xFFffdca0),
     },
     {
       'title': 'MEH',
       'name': 'neutral',
-      'imagePath': 'lib/assets/images/emotions-neutral.png',
+      'imagePath': 'lib/assets/images/emotions/emotions-neutral.png',
       'color': Color(0xFFfdf1de),
     },
     {
       'title': 'YIE',
       'name': 'in love',
-      'imagePath': 'lib/assets/images/emotions-love.png',
+      'imagePath': 'lib/assets/images/emotions/emotions-love.png',
       'color': Color(0xFFffdbe7),
     },
     {
       'title': 'UHM',
       'name': 'curious',
-      'imagePath': 'lib/assets/images/emotions-curious.png',
+      'imagePath': 'lib/assets/images/emotions/emotions-curious.png',
       'color': Color(0xFFcffdf8),
     },
     {
       'title': 'WOMP',
       'name': 'embarrassed',
-      'imagePath': 'lib/assets/images/emotions-embarrassed.png',
+      'imagePath': 'lib/assets/images/emotions/emotions-embarrassed.png',
       'color': Color(0xFFffc4c4),
     },
     {
       'title': 'AAA',
       'name': 'scared',
-      'imagePath': 'lib/assets/images/emotions-scared.png',
+      'imagePath': 'lib/assets/images/emotions/emotions-scared.png',
       'color': Color(0xFFffccab),
     },
   ];
 
   // Mood icons for specific dates
   Map<DateTime, String> userMoods = {
-    DateTime(2024, 9, 20): 'lib/assets/images/emotions-curious.png',
-    DateTime(2024, 9, 15): 'lib/assets/images/emotions-love.png',
-    DateTime(2024, 9, 21): 'lib/assets/images/emotions-sad.png',
-    DateTime(2024, 9, 22): 'lib/assets/images/emotions-angry.png',
-    DateTime(2024, 9, 23): 'lib/assets/images/emotions-happy.png',
-    DateTime(2024, 9, 24): 'lib/assets/images/emotions-happy.png',
+    DateTime(2024, 9, 20): 'lib/assets/images/emotions/emotions-curious.png',
+    DateTime(2024, 9, 15): 'lib/assets/images/emotions/emotions-love.png',
+    DateTime(2024, 9, 21): 'lib/assets/images/emotions/emotions-angry.png',
+    DateTime(2024, 9, 22): 'lib/assets/images/emotions/emotions-angry.png',
+    DateTime(2024, 9, 23): 'lib/assets/images/emotions/emotions-happy.png',
+    DateTime(2024, 9, 24): 'lib/assets/images/emotions/emotions-happy.png',
     // Add more dates and mood images as needed
   };
 
@@ -154,7 +154,6 @@ class _HomePageState extends State<HomePage> {
       _selectedTitle = _mostFreqMood['title'];
     });
   }
-
 
   //Generate days for the 5-grid calendar
   List<DateTime> _generateDaysInMonth(DateTime date) {
@@ -333,8 +332,8 @@ class _HomePageState extends State<HomePage> {
                           child: Center(
                             child: hasMood ? Image.asset(
                               userMoods[normalizedDate]!,
-                              width: width * 0.12,
-                              height: width * 0.12,
+                              width: width * 0.10,
+                              height: width * 0.10,
                               fit: BoxFit.cover,
                             )
                                 : Text(
