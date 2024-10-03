@@ -66,22 +66,22 @@ class _FeelPage extends State<FeelPage> {
               children: [
                 TextField(
                   controller: titleController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Title of Achievement',
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 12.0),
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 TextField(
                   controller: descriptionController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     hintText: 'Description',
-                    contentPadding:
-                        EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
+                    contentPadding: const EdgeInsets.symmetric(
+                        vertical: 12.0, horizontal: 12.0),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
@@ -95,7 +95,8 @@ class _FeelPage extends State<FeelPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: IconButton(
-                          icon: Icon(Icons.send, color: Colors.white, size: 23),
+                          icon: const Icon(Icons.send,
+                              color: Colors.white, size: 23),
                           onPressed: () {
                             setState(() {
                               _titleControllers.add(titleController);
@@ -125,24 +126,26 @@ class _FeelPage extends State<FeelPage> {
       builder: (context) {
         return Container(
           width: MediaQuery.of(context).size.width * 0.99,
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
+              const Text(
                 "Get notifications of your wins.",
-                style: TextStyle(fontSize: 18),
+                style: const TextStyle(fontSize: 18),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 8),
-              Text(
+              const SizedBox(height: 8),
+              const Text(
                 "Please select one option below.",
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.normal),
+                style: const TextStyle(
+                    fontSize: 12, fontWeight: FontWeight.normal),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               RadioListTile<String>(
-                title: Text('24 hours', style: TextStyle(fontSize: 12)),
+                title: const Text('24 hours',
+                    style: const TextStyle(fontSize: 12)),
                 value: '24 hours',
                 groupValue: _selectedNotificationTime,
                 onChanged: (value) {
@@ -153,7 +156,8 @@ class _FeelPage extends State<FeelPage> {
                 },
               ),
               RadioListTile<String>(
-                title: Text('48 hours', style: TextStyle(fontSize: 12)),
+                title: const Text('48 hours',
+                    style: const TextStyle(fontSize: 12)),
                 value: '48 hours',
                 groupValue: _selectedNotificationTime,
                 onChanged: (value) {
@@ -164,7 +168,8 @@ class _FeelPage extends State<FeelPage> {
                 },
               ),
               RadioListTile<String>(
-                title: Text('1 week', style: TextStyle(fontSize: 12)),
+                title:
+                    const Text('1 week', style: const TextStyle(fontSize: 12)),
                 value: '1 week',
                 groupValue: _selectedNotificationTime,
                 onChanged: (value) {
@@ -175,7 +180,8 @@ class _FeelPage extends State<FeelPage> {
                 },
               ),
               RadioListTile<String>(
-                title: Text('2 weeks', style: TextStyle(fontSize: 12)),
+                title:
+                    const Text('2 weeks', style: const TextStyle(fontSize: 12)),
                 value: '2 weeks',
                 groupValue: _selectedNotificationTime,
                 onChanged: (value) {
@@ -186,7 +192,8 @@ class _FeelPage extends State<FeelPage> {
                 },
               ),
               RadioListTile<String>(
-                title: Text('Never', style: TextStyle(fontSize: 12)),
+                title:
+                    const Text('Never', style: const TextStyle(fontSize: 12)),
                 value: 'Never',
                 groupValue: _selectedNotificationTime,
                 onChanged: (value) {
@@ -205,8 +212,8 @@ class _FeelPage extends State<FeelPage> {
                         _descriptionControllers.last.text);
                   }
                 },
-                child: Text('Schedule Notification',
-                    style: TextStyle(fontSize: 14)),
+                child: const Text('Schedule Notification',
+                    style: const TextStyle(fontSize: 14)),
               ),
             ],
           ),
@@ -268,58 +275,54 @@ class _FeelPage extends State<FeelPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 15.0),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 15.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "FULLFEELMENT",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Jua',
                       ),
                     ),
-                    Text(
+                    const Text(
                       'Remind yourself of your achievements.',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 11,
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
                         fontFamily: 'RethinkSans',
                       ),
                     ),
-                    SizedBox(height: 30),
+                    const SizedBox(height: 30),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical: 8.0, horizontal: 55.0),
                           decoration: BoxDecoration(
-                            color: Color(0xFF56537C),
+                            color: const Color(0xFF56537C),
                             borderRadius: BorderRadius.circular(8.0),
                             border: Border.all(
                               color: Colors.black,
                               width: 1.0,
                             ),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Text(
-                                'WIN COUNT: ${_titleControllers.length}',
-                                textAlign: TextAlign.left,
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            'WIN COUNT: ${_titleControllers.length}',
+                            textAlign: TextAlign.left,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 16),
                         GestureDetector(
                           onTap: _showNotificationBottomSheet,
                           child: SizedBox(
@@ -327,14 +330,14 @@ class _FeelPage extends State<FeelPage> {
                             height: 48,
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Color(0xFFD7D5EE),
+                                color: const Color(0xFFD7D5EE),
                                 border: Border.all(
                                   color: Colors.black,
                                   width: 1.0,
                                 ),
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
-                              child: Icon(
+                              child: const Icon(
                                 Icons.notifications,
                                 color: Colors.black,
                                 size: 23,
@@ -345,21 +348,20 @@ class _FeelPage extends State<FeelPage> {
                       ],
                     ),
                     if (_titleControllers.isEmpty) ...[
-                      Divider(),
-                      Text(
+                      const Divider(),
+                      const Text(
                         "Click the add button below to add achievements.",
-                        style: TextStyle(
-                          fontSize: 8,
+                        style: const TextStyle(
+                          fontSize: 10,
                           color: Colors.grey,
                           fontWeight: FontWeight.w400,
                         ),
                         textAlign: TextAlign.left,
                       ),
-                      Divider(
+                      const Divider(
                         color: Colors.grey,
                         thickness: 1,
                       ),
-                      SizedBox(height: 0),
                       Column(
                         children: [
                           Transform.translate(
@@ -374,9 +376,9 @@ class _FeelPage extends State<FeelPage> {
                           Transform.translate(
                             offset: Offset(0,
                                 -75), // Adjust the vertical offset to move the text upwards
-                            child: Text(
+                            child: const Text(
                               "No items here yet.\nShare the things you want to do!",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
                                 fontFamily: 'Jua',
@@ -392,18 +394,18 @@ class _FeelPage extends State<FeelPage> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: _titleControllers.length,
                       itemBuilder: (context, index) {
                         return Column(
                           children: [
-                            Divider(color: Colors.grey),
+                            const Divider(color: Colors.grey),
                             Padding(
                               padding: const EdgeInsets.only(bottom: 0.0),
                               child: Row(
@@ -415,7 +417,7 @@ class _FeelPage extends State<FeelPage> {
                                     child: Container(
                                       width: 30,
                                       height: 30,
-                                      padding: EdgeInsets.all(1),
+                                      padding: const EdgeInsets.all(1),
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
                                         color: Colors.black,
@@ -429,7 +431,7 @@ class _FeelPage extends State<FeelPage> {
                                                 0.5), // Shadow color
                                             spreadRadius: 1, // Spread radius
                                             blurRadius: 3, // Blur radius
-                                            offset: Offset(0,
+                                            offset: const Offset(0,
                                                 2), // Changes the position of the shadow
                                           ),
                                         ],
@@ -437,7 +439,7 @@ class _FeelPage extends State<FeelPage> {
                                       child: Center(
                                         child: Text(
                                           '${index + 1}',
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 12,
                                             color: Colors.white,
                                             fontWeight: FontWeight.bold,
@@ -466,7 +468,7 @@ class _FeelPage extends State<FeelPage> {
                                                     controller:
                                                         _titleControllers[
                                                             index],
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                         fontSize: 12,
                                                         color: Colors.black),
                                                     decoration: InputDecoration(
@@ -476,13 +478,13 @@ class _FeelPage extends State<FeelPage> {
                                                       hintStyle: TextStyle(
                                                           color: Colors.black
                                                               .withOpacity(0.6),
-                                                          fontSize: 20),
+                                                          fontSize: 18),
                                                     ),
                                                     readOnly:
                                                         !_isEditableList[index],
                                                   ),
                                                 ),
-                                                SizedBox(width: 2),
+                                                const SizedBox(width: 2),
 // Edit/Check Icon
                                                 Container(
                                                   child: IconButton(
@@ -505,7 +507,7 @@ class _FeelPage extends State<FeelPage> {
 // Delete Icon
                                                 Container(
                                                   child: IconButton(
-                                                    icon: Icon(
+                                                    icon: const Icon(
                                                       Icons.delete,
                                                       color: Colors.black,
                                                       size: 15,
@@ -527,7 +529,7 @@ class _FeelPage extends State<FeelPage> {
                                               controller:
                                                   _descriptionControllers[
                                                       index],
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 8,
                                                   color: Colors.black),
                                               decoration: InputDecoration(
@@ -552,7 +554,7 @@ class _FeelPage extends State<FeelPage> {
                                 ],
                               ),
                             ),
-                            Divider(height: 0, color: Colors.grey),
+                            const Divider(height: 0, color: Colors.grey),
                           ],
                         );
                       },
@@ -568,8 +570,8 @@ class _FeelPage extends State<FeelPage> {
         onPressed: _showAddReminderBottomSheet,
         backgroundColor: Colors.black,
         elevation: 0,
-        shape: CircleBorder(),
-        child: Icon(
+        shape: const CircleBorder(),
+        child: const Icon(
           Icons.add,
           color: Colors.white,
           size: 26,
