@@ -233,17 +233,17 @@ class _ListPageState extends State<ListPage> {
                   children: [
                     Text(
                       message,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                         fontFamily: 'Jua',
                       ),
                     ),
-                    SizedBox(height: 4),
-                    Text(
+                    const SizedBox(height: 4),
+                    const Text(
                       "Record the things you want to do over the year.",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
                         color: Colors.black,
                         fontFamily: 'RethinkSans',
@@ -260,13 +260,13 @@ class _ListPageState extends State<ListPage> {
             // Checklist for Bucketlist or Blacklist based on selection
             if (_currentList.isNotEmpty)
               Container(
-                padding: EdgeInsets.only(left: 0.0, right: 16.0),
+                padding: const EdgeInsets.only(left: 0.0, right: 16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ListView.builder(
                       shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       itemCount: _currentList.length,
                       itemBuilder: (context, index) {
                         return Padding(
@@ -287,7 +287,7 @@ class _ListPageState extends State<ListPage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   ConstrainedBox(
-                                    constraints: BoxConstraints(
+                                    constraints: const BoxConstraints(
                                       maxWidth: 25, // Adjust maxWidth as needed
                                       maxHeight:
                                           30, // Ensure the buttons are consistent in size
@@ -295,13 +295,13 @@ class _ListPageState extends State<ListPage> {
                                     child: IconButton(
                                       iconSize: 20.0,
                                       padding: EdgeInsets.zero,
-                                      icon:
-                                          Icon(Icons.edit, color: Colors.black),
+                                      icon: const Icon(Icons.edit,
+                                          color: Colors.black),
                                       onPressed: () => _editItem(index),
                                     ),
                                   ),
                                   ConstrainedBox(
-                                    constraints: BoxConstraints(
+                                    constraints: const BoxConstraints(
                                       maxWidth:
                                           30, // Same width for consistency
                                       maxHeight: 30,
@@ -309,7 +309,7 @@ class _ListPageState extends State<ListPage> {
                                     child: IconButton(
                                       iconSize: 20.0,
                                       padding: EdgeInsets.zero,
-                                      icon: Icon(Icons.delete,
+                                      icon: const Icon(Icons.delete,
                                           color: Colors.black),
                                       onPressed: () => _deleteItem(index),
                                     ),
@@ -345,13 +345,13 @@ class _ListPageState extends State<ListPage> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   Transform.translate(
                     offset:
                         Offset(0, 30), // Adjust x and y values to move the text
-                    child: Text(
+                    child: const Text(
                       "No items here yet.\nShare the things you want to do!",
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 16,
                         color: Colors.black,
                         fontFamily: 'Jua',
@@ -368,8 +368,8 @@ class _ListPageState extends State<ListPage> {
         onPressed: _showAddItemBottomSheet,
         backgroundColor: Colors.black,
         elevation: 0,
-        shape: CircleBorder(),
-        child: Icon(
+        shape: const CircleBorder(),
+        child: const Icon(
           Icons.add,
           color: Colors.white,
           size: 26,
