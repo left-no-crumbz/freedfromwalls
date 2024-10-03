@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'package:freedfromwalls/assets/widgets/customThemes.dart';
+import 'package:freedfromwalls/screens/settings_screen.dart';
 import 'package:intl/intl.dart';
-// import '../main.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,48 +11,179 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //Calendar
   DateTime today = DateTime.now();
-  late String _currentDate;
-  late String _currentDay;
+  late String _currentMonth;
+  late String _currentYear;
+  DateTime firstDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month, 1);
+
+  //Emotions
+  late Map<String, dynamic> _mostFreqMood; //Map of the most frequent mood
+  late String _selectedTitle;
+  late String _selectedName;
+  late String _selectedImagePath;
+  late Color _selectedColor;
+
+  //Emotions with each descriptions
+  final List<Map<String, dynamic>> _emotions = [
+    {
+      'title': 'YAY',
+      'name': 'happy',
+      'imagePath': 'lib/assets/images/emotions/emotions-happy.png',
+      'color': Color(0xFFF8E9BB),
+    },
+    {
+      'title': 'HUHU',
+      'name': 'sad',
+      'imagePath': 'lib/assets/images/emotions/emotions-sad.png',
+      'color': Color(0xffe4edff),
+    },
+    {
+      'title': 'GRAH',
+      'name': 'angry',
+      'imagePath': 'lib/assets/images/emotions/emotions-angry.png',
+      'color': Color(0xFFfdb9b8),
+    },
+    {
+      'title': 'SIGH',
+      'name': 'tired',
+      'imagePath': 'lib/assets/images/emotions/emotions-tired.png',
+      'color': Color(0xFFf0ffcd),
+    },
+    {
+      'title': 'WOAH',
+      'name': 'energetic',
+      'imagePath': 'lib/assets/images/emotions/emotions-energetic.png',
+      'color': Color(0xFFffdca0),
+    },
+    {
+      'title': 'MEH',
+      'name': 'neutral',
+      'imagePath': 'lib/assets/images/emotions/emotions-neutral.png',
+      'color': Color(0xFFfdf1de),
+    },
+    {
+      'title': 'YIE',
+      'name': 'in love',
+      'imagePath': 'lib/assets/images/emotions/emotions-love.png',
+      'color': Color(0xFFffdbe7),
+    },
+    {
+      'title': 'UHM',
+      'name': 'curious',
+      'imagePath': 'lib/assets/images/emotions/emotions-curious.png',
+      'color': Color(0xFFcffdf8),
+    },
+    {
+      'title': 'WOMP',
+      'name': 'embarrassed',
+      'imagePath': 'lib/assets/images/emotions/emotions-embarrassed.png',
+      'color': Color(0xFFffc4c4),
+    },
+    {
+      'title': 'AAA',
+      'name': 'scared',
+      'imagePath': 'lib/assets/images/emotions/emotions-scared.png',
+      'color': Color(0xFFffccab),
+    },
+  ];
+
+  // Mood icons for specific dates
+  Map<DateTime, String> userMoods = {
+    DateTime(2024, 9, 20): 'lib/assets/images/emotions/emotions-curious.png',
+    DateTime(2024, 9, 15): 'lib/assets/images/emotions/emotions-love.png',
+    DateTime(2024, 9, 21): 'lib/assets/images/emotions/emotions-angry.png',
+    DateTime(2024, 9, 22): 'lib/assets/images/emotions/emotions-angry.png',
+    DateTime(2024, 9, 23): 'lib/assets/images/emotions/emotions-happy.png',
+    DateTime(2024, 9, 24): 'lib/assets/images/emotions/emotions-happy.png',
+    // Add more dates and mood images as needed
+  };
 
   @override
   void initState() {
     super.initState();
     _updateTime();
+    _findMostFrequentMood();
   }
 
+  //Updates the month and year real time
   void _updateTime() {
     final now = DateTime.now();
-    final formattedDate = DateFormat('yMMMMd').format(now);
-    final formattedDay = DateFormat('EEEE').format(now);
+    final formattedMonth = DateFormat('MMMM').format(now);
+    final formattedYear = DateFormat('y').format(now);
 
     setState(() {
-      _currentDate = formattedDate;
-      _currentDay = formattedDay;
+      _currentMonth = formattedMonth;
+      _currentYear = formattedYear;
     });
   }
 
-  void _onSelectedDay(DateTime day, DateTime focusedDay) {
-    setState(() {
-      today = day;
+  // Find the most frequent emotion
+  void _findMostFrequentMood() {
+    Map<String, int> moodFrequency = {};
+
+    userMoods.forEach((date, moodImagePath) {
+      moodFrequency[moodImagePath] = (moodFrequency[moodImagePath] ?? 0) + 1;
     });
+
+    String? mostFrequentImagePath;
+    int highestFrequency = 0;
+
+    moodFrequency.forEach((moodImagePath, frequency) {
+      if (frequency > highestFrequency) {
+        mostFrequentImagePath = moodImagePath;
+        highestFrequency = frequency;
+      }
+    });
+
+    // Find the emotion details based on the most frequent image path
+    _mostFreqMood = _emotions.firstWhere(
+          (emotion) => emotion['imagePath'] == mostFrequentImagePath,
+      orElse: () => {
+        'title': '',
+        'name': '',
+        'imagePath': '',
+        'color': Colors.white, // Default fallback color
+      },
+    );
+
+    setState(() {
+      _selectedColor = _mostFreqMood['color'];
+      _selectedImagePath = _mostFreqMood['imagePath'];
+      _selectedName = _mostFreqMood['name'];
+      _selectedTitle = _mostFreqMood['title'];
+    });
+  }
+
+  //Generate days for the 5-grid calendar
+  List<DateTime> _generateDaysInMonth(DateTime date) {
+    List<DateTime> days = [];
+    DateTime firstDayOfMonth = DateTime(date.year, date.month, 1);
+
+    for (int i = 0; i < today.day; i++) {
+      days.add(firstDayOfMonth.add(Duration(days: i)));
+    }
+
+    return days;
   }
 
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final isSmallScreen = width < 450;
+
+    // Days of the current month
+    List<DateTime> daysInMonth = _generateDaysInMonth(today);
 
     return Material(
-      color: const Color.fromRGBO(241, 243, 244, 1),
+      color: Theme.of(context).scaffoldBackgroundColor,
       child: Center(
         child: Column(
           children: [
-            //Intro--something
+            // Intro section
             Container(
               width: width,
-              height: isSmallScreen ? height * 0.15 : height * 0.17,
+              height: height * 0.10,
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,85 +197,168 @@ class _HomePageState extends State<HomePage> {
                           Text(
                             'Home',
                             style: TextStyle(
-                              color: Colors.black,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
                               fontWeight: FontWeight.bold,
-                              fontSize: isSmallScreen ? 16 : 20,
+                              fontSize: AppThemes.getResponsiveFontSize(context, 16),
                             ),
                           ),
                           Text(
                             'Your Virtual Diary, Your Virtual Company.',
                             style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold,
-                              fontSize: isSmallScreen ? 8 : 10,
+                              color: Theme.of(context).textTheme.bodyLarge?.color,
+                              fontSize: AppThemes.getResponsiveFontSize(context, 10),
                             ),
                           ),
                         ],
                       ),
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SettingsPage(),
+                            ),
+                          );
+                        },
                         icon: Icon(Icons.settings),
-                      )
+                      ),
                     ],
                   ),
                 ],
               ),
             ),
 
-            //Calendar
             Container(
-              width: width,
-              height: height * 0.6,
-              alignment: Alignment.center,
-              margin: const EdgeInsets.all(16.0),
+              margin: const EdgeInsets.only(left: 16, right: 16, bottom: 18),
+              padding: const EdgeInsets.all(16),
+              width: MediaQuery.of(context).size.width * 1,
+              height: height * 0.12,
               decoration: BoxDecoration(
-                color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(color: Colors.black),
+                  color: _selectedColor,
               ),
-              child: TableCalendar(
-                rowHeight: height * 0.07,
-                focusedDay: today,
-                firstDay: DateTime(2000, 1, 1),
-                lastDay: DateTime.now(),
-                headerStyle: const HeaderStyle(
-                  titleCentered: true,
-                  formatButtonVisible: false,
-                  headerMargin: EdgeInsets.only(bottom: 10),
-                ),
-                calendarStyle: CalendarStyle(
-                  selectedDecoration: const BoxDecoration(
-                    color: Colors.black,
-                    shape: BoxShape.circle,
+              child: Row(
+                children: [
+                  Container(
+                    height: AppThemes.getResponsiveImageSize(context, 50),
+                    width: AppThemes.getResponsiveImageSize(context, 50),
+                    child: _selectedImagePath.isEmpty
+                        ? const Icon(
+                      Icons.question_mark,
+                      color: Colors.white,
+                    )
+                        : Image.asset(_selectedImagePath),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                    ),
                   ),
-                  defaultDecoration: BoxDecoration(
-                      color: const Color(0xFFD6D6D6),
-                      shape: BoxShape.circle,
-                      border: Border.all(width: 1, color: Colors.black)),
-                  weekendDecoration: BoxDecoration(
-                      color: const Color(0xFFD6D6D6),
-                      shape: BoxShape.circle,
-                      border: Border.all(width: 1, color: Colors.black)),
-                  selectedTextStyle: const TextStyle(color: Colors.white),
-                  weekendTextStyle: const TextStyle(color: Colors.black),
-                  todayDecoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
-                    shape: BoxShape.circle,
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          _selectedTitle.isEmpty
+                              ? "Why don't you feel anything..."
+                              : "Your word of the month is $_selectedTitle",
+                          style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 14)),
+                        ),
+                        Text(
+                          _selectedTitle.isEmpty
+                              ? "Hopefully, you're still alive"
+                              : "Seems like you are $_selectedName during the month of $_currentMonth.",
+                          style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 10)),
+                        ),
+                      ],
+                    ),
                   ),
-                  todayTextStyle: const TextStyle(color: Colors.white),
-                ),
-                availableGestures: AvailableGestures.all,
-                selectedDayPredicate: (day) => isSameDay(day, today),
-                onDaySelected: _onSelectedDay,
-                daysOfWeekStyle: DaysOfWeekStyle(
-                  weekdayStyle: TextStyle(color: Colors.transparent),
-                  weekendStyle: TextStyle(
-                      color: Colors.transparent,
-                      backgroundColor: Color(0xff2d2d2d)),
-                ),
+                ],
               ),
+            ),
+
+            // Custom 5-Day per row Calendar Grid
+            Column(
+              children: [
+                Text(
+                  '$_currentMonth',
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      fontSize: AppThemes.getResponsiveFontSize(context, 16),
+                      fontWeight: FontWeight.bold
+                  ),
+                ),
+                Text(
+                  '$_currentYear',
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
+                      fontSize: AppThemes.getResponsiveFontSize(context, 14)
+                  ),
+                ),
+
+                SizedBox(
+                  height: height * 0.02,
+                ),
+
+                //5-Day Calendar
+                Container(
+                  height: height * 0.5,
+                  margin: EdgeInsets.symmetric(horizontal: width * 0.05),
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 5,
+                      childAspectRatio: 1.5,
+                      mainAxisSpacing: height * 0.015,
+                    ),
+                    itemCount: daysInMonth.length,
+                    itemBuilder: (context, index) {
+                      DateTime date = daysInMonth[index];
+
+                      // Normalize the date to remove the time part
+                      DateTime normalizedDate = DateTime(date.year, date.month, date.day);
+
+                      // Check if a mood exists for the current date
+                      bool hasMood = userMoods.containsKey(normalizedDate);
+
+                      return Container(
+                          margin: EdgeInsets.all(4.0),
+                          width: width * 0.12,
+                          height: width * 0.12,
+                          decoration: BoxDecoration(
+                            color: isSameDay(today, date) ? Theme.of(context).cardColor : Theme.of(context).primaryColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Center(
+                            child: hasMood ? Image.asset(
+                              userMoods[normalizedDate]!,
+                              width: width * 0.10,
+                              height: width * 0.10,
+                              fit: BoxFit.cover,
+                            )
+                                : Text(
+                                  '${date.day}',
+                                  style: TextStyle(
+                                      color: isSameDay(today, date) ? Theme.of(context).textTheme.displaySmall?.color : Theme.of(context).textTheme.displayMedium?.color,
+                                      fontSize:  AppThemes.getResponsiveFontSize(context, 12),
+                                      fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                          ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
     );
+  }
+
+  // Helper function to check if two dates are the same
+  bool isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 }

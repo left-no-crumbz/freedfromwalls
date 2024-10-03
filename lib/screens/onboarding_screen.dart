@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freedfromwalls/screens/intro_screen.dart';
+import '../assets/widgets/customThemes.dart';
 import '../main.dart';
 
 class OnboardingPage extends StatefulWidget {
@@ -65,13 +66,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Column(
                 children: [
-                  Text(
-                    "Welcome to FreedFrom Walls!",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  Center(
+                    child: Text(
+                      "Welcome to FreedFrom Walls!",
+                      style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 16), fontWeight: FontWeight.w500, color: Colors.black),
+                    ),
                   ),
-                  Text(
-                    "Your Virtual Diary and Virtual Company~",
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+                  Center(
+                    child: Text(
+                      "Your Virtual Diary and Virtual Company~",
+                      style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 16), fontWeight: FontWeight.w500, color: Colors.black),
+                    ),
                   ),
                 ],
               ),
@@ -96,7 +101,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       color: Colors.transparent,
                       child: Text(
                           "Please enter your name:",
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                          style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 12), fontWeight: FontWeight.w500, color: Colors.black),
                       ),
                     ),
                   ],
@@ -146,7 +151,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       color: Colors.transparent,
                       child: Text(
                         "Your Birthday",
-                        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
+                        style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 12), fontWeight: FontWeight.w500, color: Colors.black),
                       ),
                     ),
                   ],
@@ -190,7 +195,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             ),
 
             Container(
-              width: width * 0.35,
+              width: width * 0.45,
               child: ElevatedButton(
                 onPressed: _confirm,
                 style: ElevatedButton.styleFrom(
@@ -206,7 +211,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: 17
+                      fontSize: AppThemes.getResponsiveFontSize(context, 16)
                   ),
                 ),
               ),
@@ -221,16 +226,17 @@ class _OnboardingPageState extends State<OnboardingPage> {
             ),
 
             Container(
-              height: height * 0.25,
+              height: height * 0.17,
+              margin: EdgeInsets.only(bottom: height * 0.01),
               child: Stack(
                 alignment: Alignment.center,
                 children: [
                   CircleAvatar(
-                    radius: height * 0.10,
+                    radius: height * 0.09,
                     backgroundColor: Color(0xFF3A375E),
                   ),
                   CircleAvatar(
-                    radius: height * 0.08,
+                    radius: height * 0.075,
                     backgroundColor: Color(0xFF56537C),
                   ),
                   CircleAvatar(
@@ -238,7 +244,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     backgroundColor: Color(0xFF9C98CB),
                   ),
                   CircleAvatar(
-                    radius: height * 0.04,
+                    radius: height * 0.045,
                     backgroundColor: Color(0xFFD7D5EE),
                   ),
                 ],
@@ -249,7 +255,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
               alignment: Alignment.bottomCenter,
               children: [
                 Container(
-                  height: height * 0.35,
+                  height: height * 0.30,
                   width: width,
                   decoration: BoxDecoration(
                     color: Color(0xFF3A375E),
@@ -257,7 +263,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                 ),
                 Container(
-                  height: height * 0.32,
+                  height: height * 0.27,
                   width: width * 0.85,
                   decoration: BoxDecoration(
                     color: Color(0xFF56537C),
@@ -265,7 +271,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                 ),
                 Container(
-                  height: height * 0.29,
+                  height: height * 0.24,
                   width: width * 0.75,
                   decoration: BoxDecoration(
                     color: Color(0xFF9C98CB),
@@ -273,7 +279,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                 ),
                 Container(
-                  height: height * 0.26,
+                  height: height * 0.21,
                   width: width * 0.65,
                   decoration: BoxDecoration(
                     color: Color(0xFFD7D5EE),
@@ -281,14 +287,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   ),
                 ),
                 Container(
-                  height: height * 0.23,
+                  height: height * 0.18,
                   width: width * 0.55,
                   decoration: BoxDecoration(
                     color: Color(0xFFEFEEFF),
                     borderRadius: BorderRadius.vertical(top: Radius.circular(200)),
                   ),
                 ),
-
               ],
             ),
           ],
