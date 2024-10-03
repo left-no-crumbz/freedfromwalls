@@ -58,7 +58,8 @@ class _FeelPage extends State<FeelPage> {
       isScrollControlled: true,
       builder: (context) {
         return Container(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -67,7 +68,8 @@ class _FeelPage extends State<FeelPage> {
                   controller: titleController,
                   decoration: InputDecoration(
                     hintText: 'Title of Achievement',
-                    contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
                   ),
                 ),
                 SizedBox(height: 8),
@@ -75,7 +77,8 @@ class _FeelPage extends State<FeelPage> {
                   controller: descriptionController,
                   decoration: InputDecoration(
                     hintText: 'Description',
-                    contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
                   ),
                 ),
                 SizedBox(height: 16),
@@ -83,7 +86,7 @@ class _FeelPage extends State<FeelPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0,right: 8.0),
+                      padding: const EdgeInsets.only(bottom: 8.0, right: 8.0),
                       child: Container(
                         width: 40,
                         height: 40,
@@ -92,14 +95,12 @@ class _FeelPage extends State<FeelPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: IconButton(
-                          icon: Icon(
-                              Icons.send,
-                              color: Colors.white,
-                              size: 23),
+                          icon: Icon(Icons.send, color: Colors.white, size: 23),
                           onPressed: () {
                             setState(() {
                               _titleControllers.add(titleController);
-                              _descriptionControllers.add(descriptionController);
+                              _descriptionControllers
+                                  .add(descriptionController);
                               _isEditableList.add(false);
                             });
                             Navigator.pop(context);
@@ -140,7 +141,7 @@ class _FeelPage extends State<FeelPage> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 16),
-               RadioListTile<String>(
+              RadioListTile<String>(
                 title: Text('24 hours', style: TextStyle(fontSize: 12)),
                 value: '24 hours',
                 groupValue: _selectedNotificationTime,
@@ -198,11 +199,14 @@ class _FeelPage extends State<FeelPage> {
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  if (_titleControllers.isNotEmpty && _descriptionControllers.isNotEmpty) {
-                    _scheduleNotification(_titleControllers.last.text, _descriptionControllers.last.text);
+                  if (_titleControllers.isNotEmpty &&
+                      _descriptionControllers.isNotEmpty) {
+                    _scheduleNotification(_titleControllers.last.text,
+                        _descriptionControllers.last.text);
                   }
                 },
-                child: Text('Schedule Notification', style: TextStyle(fontSize: 14)),
+                child: Text('Schedule Notification',
+                    style: TextStyle(fontSize: 14)),
               ),
             ],
           ),
@@ -235,7 +239,9 @@ class _FeelPage extends State<FeelPage> {
     AwesomeNotifications().createNotification(
       content: NotificationContent(
         channelKey: 'basic_channel',
-        id: DateTime.now().millisecondsSinceEpoch.remainder(100000), // Unique ID
+        id: DateTime.now()
+            .millisecondsSinceEpoch
+            .remainder(100000), // Unique ID
         title: title,
         body: description,
         notificationLayout: NotificationLayout.Default,
@@ -287,7 +293,8 @@ class _FeelPage extends State<FeelPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(
-                          padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 55.0),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 8.0, horizontal: 55.0),
                           decoration: BoxDecoration(
                             color: Color(0xFF56537C),
                             borderRadius: BorderRadius.circular(8.0),
@@ -355,7 +362,8 @@ class _FeelPage extends State<FeelPage> {
                       Column(
                         children: [
                           Transform.translate(
-                            offset: Offset(0, -30), // Adjust x and y values to move the image
+                            offset: Offset(0,
+                                -30), // Adjust x and y values to move the image
                             child: Image.asset(
                               'lib/assets/images/backgrounds/Default_Fullfeelment.png',
                               width: 320,
@@ -363,7 +371,8 @@ class _FeelPage extends State<FeelPage> {
                             ),
                           ),
                           Transform.translate(
-                            offset: Offset(0, -75), // Adjust the vertical offset to move the text upwards
+                            offset: Offset(0,
+                                -75), // Adjust the vertical offset to move the text upwards
                             child: Text(
                               "No items here yet.\nShare the things you want to do!",
                               style: TextStyle(
@@ -371,22 +380,16 @@ class _FeelPage extends State<FeelPage> {
                                 color: Colors.black,
                                 fontFamily: 'Jua',
                               ),
-                              textAlign: TextAlign.center, // Center align the text
+                              textAlign:
+                                  TextAlign.center, // Center align the text
                             ),
                           ),
                         ],
                       ),
-
-
-
-
                     ],
                   ],
                 ),
               ),
-
-
-
               Padding(
                 padding: EdgeInsets.all(16.0),
                 child: Column(
@@ -406,7 +409,8 @@ class _FeelPage extends State<FeelPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 5.0, horizontal: 8),
                                     child: Container(
                                       width: 30,
                                       height: 30,
@@ -420,10 +424,12 @@ class _FeelPage extends State<FeelPage> {
                                         ),
                                         boxShadow: [
                                           BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5), // Shadow color
+                                            color: Colors.grey.withOpacity(
+                                                0.5), // Shadow color
                                             spreadRadius: 1, // Spread radius
                                             blurRadius: 3, // Blur radius
-                                            offset: Offset(0, 2), // Changes the position of the shadow
+                                            offset: Offset(0,
+                                                2), // Changes the position of the shadow
                                           ),
                                         ],
                                       ),
@@ -438,30 +444,41 @@ class _FeelPage extends State<FeelPage> {
                                         ),
                                       ),
                                     ),
-
                                   ),
                                   Flexible(
                                     child: Padding(
                                       padding: const EdgeInsets.only(left: 0.0),
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
 // Title Row with Icons
                                           Container(
-                                            height: 20, // Set a fixed height for the row
+                                            height:
+                                                20, // Set a fixed height for the row
                                             child: Row(
-                                              crossAxisAlignment: CrossAxisAlignment.center, // Center the row items
+                                              crossAxisAlignment: CrossAxisAlignment
+                                                  .center, // Center the row items
                                               children: [
                                                 Expanded(
                                                   child: TextField(
-                                                    controller: _titleControllers[index],
-                                                    style: TextStyle(fontSize: 12, color: Colors.black),
+                                                    controller:
+                                                        _titleControllers[
+                                                            index],
+                                                    style: TextStyle(
+                                                        fontSize: 12,
+                                                        color: Colors.black),
                                                     decoration: InputDecoration(
                                                       border: InputBorder.none,
-                                                      hintText: 'Title for reminder ${index + 1}',
-                                                      hintStyle: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 20),
+                                                      hintText:
+                                                          'Title for reminder ${index + 1}',
+                                                      hintStyle: TextStyle(
+                                                          color: Colors.black
+                                                              .withOpacity(0.6),
+                                                          fontSize: 20),
                                                     ),
-                                                    readOnly: !_isEditableList[index],
+                                                    readOnly:
+                                                        !_isEditableList[index],
                                                   ),
                                                 ),
                                                 SizedBox(width: 2),
@@ -469,13 +486,17 @@ class _FeelPage extends State<FeelPage> {
                                                 Container(
                                                   child: IconButton(
                                                     icon: Icon(
-                                                      _isEditableList[index] ? Icons.check : Icons.edit,
+                                                      _isEditableList[index]
+                                                          ? Icons.check
+                                                          : Icons.edit,
                                                       color: Colors.black,
                                                       size: 15,
                                                     ),
                                                     onPressed: () {
                                                       setState(() {
-                                                        _isEditableList[index] = !_isEditableList[index]; // Toggle edit state
+                                                        _isEditableList[index] =
+                                                            !_isEditableList[
+                                                                index]; // Toggle edit state
                                                       });
                                                     },
                                                   ),
@@ -489,7 +510,8 @@ class _FeelPage extends State<FeelPage> {
                                                       size: 15,
                                                     ),
                                                     onPressed: () {
-                                                      _deleteReminder(index); // Call delete function
+                                                      _deleteReminder(
+                                                          index); // Call delete function
                                                     },
                                                   ),
                                                 ),
@@ -498,15 +520,25 @@ class _FeelPage extends State<FeelPage> {
                                           ),
 // Description TextField
                                           Container(
-                                            height: 30, // Set a fixed height for the description
+                                            height:
+                                                30, // Set a fixed height for the description
                                             child: TextField(
-                                              controller: _descriptionControllers[index],
-                                              style: TextStyle(fontSize: 8, color: Colors.black),
+                                              controller:
+                                                  _descriptionControllers[
+                                                      index],
+                                              style: TextStyle(
+                                                  fontSize: 8,
+                                                  color: Colors.black),
                                               decoration: InputDecoration(
                                                 border: InputBorder.none,
-                                                hintText: 'Description for reminder ${index + 1}',
-                                                hintStyle: TextStyle(color: Colors.black.withOpacity(0.6), fontSize: 12),
-                                                contentPadding: EdgeInsets.zero, // No padding
+                                                hintText:
+                                                    'Description for reminder ${index + 1}',
+                                                hintStyle: TextStyle(
+                                                    color: Colors.black
+                                                        .withOpacity(0.6),
+                                                    fontSize: 12),
+                                                contentPadding: EdgeInsets
+                                                    .zero, // No padding
                                                 isDense: true,
                                               ),
                                               readOnly: !_isEditableList[index],
@@ -519,10 +551,7 @@ class _FeelPage extends State<FeelPage> {
                                 ],
                               ),
                             ),
-                            Divider(
-                                height: 0,
-                                color: Colors.grey
-                            ),
+                            Divider(height: 0, color: Colors.grey),
                           ],
                         );
                       },
@@ -534,25 +563,15 @@ class _FeelPage extends State<FeelPage> {
           ),
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 30.0),
-        child: Container(
-          width: 55,
-          height: 55,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.black,
-          ),
-          child: FloatingActionButton(
-            onPressed: _showAddReminderBottomSheet,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 26,
-            ),
-          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddReminderBottomSheet,
+        backgroundColor: Colors.black,
+        elevation: 0,
+        shape: CircleBorder(),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 26,
         ),
       ),
     );

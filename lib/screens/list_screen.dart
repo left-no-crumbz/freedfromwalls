@@ -8,7 +8,8 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  bool isBucketListSelected = true; // To toggle between Bucketlisted and Blacklisted
+  bool isBucketListSelected =
+      true; // To toggle between Bucketlisted and Blacklisted
   String message = "Bucketlisted";
 
   static const borderColor = Color(0xff423e3d);
@@ -21,8 +22,10 @@ class _ListPageState extends State<ListPage> {
   List<bool> _blackListChecked = [];
 
   // Method to return the current list (Bucketlisted or Blacklisted)
-  List<String> get _currentList => isBucketListSelected ? _bucketList : _blackList;
-  List<bool> get _currentChecked => isBucketListSelected ? _bucketListChecked : _blackListChecked;
+  List<String> get _currentList =>
+      isBucketListSelected ? _bucketList : _blackList;
+  List<bool> get _currentChecked =>
+      isBucketListSelected ? _bucketListChecked : _blackListChecked;
 
   Widget screenTitle() {
     const selectedColor = Color(0xFF56537C);
@@ -49,14 +52,21 @@ class _ListPageState extends State<ListPage> {
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(color: borderColor, width: 1.0),
                   boxShadow: isBucketListSelected
-                      ? [BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2))]
+                      ? [
+                          BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 4,
+                              offset: Offset(0, 2))
+                        ]
                       : null,
                 ),
                 child: Center(
                   child: Text(
                     'Bucketlisted',
                     style: TextStyle(
-                      color: isBucketListSelected ? Colors.white : Color(0xff000000),
+                      color: isBucketListSelected
+                          ? Colors.white
+                          : Color(0xff000000),
                       fontFamily: "Inter",
                       fontSize: 14,
                     ),
@@ -84,14 +94,21 @@ class _ListPageState extends State<ListPage> {
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(color: borderColor, width: 1.0),
                   boxShadow: !isBucketListSelected
-                      ? [BoxShadow(color: Colors.black26, blurRadius: 4, offset: Offset(0, 2))]
+                      ? [
+                          BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 4,
+                              offset: Offset(0, 2))
+                        ]
                       : null,
                 ),
                 child: Center(
                   child: Text(
                     'Blacklisted',
                     style: TextStyle(
-                      color: isBucketListSelected ? Color(0xff000000) : Colors.white,
+                      color: isBucketListSelected
+                          ? Color(0xff000000)
+                          : Colors.white,
                       fontFamily: "Inter",
                       fontSize: 14,
                     ),
@@ -106,13 +123,15 @@ class _ListPageState extends State<ListPage> {
   }
 
   void _showAddItemBottomSheet({String? currentItem, int? index}) {
-    final TextEditingController _textController = TextEditingController(text: currentItem);
+    final TextEditingController _textController =
+        TextEditingController(text: currentItem);
 
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -269,24 +288,28 @@ class _ListPageState extends State<ListPage> {
                                   ConstrainedBox(
                                     constraints: BoxConstraints(
                                       maxWidth: 25, // Adjust maxWidth as needed
-                                      maxHeight: 30, // Ensure the buttons are consistent in size
+                                      maxHeight:
+                                          30, // Ensure the buttons are consistent in size
                                     ),
                                     child: IconButton(
                                       iconSize: 20.0,
                                       padding: EdgeInsets.zero,
-                                      icon: Icon(Icons.edit, color: Colors.black),
+                                      icon:
+                                          Icon(Icons.edit, color: Colors.black),
                                       onPressed: () => _editItem(index),
                                     ),
                                   ),
                                   ConstrainedBox(
                                     constraints: BoxConstraints(
-                                      maxWidth: 30, // Same width for consistency
+                                      maxWidth:
+                                          30, // Same width for consistency
                                       maxHeight: 30,
                                     ),
                                     child: IconButton(
                                       iconSize: 20.0,
                                       padding: EdgeInsets.zero,
-                                      icon: Icon(Icons.delete, color: Colors.black),
+                                      icon: Icon(Icons.delete,
+                                          color: Colors.black),
                                       onPressed: () => _deleteItem(index),
                                     ),
                                   ),
@@ -306,7 +329,8 @@ class _ListPageState extends State<ListPage> {
               Column(
                 children: [
                   Transform.translate(
-                    offset: Offset(0, 50), // Adjust x and y values to move the image
+                    offset: Offset(
+                        0, 50), // Adjust x and y values to move the image
                     child: Container(
                       width: 250,
                       height: 250,
@@ -322,7 +346,8 @@ class _ListPageState extends State<ListPage> {
                   ),
                   SizedBox(height: 16),
                   Transform.translate(
-                    offset: Offset(0, 30), // Adjust x and y values to move the text
+                    offset:
+                        Offset(0, 30), // Adjust x and y values to move the text
                     child: Text(
                       "No items here yet.\nShare the things you want to do!",
                       style: TextStyle(
@@ -338,25 +363,15 @@ class _ListPageState extends State<ListPage> {
           ],
         ),
       ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 30.0),
-        child: Container(
-          width: 55,
-          height: 55,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.black,
-          ),
-          child: FloatingActionButton(
-            onPressed: _showAddItemBottomSheet,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 26,
-            ),
-          ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _showAddItemBottomSheet,
+        backgroundColor: Colors.black,
+        elevation: 0,
+        shape: CircleBorder(),
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 26,
         ),
       ),
     );

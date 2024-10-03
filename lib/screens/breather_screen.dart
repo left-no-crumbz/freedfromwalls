@@ -51,6 +51,9 @@ class _BreatherPageState extends State<BreatherPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.black,
+        shape: const CircleBorder(),
         onPressed: () {
           Navigator.push(
             context,
