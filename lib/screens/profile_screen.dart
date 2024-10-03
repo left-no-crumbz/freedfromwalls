@@ -59,7 +59,10 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
                 child: Text(
                   "EDIT",
-                  style: const TextStyle(color: const Color(0xffD7D5EE)),
+                  style: const TextStyle(
+                      color: const Color(0xffD7D5EE),
+                      fontFamily: "RethinkSans",
+                      fontWeight: FontWeight.bold),
                 ),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xff56537C),
@@ -103,7 +106,7 @@ class _NameBioState extends State<NameBio> {
       children: [
         Text(
           widget.name,
-          style: const TextStyle(fontSize: 20),
+          style: const TextStyle(fontSize: 20, fontFamily: "Jua"),
         ),
         Text(
           widget.bio,
@@ -142,9 +145,16 @@ class _FavoriteState extends State<Favorite> {
                   Text(
                     widget.keyStr,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(color: Color(0xff9C98CB)),
+                    style: const TextStyle(
+                        color: Color(0xff9C98CB),
+                        fontFamily: "RethinkSans",
+                        fontWeight: FontWeight.w500),
                   ),
-                  Text(widget.value),
+                  Text(
+                    widget.value,
+                    style: const TextStyle(
+                        fontFamily: "RethinkSans", fontWeight: FontWeight.w500),
+                  ),
                 ],
               ),
             ],

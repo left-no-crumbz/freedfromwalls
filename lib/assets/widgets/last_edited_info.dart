@@ -20,12 +20,16 @@ class LastEditedInfo extends StatelessWidget {
           "Last edited",
           style: const TextStyle(
               fontStyle: FontStyle.italic,
-              fontSize: 10,
-              color: const Color(0xff746F6F)),
+              fontSize: 12,
+              color: const Color(0xff746F6F),
+              fontFamily: "RethinkSans"),
         ),
         Text(
           "${DateFormat("yMMMMd").format(editedDate)} | ${DateFormat("jm").format(editedDate)}",
-          style: const TextStyle(fontSize: 10, color: const Color(0xff746F6F)),
+          style: const TextStyle(
+              fontSize: 12,
+              color: const Color(0xff746F6F),
+              fontFamily: "RethinkSans"),
         ),
       ],
     );

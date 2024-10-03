@@ -126,30 +126,33 @@ class DateWidget extends StatelessWidget {
             Text(
               DateFormat("MMMM").format(date),
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
                 color: isSelected
                     ? const Color(0xffD7D5EE)
                     : const Color(0xff000000),
+                fontFamily: "Jua",
               ),
             ),
             Text(
               DateFormat("dd").format(date),
               style: TextStyle(
-                fontSize: 32,
+                fontSize: 34,
                 fontWeight: FontWeight.bold,
                 color: isSelected
                     ? const Color(0xffD7D5EE)
                     : const Color(0xff000000),
+                fontFamily: "Jua",
               ),
             ),
             Text(
               DateFormat("EEEE").format(date),
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 color: isSelected
                     ? const Color(0xffD7D5EE)
                     : const Color(0xff000000),
+                fontFamily: "Jua",
               ),
             ),
           ],

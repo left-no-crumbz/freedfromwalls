@@ -16,11 +16,19 @@ class TitleDescription extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Jua',
+            ),
           ),
           Text(
             description,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w100),
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w100,
+              fontFamily: 'RethinkSans',
+            ),
           )
         ],
       ),

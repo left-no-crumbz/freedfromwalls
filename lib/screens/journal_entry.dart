@@ -89,7 +89,8 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
           children: [
             const Text(
               "Journal Entry",
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                  fontSize: 20, fontWeight: FontWeight.bold, fontFamily: "Jua"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,7 +110,10 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                   child: Text(
                     "${DateFormat("yMd").format(creationDate)}",
                     style: const TextStyle(
-                        fontSize: 12, color: const Color(0xffD7D5EE)),
+                        fontSize: 12,
+                        color: const Color(0xffD7D5EE),
+                        fontFamily: "RethinkSans",
+                        fontWeight: FontWeight.bold),
                   ),
                 )
               ],
@@ -137,7 +141,10 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                   ),
                   border: InputBorder.none,
                 ),
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(
+                    fontSize: 14,
+                    fontStyle: FontStyle.italic,
+                    fontFamily: "RethinkSans"),
               ),
             ),
             const Divider(color: Colors.grey),
@@ -153,6 +160,8 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                   borderRadius: BorderRadius.circular(5)),
               child: const Text(
                 "NOTES",
+                style: const TextStyle(
+                    fontFamily: "RethinkSans", fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 4),
@@ -237,11 +246,11 @@ class NoteItem extends StatelessWidget {
               child: Text(
                 note ?? "Additional Notes...",
                 style: TextStyle(
-                  color: note == null
-                      ? const Color(0xffB3B3B3)
-                      : const Color(0xff000000),
-                  fontSize: 12,
-                ),
+                    color: note == null
+                        ? const Color(0xffB3B3B3)
+                        : const Color(0xff000000),
+                    fontSize: 12,
+                    fontFamily: "RethinkSans"),
               ),
             ),
             if (note != null)
@@ -303,8 +312,9 @@ class _AddNoteBottomSheetState extends State<AddNoteBottomSheet> {
         decoration: const InputDecoration(
           hintText: "Notes",
           hintStyle: TextStyle(
-            color: Color(0xff938F8F),
-          ),
+              color: Color(0xff938F8F),
+              fontFamily: "RethinkSans",
+              fontWeight: FontWeight.bold),
         ),
       ),
     );

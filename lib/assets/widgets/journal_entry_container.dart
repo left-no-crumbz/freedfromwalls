@@ -30,14 +30,21 @@ class JournalEntryContainer extends StatelessWidget {
         children: [
           const Text(
             "Journal Entry",
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontFamily: "Jua",
+            ),
           ),
           const SizedBox(height: 16),
           Expanded(
             child: SingleChildScrollView(
               child: Text(
                 journalEntry.isEmpty ? "No entry yet" : journalEntry,
-                style: const TextStyle(fontSize: 12),
+                style: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: "Jua",
+                    fontStyle: FontStyle.italic),
               ),
             ),
           ),

@@ -35,6 +35,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         .map((key, value) => MapEntry(key, TextEditingController(text: value)));
   }
 
+  bool _validateInputs() {
+    if (nameController.text.trim().isEmpty ||
+        bioController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Name and Bio cannot be blank')),
+      );
+      return false;
+    }
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +54,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         centerTitle: true,
         title: const Text(
           "FreedFrom Walls",
-          style: const TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: 18),
         ),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
@@ -58,32 +69,37 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               children: [
                 const Text(
                   "User Profile",
-                  style: const TextStyle(
-                      fontSize: 20, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                const Expanded(child: const SizedBox()),
+                const Expanded(child: SizedBox()),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context, {
-                      'name': nameController.text,
-                      'bio': bioController.text,
-                      'avatarPath': chosenImagePath,
-                      'favorites': favoritesControllers.map(
-                          (key, controller) => MapEntry(key, controller.text)),
-                    });
+                    if (_validateInputs()) {
+                      Navigator.pop(context, {
+                        'name': nameController.text,
+                        'bio': bioController.text,
+                        'avatarPath': chosenImagePath,
+                        'favorites': favoritesControllers.map(
+                            (key, controller) =>
+                                MapEntry(key, controller.text)),
+                      });
+                    }
                   },
-                  child: Text(
+                  child: const Text(
                     "SAVE",
-                    style: const TextStyle(color: const Color(0xffD7D5EE)),
+                    style: TextStyle(
+                        color: Color(0xffD7D5EE),
+                        fontFamily: "RethinkSans",
+                        fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xff56537C),
-                      side: BorderSide(color: Colors.black, width: 1.5)),
+                      side: const BorderSide(color: Colors.black, width: 1.5)),
                 ),
               ],
             ),
           ),
-          SizedBox(height: 1, child: const Divider(color: Colors.black)),
+          const SizedBox(height: 1, child: Divider(color: Colors.black)),
           AvatarSelector(
             initialAvatarPath: chosenImagePath,
             onAvatarSelected: (String path) {
@@ -142,7 +158,11 @@ class _AvatarSelectorState extends State<AvatarSelector> {
         children: [
           const Text(
             "Choose Your Avatar",
-            style: const TextStyle(fontSize: 15),
+            style: const TextStyle(
+              fontSize: 15,
+              fontFamily: "RethinkSans",
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 16),
           Image.asset(
@@ -226,13 +246,20 @@ class _InformationFieldState extends State<InformationField> {
         children: [
           Text(
             widget.field ?? "Field",
-            style: const TextStyle(fontSize: 12, color: Color(0xffBABABA)),
+            style: const TextStyle(
+              fontSize: 12,
+              color: Color(0xffBABABA),
+              fontFamily: "RethinkSans",
+              fontWeight: FontWeight.w500,
+            ),
           ),
           SizedBox(
             height: 25,
             child: TextField(
               controller: widget.informationController,
               readOnly: widget.readOnly,
+              style: const TextStyle(
+                  fontFamily: "RethinkSans", fontWeight: FontWeight.w500),
               onTap: widget.readOnly && widget.field == "Birthday"
                   ? () => _selectDate(context)
                   : null,
@@ -240,7 +267,10 @@ class _InformationFieldState extends State<InformationField> {
                 border: const UnderlineInputBorder(
                     borderSide: BorderSide(color: Color(0xff000000))),
                 hintText: widget.hintText,
-                hintStyle: const TextStyle(fontSize: 15),
+                hintStyle: const TextStyle(
+                  fontSize: 15,
+                  fontFamily: "RethinkSans",
+                ),
                 isDense: true,
                 prefixIconConstraints: BoxConstraints(maxWidth: 30),
                 prefixIcon: widget.prefixIcon != null

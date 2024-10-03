@@ -98,7 +98,12 @@ flutter:
        - asset: lib/assets/fonts/Inter_18pt-BlackItalic.ttf
        - asset: lib/assets/fonts/Inter_18pt-Bold.ttf
        - asset: lib/assets/fonts/Inter_18pt-BoldItalic.ttf
-
+   - family: RethinkSans
+     fonts:
+       - asset: lib/assets/fonts/RethinkSans-Regular.ttf
+       - asset: lib/assets/fonts/RethinkSans-Bold.ttf
+       - asset: lib/assets/fonts/RethinkSans-Italic.ttf
+       - asset: lib/assets/fonts/RethinkSans-Medium.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

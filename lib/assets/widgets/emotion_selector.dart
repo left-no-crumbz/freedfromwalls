@@ -74,13 +74,14 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
                       _selectedTitle.isEmpty
                           ? "Start selecting what you feel."
                           : "Your word of the day is $_selectedTitle",
-                      style: const TextStyle(fontSize: 14),
+                      style: const TextStyle(fontSize: 16, fontFamily: "Jua"),
                     ),
                     Text(
                       _selectedTitle.isEmpty
                           ? "Click the question mark to choose an emotion"
                           : "Seems like you are $_selectedName. Share what you feel in the journal.",
-                      style: const TextStyle(fontSize: 10),
+                      style: const TextStyle(
+                          fontSize: 12, fontFamily: "RethinkSans"),
                     ),
                   ],
                 ),
@@ -115,8 +116,6 @@ class Emotion extends StatelessWidget {
       onTap: () {
         onSelect(title, name, color, imagePath);
         Navigator.pop(context);
-        // on tap of an emotion, the color, icon, and text of the emotion selector
-        // should change
       },
       child: Column(
         children: [
@@ -128,11 +127,11 @@ class Emotion extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             title,
-            style: const TextStyle(fontSize: 10),
+            style: const TextStyle(fontSize: 10, fontFamily: "Jua"),
           ),
           Text(
             "($name)",
-            style: const TextStyle(fontSize: 10),
+            style: const TextStyle(fontSize: 10, fontFamily: "Jua"),
           )
         ],
       ),
@@ -160,11 +159,12 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
           // Title
           const Text(
             "How do you feel right now?",
-            style: const TextStyle(fontSize: 20),
+            style: const TextStyle(
+                fontSize: 20, fontFamily: "Jua", fontWeight: FontWeight.bold),
           ),
           const Text(
             "Please select one emotion below.",
-            style: const TextStyle(fontSize: 12),
+            style: const TextStyle(fontSize: 12, fontFamily: "RethinkSans"),
           ),
           const SizedBox(height: 16),
           Expanded(

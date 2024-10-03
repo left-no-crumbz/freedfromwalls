@@ -10,7 +10,10 @@ class CustomTitle extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16.0, bottom: 8),
       child: Text(
         title,
-        style: const TextStyle(fontSize: 12),
+        style: const TextStyle(
+            fontSize: 12,
+            fontFamily: "RethinkSans",
+            fontWeight: FontWeight.bold),
       ),
     );
   }

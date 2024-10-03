@@ -275,7 +275,7 @@ class _FeelPage extends State<FeelPage> {
                     Text(
                       "FULLFEELMENT",
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Jua',
                       ),
@@ -286,6 +286,7 @@ class _FeelPage extends State<FeelPage> {
                         fontSize: 11,
                         color: Colors.black,
                         fontWeight: FontWeight.w500,
+                        fontFamily: 'RethinkSans',
                       ),
                     ),
                     SizedBox(height: 30),

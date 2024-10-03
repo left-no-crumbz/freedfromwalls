@@ -234,7 +234,7 @@ class _ListPageState extends State<ListPage> {
                     Text(
                       message,
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                         fontFamily: 'Jua',
@@ -244,8 +244,9 @@ class _ListPageState extends State<ListPage> {
                     Text(
                       "Record the things you want to do over the year.",
                       style: TextStyle(
-                        fontSize: 8,
+                        fontSize: 12,
                         color: Colors.black,
+                        fontFamily: 'RethinkSans',
                       ),
                     ),
                   ],
