@@ -85,15 +85,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       });
                     }
                   },
-                  child: const Text(
+                  child: Text(
                     "SAVE",
                     style: TextStyle(
-                        color: Color(0xffD7D5EE),
+                        color: Theme.of(context).textTheme.displaySmall?.color,
                         fontFamily: "RethinkSans",
                         fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xff56537C),
+                      backgroundColor: Theme.of(context).cardColor,
                       side: const BorderSide(color: Colors.black, width: 1.5)),
                 ),
               ],
@@ -152,7 +152,7 @@ class _AvatarSelectorState extends State<AvatarSelector> {
       padding: const EdgeInsets.symmetric(vertical: 16),
       decoration: BoxDecoration(
         border: Border.all(color: Colors.black),
-        color: const Color(0xffD7D5EE),
+        color: Theme.of(context).primaryColor,
       ),
       child: Column(
         children: [

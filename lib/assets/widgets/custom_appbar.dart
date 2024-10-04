@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'customThemes.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSize {
   const CustomAppBar({super.key});
@@ -8,20 +9,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
 
   @override
   Widget build(BuildContext context) {
-    const backgroundColor = Color(0xff2d2d2d);
+    const backgroundColor = Colors.black;
     return AppBar(
       backgroundColor: backgroundColor,
       title: Row(
         children: <Widget>[
           Image.asset("lib/assets/images/logo.png"),
-          const SizedBox(
-            width: 16,
-          ),
-          const Text(
+          const SizedBox(width: 16,),
+          Text(
             "FreedFromWalls",
             style: TextStyle(
               color: Colors.white,
-              fontSize: 16,
+              fontSize: AppThemes.getResponsiveFontSize(context, 16),
               fontWeight: FontWeight.bold,
               fontFamily: "Inter",
             ),

@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(
     ChangeNotifierProvider(
-      create: (_) => ThemeProvider(initialTheme: AppThemes.sunriseTheme),
+      create: (_) => ThemeProvider(initialTheme: AppThemes.defaultTheme),
       child: FreedFromWallsApp(),
     ),
   );

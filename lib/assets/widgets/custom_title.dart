@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'customThemes.dart';
 
 class CustomTitle extends StatelessWidget {
   final String title;
@@ -10,8 +11,8 @@ class CustomTitle extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16.0, bottom: 8),
       child: Text(
         title,
-        style: const TextStyle(
-            fontSize: 12,
+        style: TextStyle(
+            fontSize: AppThemes.getResponsiveFontSize(context, 12),
             fontFamily: "RethinkSans",
             fontWeight: FontWeight.bold),
       ),

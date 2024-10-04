@@ -11,7 +11,7 @@ void main() {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   runApp(
     ChangeNotifierProvider(
-      create: (_) => ThemeProvider(initialTheme: AppThemes.sunriseTheme),
+      create: (_) => ThemeProvider(initialTheme: AppThemes.defaultTheme),
       child: FreedFromWallsLogin(),
     ),
   );

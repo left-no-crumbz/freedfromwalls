@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../assets/widgets/customThemes.dart';
 import '../assets/widgets/title_description.dart';
 import './journal_entry.dart';
 import '../assets/widgets/journal_entry_container.dart';
@@ -84,7 +85,7 @@ class Title extends StatelessWidget {
       padding: const EdgeInsets.only(left: 16.0, bottom: 8),
       child: Text(
         title,
-        style: const TextStyle(fontSize: 12),
+        style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 12)),
       ),
     );
   }

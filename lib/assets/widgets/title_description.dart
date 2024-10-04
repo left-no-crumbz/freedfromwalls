@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'customThemes.dart';
 
 class TitleDescription extends StatelessWidget {
   final String title;
@@ -16,17 +17,17 @@ class TitleDescription extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
-              fontSize: 20,
+            style: TextStyle(
+              fontSize:  AppThemes.getResponsiveFontSize(context, 20),
               fontWeight: FontWeight.bold,
               fontFamily: 'Jua',
             ),
           ),
           Text(
             description,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w100,
+            style: TextStyle(
+              fontSize:  AppThemes.getResponsiveFontSize(context, 12),
+              fontWeight: FontWeight.w300,
               fontFamily: 'RethinkSans',
             ),
           )

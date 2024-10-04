@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './custom_title.dart';
+import 'customThemes.dart';
 
 class EmotionSelectorContainer extends StatefulWidget {
   const EmotionSelectorContainer({super.key});
@@ -51,8 +52,8 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
               GestureDetector(
                 onTap: _showEmotionBottomSheet,
                 child: Container(
-                  height: 50,
-                  width: 50,
+                  height: AppThemes.getResponsiveImageSize(context, 50),
+                  width: AppThemes.getResponsiveImageSize(context, 50),
                   child: _selectedImagePath.isEmpty
                       ? const Icon(
                           Icons.question_mark,
@@ -74,14 +75,19 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
                       _selectedTitle.isEmpty
                           ? "Start selecting what you feel."
                           : "Your word of the day is $_selectedTitle",
-                      style: const TextStyle(fontSize: 16, fontFamily: "Jua"),
+                      style: TextStyle(
+                          fontSize: AppThemes.getResponsiveFontSize(context, 16),
+                          fontFamily: "Jua"
+                      ),
                     ),
                     Text(
                       _selectedTitle.isEmpty
                           ? "Click the question mark to choose an emotion"
                           : "Seems like you are $_selectedName. Share what you feel in the journal.",
-                      style: const TextStyle(
-                          fontSize: 12, fontFamily: "RethinkSans"),
+                      style: TextStyle(
+                          fontSize: AppThemes.getResponsiveFontSize(context, 12),
+                          fontFamily: "RethinkSans"
+                      ),
                     ),
                   ],
                 ),
@@ -121,17 +127,17 @@ class Emotion extends StatelessWidget {
         children: [
           Image.asset(
             imagePath,
-            width: 60,
-            height: 60,
+            width: AppThemes.getResponsiveImageSize(context, 60),
+            height: AppThemes.getResponsiveImageSize(context, 60),
           ),
           const SizedBox(height: 8),
           Text(
             title,
-            style: const TextStyle(fontSize: 10, fontFamily: "Jua"),
+            style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 10), fontFamily: "Jua"),
           ),
           Text(
             "($name)",
-            style: const TextStyle(fontSize: 10, fontFamily: "Jua"),
+            style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 10), fontFamily: "Jua"),
           )
         ],
       ),
@@ -157,14 +163,14 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
       child: Column(
         children: [
           // Title
-          const Text(
+          Text(
             "How do you feel right now?",
-            style: const TextStyle(
-                fontSize: 20, fontFamily: "Jua", fontWeight: FontWeight.bold),
+            style: TextStyle(
+                fontSize: AppThemes.getResponsiveFontSize(context, 20), fontFamily: "Jua", fontWeight: FontWeight.bold),
           ),
-          const Text(
+          Text(
             "Please select one emotion below.",
-            style: const TextStyle(fontSize: 12, fontFamily: "RethinkSans"),
+            style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 12), fontFamily: "RethinkSans"),
           ),
           const SizedBox(height: 16),
           Expanded(

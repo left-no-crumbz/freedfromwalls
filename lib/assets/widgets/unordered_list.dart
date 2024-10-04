@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'customThemes.dart';
+
 class UnorderedList extends StatelessWidget {
   final List<TextEditingController> controllers;
   final bool isEditing;
@@ -52,13 +54,15 @@ class UnorderedListItem extends StatelessWidget {
             height: 20,
             child: TextField(
                 controller: controller,
-                style: TextStyle(fontSize: 12, color: textColor),
+                style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 12), color: textColor),
                 // text is read-only when not editing.
                 readOnly: !isEditing,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   hintStyle: TextStyle(
-                      fontSize: 12, color: textColor.withOpacity(0.6)),
+                      fontSize: AppThemes.getResponsiveFontSize(context, 12),
+                      color: textColor.withOpacity(0.6)
+                  ),
                   hintText: "Enter text here",
                 )),
           ),

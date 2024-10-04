@@ -3,6 +3,8 @@ import 'package:freedfromwalls/assets/widgets/customThemes.dart';
 import 'package:freedfromwalls/screens/settings_screen.dart';
 import 'package:intl/intl.dart';
 
+import '../assets/widgets/title_description.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -96,6 +98,7 @@ class _HomePageState extends State<HomePage> {
     DateTime(2024, 9, 22): 'lib/assets/images/emotions/emotions-angry.png',
     DateTime(2024, 9, 23): 'lib/assets/images/emotions/emotions-happy.png',
     DateTime(2024, 9, 24): 'lib/assets/images/emotions/emotions-happy.png',
+    DateTime(2024, 10, 1): 'lib/assets/images/emotions/emotions-happy.png',
     // Add more dates and mood images as needed
   };
 
@@ -118,17 +121,22 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // Find the most frequent emotion
+  // Find the most frequent emotion for the current month
   void _findMostFrequentMood() {
     Map<String, int> moodFrequency = {};
+    DateTime now = DateTime.now(); // Current date
 
+    // Filter moods to include only those from the current month
     userMoods.forEach((date, moodImagePath) {
-      moodFrequency[moodImagePath] = (moodFrequency[moodImagePath] ?? 0) + 1;
+      if (date.year == now.year && date.month == now.month) {
+        moodFrequency[moodImagePath] = (moodFrequency[moodImagePath] ?? 0) + 1;
+      }
     });
 
     String? mostFrequentImagePath;
     int highestFrequency = 0;
 
+    // Find the most frequent mood image path
     moodFrequency.forEach((moodImagePath, frequency) {
       if (frequency > highestFrequency) {
         mostFrequentImagePath = moodImagePath;
@@ -147,6 +155,7 @@ class _HomePageState extends State<HomePage> {
       },
     );
 
+    // Update the state with the most frequent mood details
     setState(() {
       _selectedColor = _mostFreqMood['color'];
       _selectedImagePath = _mostFreqMood['imagePath'];
@@ -184,33 +193,13 @@ class _HomePageState extends State<HomePage> {
             Container(
               width: width,
               height: height * 0.10,
-              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Home',
-                            style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
-                              fontWeight: FontWeight.bold,
-                              fontSize: AppThemes.getResponsiveFontSize(context, 16),
-                            ),
-                          ),
-                          Text(
-                            'Your Virtual Diary, Your Virtual Company.',
-                            style: TextStyle(
-                              color: Theme.of(context).textTheme.bodyLarge?.color,
-                              fontSize: AppThemes.getResponsiveFontSize(context, 10),
-                            ),
-                          ),
-                        ],
-                      ),
+                      const TitleDescription(title: "Home", description: "Your Virtual Diary, Your Virtual Company."),
                       IconButton(
                         onPressed: () {
                           Navigator.push(
@@ -250,6 +239,7 @@ class _HomePageState extends State<HomePage> {
                     )
                         : Image.asset(_selectedImagePath),
                     decoration: BoxDecoration(
+                        color: Colors.black,
                         borderRadius: BorderRadius.circular(100),
                     ),
                   ),

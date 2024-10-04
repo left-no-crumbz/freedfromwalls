@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'customThemes.dart';
 
 class LastEditedInfo extends StatelessWidget {
   final DateTime creationDate;
@@ -16,18 +17,18 @@ class LastEditedInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Last edited",
-          style: const TextStyle(
+          style: TextStyle(
               fontStyle: FontStyle.italic,
-              fontSize: 12,
+              fontSize: AppThemes.getResponsiveFontSize(context, 12),
               color: const Color(0xff746F6F),
               fontFamily: "RethinkSans"),
         ),
         Text(
           "${DateFormat("yMMMMd").format(editedDate)} | ${DateFormat("jm").format(editedDate)}",
-          style: const TextStyle(
-              fontSize: 12,
+          style: TextStyle(
+              fontSize: AppThemes.getResponsiveFontSize(context, 12),
               color: const Color(0xff746F6F),
               fontFamily: "RethinkSans"),
         ),

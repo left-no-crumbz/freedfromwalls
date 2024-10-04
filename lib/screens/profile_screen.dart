@@ -59,13 +59,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 },
                 child: Text(
                   "EDIT",
-                  style: const TextStyle(
-                      color: const Color(0xffD7D5EE),
+                  style: TextStyle(
+                      color: Theme.of(context).textTheme.displaySmall?.color,
                       fontFamily: "RethinkSans",
                       fontWeight: FontWeight.bold),
                 ),
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff56537C),
+                    backgroundColor: Theme.of(context).cardColor,
                     side: BorderSide(color: Colors.black, width: 1.5)),
               ),
               const SizedBox(width: 16),
@@ -145,8 +145,8 @@ class _FavoriteState extends State<Favorite> {
                   Text(
                     widget.keyStr,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        color: Color(0xff9C98CB),
+                    style: TextStyle(
+                        color: Theme.of(context).textTheme.displayMedium?.color,
                         fontFamily: "RethinkSans",
                         fontWeight: FontWeight.w500),
                   ),

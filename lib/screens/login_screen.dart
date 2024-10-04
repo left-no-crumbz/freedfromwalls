@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:freedfromwalls/assets/widgets/customThemes.dart';
 import '../main.dart';
 import 'register_screen.dart';
+
 void main(){
   AwesomeNotifications().initialize(null,
     [
@@ -13,6 +14,7 @@ void main(){
     debug: true,
   );
 }
+
 class LoginPage extends StatefulWidget {
   @override
   State<LoginPage> createState() => _LoginPageState();

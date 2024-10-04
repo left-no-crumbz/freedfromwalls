@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:freedfromwalls/assets/widgets/last_edited_info.dart';
 
+import 'customThemes.dart';
+
 class JournalEntryContainer extends StatelessWidget {
   final String journalEntry;
   final DateTime? creationDate;
@@ -21,17 +23,17 @@ class JournalEntryContainer extends StatelessWidget {
       margin: const EdgeInsets.only(left: 16, right: 16),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: const Color(0xffD7D5EE),
+        color: Theme.of(context).primaryColor,
         border: Border.all(color: const Color(0xff000000)),
         borderRadius: BorderRadius.circular(5),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             "Journal Entry",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: AppThemes.getResponsiveFontSize(context, 16),
               fontWeight: FontWeight.bold,
               fontFamily: "Jua",
             ),
@@ -41,8 +43,8 @@ class JournalEntryContainer extends StatelessWidget {
             child: SingleChildScrollView(
               child: Text(
                 journalEntry.isEmpty ? "No entry yet" : journalEntry,
-                style: const TextStyle(
-                    fontSize: 14,
+                style: TextStyle(
+                    fontSize: AppThemes.getResponsiveFontSize(context, 14),
                     fontFamily: "Jua",
                     fontStyle: FontStyle.italic),
               ),
