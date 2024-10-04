@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../assets/widgets/customThemes.dart';
 import '../assets/widgets/last_edited_info.dart';
 
 class JournalEntryScreen extends StatefulWidget {
@@ -75,9 +76,9 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(
+        title: Text(
           "FreedFrom Walls",
-          style: const TextStyle(fontSize: 18),
+          style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 18)),
         ),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
@@ -87,10 +88,10 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               "Journal Entry",
-              style: const TextStyle(
-                  fontSize: 20, fontWeight: FontWeight.bold, fontFamily: "Jua"),
+              style: TextStyle(
+                  fontSize: AppThemes.getResponsiveFontSize(context, 20), fontWeight: FontWeight.bold, fontFamily: "Jua"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,14 +105,14 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                       const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: const Color(0xff56537C),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
                     "${DateFormat("yMd").format(creationDate)}",
-                    style: const TextStyle(
-                        fontSize: 12,
-                        color: const Color(0xffD7D5EE),
+                    style: TextStyle(
+                        fontSize: AppThemes.getResponsiveFontSize(context, 12),
+                        color: Theme.of(context).textTheme.displaySmall?.color,
                         fontFamily: "RethinkSans",
                         fontWeight: FontWeight.bold),
                   ),
@@ -135,14 +136,14 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                 maxLines: 100,
                 decoration: InputDecoration(
                   hintText: "Write something here",
-                  hintStyle: const TextStyle(
-                    fontSize: 12,
+                  hintStyle: TextStyle(
+                    fontSize: AppThemes.getResponsiveFontSize(context, 12),
                     fontStyle: FontStyle.italic,
                   ),
                   border: InputBorder.none,
                 ),
-                style: const TextStyle(
-                    fontSize: 14,
+                style: TextStyle(
+                    fontSize: AppThemes.getResponsiveFontSize(context, 14),
                     fontStyle: FontStyle.italic,
                     fontFamily: "RethinkSans"),
               ),
@@ -155,7 +156,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                  color: const Color(0xffD7D5EE),
+                  color: Theme.of(context).primaryColor,
                   border: Border.all(color: Colors.black),
                   borderRadius: BorderRadius.circular(5)),
               child: const Text(

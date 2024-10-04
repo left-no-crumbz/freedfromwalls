@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:freedfromwalls/assets/widgets/customThemes.dart';
+
+import '../assets/widgets/title_description.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -8,8 +11,7 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  bool isBucketListSelected =
-      true; // To toggle between Bucketlisted and Blacklisted
+  bool isBucketListSelected = true; // To toggle between Bucketlisted and Blacklisted
   String message = "Bucketlisted";
 
   static const borderColor = Color(0xff423e3d);
@@ -28,8 +30,8 @@ class _ListPageState extends State<ListPage> {
       isBucketListSelected ? _bucketListChecked : _blackListChecked;
 
   Widget screenTitle() {
-    const selectedColor = Color(0xFF56537C);
-    const unselectedColor = Color(0xFFD7D5EE);
+    final selectedColor = Theme.of(context).cardColor;
+    final unselectedColor = Theme.of(context).primaryColor;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -68,7 +70,7 @@ class _ListPageState extends State<ListPage> {
                           ? Colors.white
                           : Color(0xff000000),
                       fontFamily: "Inter",
-                      fontSize: 14,
+                      fontSize: AppThemes.getResponsiveFontSize(context, 14),
                     ),
                   ),
                 ),
@@ -110,7 +112,7 @@ class _ListPageState extends State<ListPage> {
                           ? Color(0xff000000)
                           : Colors.white,
                       fontFamily: "Inter",
-                      fontSize: 14,
+                      fontSize: AppThemes.getResponsiveFontSize(context, 14),
                     ),
                   ),
                 ),
@@ -220,47 +222,25 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      message,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontFamily: 'Jua',
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      "Record the things you want to do over the year.",
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: Colors.black,
-                        fontFamily: 'RethinkSans',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TitleDescription(title: message, description: "Record the things you want to do over the year."),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: screenTitle(),
             ),
+
             // Checklist for Bucketlist or Blacklist based on selection
             if (_currentList.isNotEmpty)
               Container(
-                padding: const EdgeInsets.only(left: 0.0, right: 16.0),
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 5),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -269,53 +249,48 @@ class _ListPageState extends State<ListPage> {
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: _currentList.length,
                       itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: Card(
-                            color: Colors.white,
-                            child: ListTile(
-                              leading: Checkbox(
-                                value: _currentChecked[index],
-                                onChanged: (bool? value) {
-                                  setState(() {
-                                    _currentChecked[index] = value ?? false;
-                                  });
-                                },
-                              ),
-                              title: Text(_currentList[index]),
-                              trailing: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  ConstrainedBox(
-                                    constraints: const BoxConstraints(
-                                      maxWidth: 25, // Adjust maxWidth as needed
-                                      maxHeight:
-                                          30, // Ensure the buttons are consistent in size
-                                    ),
-                                    child: IconButton(
-                                      iconSize: 20.0,
-                                      padding: EdgeInsets.zero,
-                                      icon: const Icon(Icons.edit,
-                                          color: Colors.black),
-                                      onPressed: () => _editItem(index),
-                                    ),
+                        return Card(
+                          color: Colors.white,
+                          child: ListTile(
+                            leading: Checkbox(
+                              value: _currentChecked[index],
+                              onChanged: (bool? value) {
+                                setState(() {
+                                  _currentChecked[index] = value ?? false;
+                                });
+                              },
+                            ),
+                            title: Text(_currentList[index]),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    maxWidth: 25, // Adjust maxWidth as needed
+                                    maxHeight: 30, // Ensure the buttons are consistent in size
                                   ),
-                                  ConstrainedBox(
-                                    constraints: const BoxConstraints(
-                                      maxWidth:
-                                          30, // Same width for consistency
-                                      maxHeight: 30,
-                                    ),
-                                    child: IconButton(
-                                      iconSize: 20.0,
-                                      padding: EdgeInsets.zero,
-                                      icon: const Icon(Icons.delete,
-                                          color: Colors.black),
-                                      onPressed: () => _deleteItem(index),
-                                    ),
+                                  child: IconButton(
+                                    iconSize: 20.0,
+                                    padding: EdgeInsets.zero,
+                                    icon: const Icon(Icons.edit,
+                                        color: Colors.black),
+                                    onPressed: () => _editItem(index),
                                   ),
-                                ],
-                              ),
+                                ),
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(
+                                    maxWidth: 30, // Same width for consistency
+                                    maxHeight: 30,
+                                  ),
+                                  child: IconButton(
+                                    iconSize: 20.0,
+                                    padding: EdgeInsets.zero,
+                                    icon: const Icon(Icons.delete,
+                                        color: Colors.black),
+                                    onPressed: () => _deleteItem(index),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         );
@@ -328,36 +303,25 @@ class _ListPageState extends State<ListPage> {
             // Display the image and "No items here" text only if the current list is empty
             if (_currentList.isEmpty)
               Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Transform.translate(
-                    offset: Offset(
-                        0, 50), // Adjust x and y values to move the image
-                    child: Container(
-                      width: 250,
-                      height: 250,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage(isBucketListSelected
-                              ? 'lib/assets/images/backgrounds/Default_Bucketlisted.png'
-                              : 'lib/assets/images/backgrounds/Default_Blacklisted.png'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                  SizedBox(height: height * 0.08,),
+                  Image.asset(
+                    isBucketListSelected ? 'lib/assets/images/backgrounds/Default_Bucketlisted.png'
+                        : 'lib/assets/images/backgrounds/Default_Blacklisted.png',
+                    width: AppThemes.getResponsiveImageSize(context, 250),
+                    height: AppThemes.getResponsiveImageSize(context, 250),
                   ),
                   const SizedBox(height: 16),
-                  Transform.translate(
-                    offset:
-                        Offset(0, 30), // Adjust x and y values to move the text
-                    child: const Text(
-                      "No items here yet.\nShare the things you want to do!",
-                      style: const TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontFamily: 'Jua',
-                      ),
-                      textAlign: TextAlign.center,
+                  Text(
+                    "No items here yet.\nShare the things you want to do!",
+                    style: TextStyle(
+                      fontSize: AppThemes.getResponsiveFontSize(context, 16),
+                      color: Colors.black,
+                      fontFamily: 'Jua',
                     ),
+                    textAlign: TextAlign.center, // Already set for centering
                   ),
                 ],
               ),

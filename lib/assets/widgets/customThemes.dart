@@ -19,25 +19,11 @@ class AppThemes {
     brightness: Brightness.light,
     primaryColor: Color(0xFFD7D5EE), //Used for main color
     cardColor: Color(0xFF56537C), //Used for secondary color
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.black,
-      titleTextStyle: TextStyle(color: Colors.white),
-    ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Color(0xFFFFFFFF),
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.grey,
-    ),
-    scaffoldBackgroundColor: Color(0xFFFFFFFF),
+    scaffoldBackgroundColor: Color(0xFFFFFFFF), //Background color for body
     textTheme: TextTheme(
-      bodyLarge: TextStyle(color: Colors.black),
       displaySmall: TextStyle(color: Color(0xFFD7D5EE)), //Used in grid view selected
       displayMedium: TextStyle(color: Color(0xFF56537C)), //Used in grid view unselected
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: Color(0xFFFFCC99),  // Gold
-    ),
-    iconTheme: IconThemeData(color: Colors.black),
   );
 
   // Sunrise Theme
@@ -45,76 +31,34 @@ class AppThemes {
     brightness: Brightness.light,
     primaryColor: Color(0xFFFFCC99), //Used for main color
     cardColor: Color(0xFFC6541F), //Used for secondary color
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.black,
-      titleTextStyle: TextStyle(color: Colors.white),
-    ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Color(0xFFF8EACB),
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.grey,
-    ),
-    scaffoldBackgroundColor: Color(0xFFF8EACB),
+    scaffoldBackgroundColor: Color(0xFFF8EACB), //Background color for body
     textTheme: TextTheme(
-      bodyLarge: TextStyle(color: Colors.black),
       displaySmall: TextStyle(color: Color(0xFFFFCC99)), //Used in grid view selected
       displayMedium: TextStyle(color: Color(0xFFC6541F)), //Used in grid view unselected
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: Color(0xFFFFCC99),  // Gold
-    ),
-    iconTheme: IconThemeData(color: Colors.black),
   );
 
   // Sunset Theme
   static final ThemeData sunsetTheme = ThemeData(
     brightness: Brightness.light,
-    primaryColor: Color(0xFFE8AF78), //Used for main color
-    cardColor: Color(0xFF993366), //Used for secondary color
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.black,
-      titleTextStyle: TextStyle(color: Colors.white),
-    ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Color(0xFFF5CEDA),
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.grey[700],
-    ),
-    scaffoldBackgroundColor: Color(0xFFF5CEDA),
+    primaryColor: Color(0xFFE5B4BE), //Used for unselected
+    cardColor: Color(0xFF752939), //Used for selected
+    scaffoldBackgroundColor: Color(0xFFF5CEDA), //Background color for body
     textTheme: TextTheme(
-      bodyLarge: TextStyle(color: Colors.black),
-      displaySmall: TextStyle(color: Color(0xFFE8AF78)), //Used in grid view selected
-      displayMedium: TextStyle(color: Color(0xFF993366)), //Used in grid view unselected
+      displaySmall: TextStyle(color: Color(0xFFE5B4BE)), //Used for selected
+      displayMedium: TextStyle(color: Color(0xFF752939)), //Used for unselected
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: Color(0xFF993366),  // Dark purple
-    ),
-    iconTheme: IconThemeData(color: Colors.black),
   );
 
   // Sunset Theme
   static final ThemeData midnightTheme = ThemeData(
     brightness: Brightness.light,
-    primaryColor: Color(0xFF445478),
-    cardColor: Color(0xFFF8D5D5),
-    appBarTheme: AppBarTheme(
-      backgroundColor: Colors.black,
-      titleTextStyle: TextStyle(color: Colors.white),
-    ),
-    bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Color(0xFFF5CEDA),
-      selectedItemColor: Colors.black,
-      unselectedItemColor: Colors.grey[700],
-    ),
-    scaffoldBackgroundColor: Color(0xFFA6B1C8),
+    primaryColor: Color(0xFFB3C2E1), //Used for unselected
+    cardColor: Color(0xFF445478), //Used for selected
+    scaffoldBackgroundColor: Color(0xFFA6B1C8), //Background color for body
     textTheme: TextTheme(
-      bodyLarge: TextStyle(color: Colors.black),
-      displaySmall: TextStyle(color: Color(0xFF445478)), //Used in grid view selected
-      displayMedium: TextStyle(color: Color(0xFFF8D5D5)), //Used in grid view unselected
+      displaySmall: TextStyle(color: Color(0xFFB3C2E1)), //Used for selected
+      displayMedium: TextStyle(color: Color(0xFF445478)), //Used for unselected
     ),
-    floatingActionButtonTheme: FloatingActionButtonThemeData(
-      backgroundColor: Color(0xFF993366),  // Dark purple
-    ),
-    iconTheme: IconThemeData(color: Colors.black),
   );
 }

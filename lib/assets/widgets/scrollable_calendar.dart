@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'customThemes.dart';
 import 'package:intl/intl.dart';
 
 // TODO: Refactor in a way that each date would store its state
@@ -109,7 +110,7 @@ class DateWidget extends StatelessWidget {
         width: 100,
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
-          color: isSelected ? const Color(0xff56537C) : const Color(0xffEFEFEF),
+          color: isSelected ? Theme.of(context).cardColor : Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: const Color(0xff000000)),
           boxShadow: [
@@ -126,32 +127,32 @@ class DateWidget extends StatelessWidget {
             Text(
               DateFormat("MMMM").format(date),
               style: TextStyle(
-                fontSize: 14,
+                fontSize: AppThemes.getResponsiveFontSize(context, 14),
                 fontWeight: FontWeight.bold,
                 color: isSelected
-                    ? const Color(0xffD7D5EE)
-                    : const Color(0xff000000),
+                    ? Theme.of(context).textTheme.displaySmall?.color
+                    : Theme.of(context).textTheme.displayMedium?.color,
                 fontFamily: "Jua",
               ),
             ),
             Text(
               DateFormat("dd").format(date),
               style: TextStyle(
-                fontSize: 34,
+                fontSize: AppThemes.getResponsiveFontSize(context, 34),
                 fontWeight: FontWeight.bold,
                 color: isSelected
-                    ? const Color(0xffD7D5EE)
-                    : const Color(0xff000000),
+                    ? Theme.of(context).textTheme.displaySmall?.color
+                    : Theme.of(context).textTheme.displayMedium?.color,
                 fontFamily: "Jua",
               ),
             ),
             Text(
               DateFormat("EEEE").format(date),
               style: TextStyle(
-                fontSize: 14,
+                fontSize: AppThemes.getResponsiveFontSize(context, 14),
                 color: isSelected
-                    ? const Color(0xffD7D5EE)
-                    : const Color(0xff000000),
+                    ? Theme.of(context).textTheme.displaySmall?.color
+                    : Theme.of(context).textTheme.displayMedium?.color,
                 fontFamily: "Jua",
               ),
             ),

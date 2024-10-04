@@ -8,62 +8,83 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-              'Theme Settings'
-          ),
-          iconTheme: IconThemeData(
-              color: Colors.white
-          ),
+        backgroundColor: Colors.black,
+        title: Text(
+              'Theme Settings',
+              style: TextStyle(
+                color: Colors.white
+              ),
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
       ),
-      body: Column(
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 16.0,
+          mainAxisSpacing: 16.0,
+          children: [
+            _buildThemeOption(context, 'Default', AppThemes.defaultTheme),
+            _buildThemeOption(context, 'Sunset',  AppThemes.sunsetTheme),
+            _buildThemeOption(context, 'Sunrise',  AppThemes.sunriseTheme),
+            _buildThemeOption(context, 'Midnight',  AppThemes.midnightTheme),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildThemeOption(BuildContext context, String themeName, ThemeData theme) {
+    ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+
+    return Container(
+      padding: EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        color: themeProvider.theme == theme ? theme.primaryColor : Color(0xFFE5E5EA),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: themeProvider.theme == theme ? theme.cardColor : Colors.black,
+          width: 1,
+        ),
+      ),
+      child: Column(
         children: [
-          ListTile(
-            title: Text('Default'),
-            leading: Radio(
-              value: AppThemes.defaultTheme,
-              groupValue: Provider.of<ThemeProvider>(context).theme,
-              onChanged: (ThemeData? value) {
-                if (value != null) {
-                  Provider.of<ThemeProvider>(context, listen: false).swapTheme(value);
-                }
-              },
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [theme.primaryColor, theme.cardColor, theme.scaffoldBackgroundColor],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: themeProvider.theme == theme ? theme.cardColor : Colors.black,
+                  width: 1,
+                ),
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.palette,
+                  size: 40,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
-          ListTile(
-            title: Text('Sunrise'),
-            leading: Radio(
-              value: AppThemes.sunriseTheme,
-              groupValue: Provider.of<ThemeProvider>(context).theme,
-              onChanged: (ThemeData? value) {
-                if (value != null) {
-                  Provider.of<ThemeProvider>(context, listen: false).swapTheme(value);
-                }
-              },
-            ),
-          ),
-          ListTile(
-            title: Text('Sunset'),
-            leading: Radio(
-              value: AppThemes.sunsetTheme,
-              groupValue: Provider.of<ThemeProvider>(context).theme,
-              onChanged: (ThemeData? value) {
-                if (value != null) {
-                  Provider.of<ThemeProvider>(context, listen: false).swapTheme(value);
-                }
-              },
-            ),
-          ),
-          ListTile(
-            title: Text('Midnight'),
-            leading: Radio(
-              value: AppThemes.midnightTheme,
-              groupValue: Provider.of<ThemeProvider>(context).theme,
-              onChanged: (ThemeData? value) {
-                if (value != null) {
-                  Provider.of<ThemeProvider>(context, listen: false).swapTheme(value);
-                }
-              },
-            ),
+          SizedBox(height: 8),
+          Text(themeName),
+          SizedBox(height: 8),
+          Radio<ThemeData>(
+            value: theme,
+            groupValue: themeProvider.theme,
+            onChanged: (ThemeData? value) {
+              if (value != null) {
+                themeProvider.swapTheme(value);
+              }
+            },
           ),
         ],
       ),
