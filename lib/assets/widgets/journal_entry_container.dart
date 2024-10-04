@@ -9,11 +9,11 @@ class JournalEntryContainer extends StatelessWidget {
   final DateTime? editedDate;
 
   const JournalEntryContainer({
-    Key? key,
+    super.key,
     required this.journalEntry,
     this.creationDate,
     this.editedDate,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

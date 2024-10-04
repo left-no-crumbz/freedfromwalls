@@ -6,8 +6,7 @@ import 'package:intl/intl.dart';
 class ScrollableCalendar extends StatefulWidget {
   final DateTime initialDate;
 
-  const ScrollableCalendar({Key? key, required this.initialDate})
-      : super(key: key);
+  const ScrollableCalendar({super.key, required this.initialDate});
 
   @override
   State<ScrollableCalendar> createState() => _ScrollableCalendarState();
@@ -18,7 +17,7 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
   late int _selectedIndex;
   List<DateTime> _dates = [];
   int _daysToGenerate = 365;
-  int _threshold = 30;
+  final int _threshold = 30;
 
   @override
   void initState() {
@@ -66,7 +65,7 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 120,
       child: ListView.builder(
         controller: _scrollController,
@@ -96,11 +95,11 @@ class DateWidget extends StatelessWidget {
   final VoidCallback onTap;
 
   const DateWidget({
-    Key? key,
+    super.key,
     required this.date,
     required this.isSelected,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +109,9 @@ class DateWidget extends StatelessWidget {
         width: 100,
         margin: const EdgeInsets.symmetric(horizontal: 4),
         decoration: BoxDecoration(
-          color: isSelected ? Theme.of(context).cardColor : Theme.of(context).primaryColor,
+          color: isSelected
+              ? Theme.of(context).cardColor
+              : Theme.of(context).primaryColor,
           borderRadius: BorderRadius.circular(8),
           border: Border.all(color: const Color(0xff000000)),
           boxShadow: [

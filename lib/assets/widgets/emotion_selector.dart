@@ -54,15 +54,15 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
                 child: Container(
                   height: AppThemes.getResponsiveImageSize(context, 50),
                   width: AppThemes.getResponsiveImageSize(context, 50),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                      color: Colors.black),
                   child: _selectedImagePath.isEmpty
                       ? const Icon(
                           Icons.question_mark,
                           color: Colors.white,
                         )
                       : Image.asset(_selectedImagePath),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.black),
                 ),
               ),
               const SizedBox(width: 16),
@@ -76,18 +76,18 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
                           ? "Start selecting what you feel."
                           : "Your word of the day is $_selectedTitle",
                       style: TextStyle(
-                          fontSize: AppThemes.getResponsiveFontSize(context, 16),
-                          fontFamily: "Jua"
-                      ),
+                          fontSize:
+                              AppThemes.getResponsiveFontSize(context, 16),
+                          fontFamily: "Jua"),
                     ),
                     Text(
                       _selectedTitle.isEmpty
                           ? "Click the question mark to choose an emotion"
                           : "Seems like you are $_selectedName. Share what you feel in the journal.",
                       style: TextStyle(
-                          fontSize: AppThemes.getResponsiveFontSize(context, 12),
-                          fontFamily: "RethinkSans"
-                      ),
+                          fontSize:
+                              AppThemes.getResponsiveFontSize(context, 12),
+                          fontFamily: "RethinkSans"),
                     ),
                   ],
                 ),
@@ -108,13 +108,13 @@ class Emotion extends StatelessWidget {
   final Function(String, String, Color, String) onSelect;
 
   const Emotion({
-    Key? key,
+    super.key,
     required this.title,
     required this.name,
     required this.imagePath,
     required this.color,
     required this.onSelect,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -133,11 +133,15 @@ class Emotion extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             title,
-            style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 10), fontFamily: "Jua"),
+            style: TextStyle(
+                fontSize: AppThemes.getResponsiveFontSize(context, 10),
+                fontFamily: "Jua"),
           ),
           Text(
             "($name)",
-            style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 10), fontFamily: "Jua"),
+            style: TextStyle(
+                fontSize: AppThemes.getResponsiveFontSize(context, 10),
+                fontFamily: "Jua"),
           )
         ],
       ),
@@ -166,11 +170,15 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
           Text(
             "How do you feel right now?",
             style: TextStyle(
-                fontSize: AppThemes.getResponsiveFontSize(context, 20), fontFamily: "Jua", fontWeight: FontWeight.bold),
+                fontSize: AppThemes.getResponsiveFontSize(context, 20),
+                fontFamily: "Jua",
+                fontWeight: FontWeight.bold),
           ),
           Text(
             "Please select one emotion below.",
-            style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 12), fontFamily: "RethinkSans"),
+            style: TextStyle(
+                fontSize: AppThemes.getResponsiveFontSize(context, 12),
+                fontFamily: "RethinkSans"),
           ),
           const SizedBox(height: 16),
           Expanded(
