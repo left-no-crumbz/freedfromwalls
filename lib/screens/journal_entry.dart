@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:freedfromwalls/models/additional_note.dart';
+import 'package:freedfromwalls/models/emotion.dart';
 import 'package:intl/intl.dart';
 import '../assets/widgets/customThemes.dart';
 import '../assets/widgets/last_edited_info.dart';
+import '../controllers/daily_entry_controller.dart';
+import '../models/daily_entry.dart';
 
 class JournalEntryScreen extends StatefulWidget {
   final Function(String, DateTime, DateTime) onJournalEntryChanged;
@@ -11,13 +15,13 @@ class JournalEntryScreen extends StatefulWidget {
   final DateTime? initialEditedDate;
 
   const JournalEntryScreen({
-    Key? key,
+    super.key,
     required this.onJournalEntryChanged,
     this.initialEntry = "",
     required this.getCurrentTime,
     this.initialCreationDate,
     this.initialEditedDate,
-  }) : super(key: key);
+  });
 
   @override
   State<JournalEntryScreen> createState() => _JournalEntryScreenState();
@@ -27,7 +31,9 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
   late DateTime editedDate;
   late final DateTime creationDate;
   late final TextEditingController _journalEntryController;
-  List<String> notes = [];
+  List<AdditionalNoteModel> notes = [];
+  final DailyEntryController controller = DailyEntryController();
+  List<DailyEntryModel> entries = [];
 
   @override
   void initState() {
@@ -36,12 +42,34 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
     editedDate = widget.initialEditedDate ?? creationDate;
     _journalEntryController = TextEditingController(text: widget.initialEntry);
     _journalEntryController.addListener(_onJournalEntryChanged);
+    _loadEntries();
+    print(entries);
+  }
+
+  Future<void> _loadEntries() async {
+    entries = await controller.fetchEntries();
   }
 
   void _onJournalEntryChanged() {
+    DailyEntryModel dailyEntry = DailyEntryModel(
+      date: DateTime.now(),
+      journalEntry: _journalEntryController.text,
+      additionalNotes: notes,
+    );
+
     editedDate = widget.getCurrentTime();
     widget.onJournalEntryChanged(
         _journalEntryController.text, creationDate, editedDate);
+  }
+
+  Future<void> _addEntry() async {
+    DailyEntryModel dailyEntry = DailyEntryModel(
+      date: DateTime.now(),
+      emotion: EmotionModel(name: "happy", title: "YAY", color: "0xFFF8E9BB"),
+      journalEntry: _journalEntryController.text,
+      additionalNotes: notes,
+    );
+    await controller.addEntry(dailyEntry);
   }
 
   @override
@@ -53,7 +81,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
   void addNote(String note) {
     setState(() {
-      notes.add(note);
+      notes.add(AdditionalNoteModel(dailyEntryId: entries.length, note: note));
     });
   }
 
@@ -65,7 +93,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
   void editNote(int index, String newNote) {
     setState(() {
-      notes[index] = newNote;
+      notes[index].note = newNote;
       editedDate = DateTime.now();
     });
   }
@@ -78,7 +106,8 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
         centerTitle: true,
         title: Text(
           "FreedFrom Walls",
-          style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 18)),
+          style:
+              TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 18)),
         ),
         backgroundColor: Colors.black,
         foregroundColor: Colors.white,
@@ -91,7 +120,9 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
             Text(
               "Journal Entry",
               style: TextStyle(
-                  fontSize: AppThemes.getResponsiveFontSize(context, 20), fontWeight: FontWeight.bold, fontFamily: "Jua"),
+                  fontSize: AppThemes.getResponsiveFontSize(context, 20),
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Jua"),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -109,7 +140,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    "${DateFormat("yMd").format(creationDate)}",
+                    DateFormat("yMd").format(creationDate),
                     style: TextStyle(
                         fontSize: AppThemes.getResponsiveFontSize(context, 12),
                         color: Theme.of(context).textTheme.displaySmall?.color,
@@ -123,13 +154,13 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
               color: Colors.grey,
             ),
             //  A SizedBox was needed to limit the height of the TextField
-            Container(
+            SizedBox(
               height: 250,
               child: TextField(
                 controller: _journalEntryController,
                 textInputAction: TextInputAction.send,
                 onSubmitted: (String str) {
-                  _onJournalEntryChanged;
+                  _addEntry();
                   FocusManager.instance.primaryFocus?.unfocus();
                   Navigator.pop(context);
                 },
@@ -161,7 +192,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                   borderRadius: BorderRadius.circular(5)),
               child: const Text(
                 "NOTES",
-                style: const TextStyle(
+                style: TextStyle(
                     fontFamily: "RethinkSans", fontWeight: FontWeight.bold),
               ),
             ),
@@ -177,7 +208,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                     );
                   } else {
                     return NoteItem(
-                      note: notes[index],
+                      note: notes[index].note,
                       onRemove: () => removeNote(index),
                       onEdit: (String newNote) => editNote(index, newNote),
                     );
