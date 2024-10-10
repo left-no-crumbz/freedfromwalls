@@ -7,6 +7,8 @@ import 'login_screen.dart';
 import '../main.dart';
 
 class RegisterPage extends StatefulWidget {
+  const RegisterPage({super.key});
+
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
@@ -19,37 +21,47 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confPassController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final LoginController _registerController = LoginController();
-
   //Register function
   Future<void> _register() async {
     String confirmPass = _confPassController.text;
     String password = _passController.text;
     String email = _emailController.text;
 
-    UserModel user = UserModel(email: email, password: password);
-
-    bool success = await _registerController.register(user);
-
-    if (success) {
-      if (success) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OnboardingPage(),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Error: Please confirm your password."),
-        ));
-      }
-    } else {
+    if (password != confirmPass) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Error: Please confirm your password."),
+      ));
+    } else if (password.isEmpty || confirmPass.isEmpty || email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error: Empty field."),
       ));
+    } else {
+      UserModel user = UserModel(email: email, password: password);
+      bool success = await _registerController.register(user);
+
+      if (success) {
+        if (mounted) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OnboardingPage(),
+            ),
+          );
+        } else {
+          debugPrint(
+              "Context not mounted! Async function probably caused this.");
+        }
+      } else {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Email is already in use."),
+          ));
+        }
+      }
     }
   }
+
+  final LoginController _registerController = LoginController();
 
   @override
   Widget build(BuildContext context) {
