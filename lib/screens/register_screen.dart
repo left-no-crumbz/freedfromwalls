@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:freedfromwalls/controllers/login_controller.dart';
+import 'package:freedfromwalls/models/user.dart';
 import 'package:freedfromwalls/screens/onboarding_screen.dart';
 import '../assets/widgets/customThemes.dart';
 import 'login_screen.dart';
@@ -17,15 +19,20 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confPassController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final LoginController _registerController = LoginController();
 
   //Register function
-  void _register() {
+  Future<void> _register() async {
     String confirmPass = _confPassController.text;
     String password = _passController.text;
     String email = _emailController.text;
 
-    if (password.isNotEmpty && confirmPass.isNotEmpty && email.isNotEmpty) {
-      if (password == confirmPass) {
+    UserModel user = UserModel(email: email, password: password);
+
+    bool success = await _registerController.register(user);
+
+    if (success) {
+      if (success) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -37,8 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
           content: Text("Error: Please confirm your password."),
         ));
       }
-    }
-    else {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error: Empty field."),
       ));
@@ -63,7 +69,10 @@ class _RegisterPageState extends State<RegisterPage> {
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
                 "REGISTER",
-                style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 18), fontWeight: FontWeight.w500, color: Colors.black),
+                style: TextStyle(
+                    fontSize: AppThemes.getResponsiveFontSize(context, 18),
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),
               ),
             ),
 
@@ -79,8 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       blurRadius: 4,
                       offset: Offset(2, 4),
                     ),
-                  ]
-              ),
+                  ]),
               child: TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -103,8 +111,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       blurRadius: 4,
                       offset: Offset(2, 4),
                     ),
-                  ]
-              ),
+                  ]),
               child: TextField(
                 obscureText: _isShown1 ? false : true,
                 controller: _passController,
@@ -141,8 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       blurRadius: 4,
                       offset: Offset(2, 4),
                     ),
-                  ]
-              ),
+                  ]),
               child: TextField(
                 obscureText: _isShown2 ? false : true,
                 controller: _confPassController,
@@ -176,7 +182,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
             ),
 
-            Container(
+            SizedBox(
               width: width * 0.45,
               child: ElevatedButton(
                 onPressed: _register,
@@ -186,15 +192,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     side: BorderSide(
                       color: Colors.black,
                       width: 1,
-                    )
-                ),
+                    )),
                 child: Text(
                   "REGISTER",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: AppThemes.getResponsiveFontSize(context, 16)
-                  ),
+                      fontSize: AppThemes.getResponsiveFontSize(context, 16)),
                 ),
               ),
             ),
@@ -241,7 +245,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: width,
                   decoration: BoxDecoration(
                     color: Color(0xFF3A375E),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(500)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(500)),
                   ),
                 ),
                 Container(
@@ -249,7 +254,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: width * 0.85,
                   decoration: BoxDecoration(
                     color: Color(0xFF56537C),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(400)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(400)),
                   ),
                 ),
                 Container(
@@ -257,7 +263,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: width * 0.75,
                   decoration: BoxDecoration(
                     color: Color(0xFF9C98CB),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(350)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(350)),
                   ),
                 ),
                 Container(
@@ -265,7 +272,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: width * 0.65,
                   decoration: BoxDecoration(
                     color: Color(0xFFD7D5EE),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(300)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(300)),
                   ),
                 ),
                 Container(
@@ -273,16 +281,15 @@ class _RegisterPageState extends State<RegisterPage> {
                   width: width * 0.55,
                   decoration: BoxDecoration(
                     color: Color(0xFFEFEEFF),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(200)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(200)),
                   ),
                 ),
                 Container(
                   height: height * 0.07,
                   width: width * 0.50,
                   margin: EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                      color: Colors.transparent
-                  ),
+                  decoration: BoxDecoration(color: Colors.transparent),
                   child: TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -298,16 +305,21 @@ class _RegisterPageState extends State<RegisterPage> {
                           Text(
                             "Already have an account?",
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black, fontSize: AppThemes.getResponsiveFontSize(context, 12)),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: AppThemes.getResponsiveFontSize(
+                                    context, 12)),
                           ),
                           Text(
                             "Return to Login Page.",
                             textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.black, fontSize: AppThemes.getResponsiveFontSize(context, 12)),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontSize: AppThemes.getResponsiveFontSize(
+                                    context, 12)),
                           )
                         ],
-                      )
-                  ),
+                      )),
                 )
               ],
             ),
@@ -315,4 +327,3 @@ class _RegisterPageState extends State<RegisterPage> {
         ));
   }
 }
-

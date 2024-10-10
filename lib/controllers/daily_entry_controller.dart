@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:freedfromwalls/models/daily_entry.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -30,7 +31,7 @@ class DailyEntryController {
       },
       body: jsonEncode(dailyEntry.toJson()),
     );
-    print(response.statusCode);
+    debugPrint("${response.statusCode}");
     if (response.statusCode != 200) {
       throw Exception('Failed to add entry');
     }

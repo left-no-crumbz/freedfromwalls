@@ -1,21 +1,28 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:freedfromwalls/assets/widgets/customThemes.dart';
+import 'package:freedfromwalls/controllers/login_controller.dart';
+import 'package:freedfromwalls/models/user.dart';
 import '../main.dart';
 import 'register_screen.dart';
 
-void main(){
-  AwesomeNotifications().initialize(null,
+void main() {
+  AwesomeNotifications().initialize(
+    null,
     [
-      NotificationChannel(channelKey: 'basic_channel',
+      NotificationChannel(
+        channelKey: 'basic_channel',
         channelName: 'Basic Notifications',
-        channelDescription: 'Notification channel for basic tests',),
+        channelDescription: 'Notification channel for basic tests',
+      ),
     ],
     debug: true,
   );
 }
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
@@ -23,6 +30,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _isChecked = false; // Remember me button
   bool _isShown = false; // Password visibility
+  final LoginController _loginController = LoginController();
 
   //Controllers
   final TextEditingController _emailController = TextEditingController();
@@ -33,24 +41,30 @@ class _LoginPageState extends State<LoginPage> {
   final String _password = 'admin12345';
 
   //login function
-  void _login() {
+  Future<void> _login() async {
     String email = _emailController.text;
     String password = _passController.text;
 
-    if (email == _email && password == _password) {
+    UserModel user = UserModel(
+      email: email,
+      password: password,
+    );
+
+    bool success = await _loginController.login(user);
+    print("Login is successful: $success");
+
+    if (success) {
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => FreedFromWallsApp(),
         ),
       );
-    }
-    else if (email.isEmpty && password.isEmpty) {
+    } else if (email.isEmpty && password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error: Empty Field."),
       ));
-    }
-    else {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error: Incorrect email or password."),
       ));
@@ -62,7 +76,6 @@ class _LoginPageState extends State<LoginPage> {
     //Height and width of the Screen
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-
 
     return Scaffold(
         backgroundColor: Colors.grey[100],
@@ -77,7 +90,10 @@ class _LoginPageState extends State<LoginPage> {
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
                 "LOG IN",
-                style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 18), fontWeight: FontWeight.w500, color: Colors.black),
+                style: TextStyle(
+                    fontSize: AppThemes.getResponsiveFontSize(context, 18),
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),
               ),
             ),
 
@@ -93,8 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                       blurRadius: 4,
                       offset: Offset(2, 4),
                     ),
-                  ]
-              ),
+                  ]),
               child: TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -117,8 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                       blurRadius: 4,
                       offset: Offset(2, 4),
                     ),
-                  ]
-              ),
+                  ]),
               child: TextField(
                 obscureText: _isShown ? false : true,
                 controller: _passController,
@@ -138,10 +152,10 @@ class _LoginPageState extends State<LoginPage> {
                           _isShown = !_isShown;
                         });
                       },
-                                    ),
+                    ),
                   ),
+                ),
               ),
-            ),
             ),
 
             // Remember me checkbox
@@ -151,8 +165,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Checkbox(
                     value: _isChecked,
-                    activeColor:
-                        _isChecked ? Color(0xff2d2d2d) : Colors.white,
+                    activeColor: _isChecked ? Color(0xff2d2d2d) : Colors.white,
                     onChanged: (bool? value) {
                       setState(() {
                         _isChecked = value!;
@@ -160,11 +173,11 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   Text(
-                      "Remember me",
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: AppThemes.getResponsiveFontSize(context, 12),
-                      ),
+                    "Remember me",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: AppThemes.getResponsiveFontSize(context, 12),
+                    ),
                   ),
                 ],
               ),
@@ -178,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
 
-            Container(
+            SizedBox(
               width: width * 0.45,
               child: ElevatedButton(
                 onPressed: _login,
@@ -188,15 +201,13 @@ class _LoginPageState extends State<LoginPage> {
                     side: BorderSide(
                       color: Colors.black,
                       width: 1,
-                    )
-                ),
+                    )),
                 child: Text(
                   "LOG IN",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: AppThemes.getResponsiveFontSize(context, 16)
-                  ),
+                      fontSize: AppThemes.getResponsiveFontSize(context, 16)),
                 ),
               ),
             ),
@@ -243,7 +254,8 @@ class _LoginPageState extends State<LoginPage> {
                   width: width,
                   decoration: BoxDecoration(
                     color: Color(0xFF3A375E),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(500)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(500)),
                   ),
                 ),
                 Container(
@@ -251,7 +263,8 @@ class _LoginPageState extends State<LoginPage> {
                   width: width * 0.85,
                   decoration: BoxDecoration(
                     color: Color(0xFF56537C),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(400)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(400)),
                   ),
                 ),
                 Container(
@@ -259,7 +272,8 @@ class _LoginPageState extends State<LoginPage> {
                   width: width * 0.75,
                   decoration: BoxDecoration(
                     color: Color(0xFF9C98CB),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(350)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(350)),
                   ),
                 ),
                 Container(
@@ -267,7 +281,8 @@ class _LoginPageState extends State<LoginPage> {
                   width: width * 0.65,
                   decoration: BoxDecoration(
                     color: Color(0xFFD7D5EE),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(300)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(300)),
                   ),
                 ),
                 Container(
@@ -275,16 +290,15 @@ class _LoginPageState extends State<LoginPage> {
                   width: width * 0.55,
                   decoration: BoxDecoration(
                     color: Color(0xFFEFEEFF),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(200)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(200)),
                   ),
                 ),
                 Container(
                   height: height * 0.05,
                   width: width * 0.50,
                   margin: EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.transparent
-                  ),
+                  decoration: BoxDecoration(color: Colors.transparent),
                   child: TextButton(
                       onPressed: () {
                         Navigator.push(
@@ -297,14 +311,15 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text(
                         "Not a member? Sign up now.",
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.black, fontSize: AppThemes.getResponsiveFontSize(context, 12)),
-                      )
-                  ),
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize:
+                                AppThemes.getResponsiveFontSize(context, 12)),
+                      )),
                 )
               ],
             ),
           ],
-        )
-    );
+        ));
   }
 }
