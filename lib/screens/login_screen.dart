@@ -5,6 +5,8 @@ import 'package:freedfromwalls/controllers/login_controller.dart';
 import 'package:freedfromwalls/models/user.dart';
 import '../main.dart';
 import 'register_screen.dart';
+import '../providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   AwesomeNotifications().initialize(
@@ -51,23 +53,36 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     bool success = await _loginController.login(user);
-    print("Login is successful: $success");
+    debugPrint("Login is successful: $success");
 
     if (success) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => FreedFromWallsApp(),
-        ),
-      );
+      if (mounted) {
+        Provider.of<UserProvider>(context, listen: false).setUser(user);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const FreedFromWallsApp(),
+          ),
+        );
+      } else {
+        debugPrint("ERROR: Context not mounted!");
+      }
     } else if (email.isEmpty && password.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Error: Empty Field."),
-      ));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Error: Empty Field."),
+        ));
+      } else {
+        debugPrint("ERROR: Context not mounted!");
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Error: Incorrect email or password."),
-      ));
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Error: Incorrect email or password."),
+        ));
+      } else {
+        debugPrint("ERROR: Context not mounted!");
+      }
     }
   }
 
@@ -99,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
 
             //Inputs
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [
@@ -107,12 +122,12 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.black.withOpacity(0.6),
                       spreadRadius: 2,
                       blurRadius: 4,
-                      offset: Offset(2, 4),
+                      offset: const Offset(2, 4),
                     ),
                   ]),
               child: TextField(
                 controller: _emailController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: "Email Address",
                   filled: true,
                   fillColor: Color(0xFFF1F1F1),
@@ -122,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
 
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.0),
                   boxShadow: [
@@ -130,7 +145,7 @@ class _LoginPageState extends State<LoginPage> {
                       color: Colors.black.withOpacity(0.6),
                       spreadRadius: 2,
                       blurRadius: 4,
-                      offset: Offset(2, 4),
+                      offset: const Offset(2, 4),
                     ),
                   ]),
               child: TextField(
@@ -139,8 +154,8 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: InputDecoration(
                   labelText: "Password",
                   filled: true,
-                  fillColor: Color(0xFFF1F1F1),
-                  border: OutlineInputBorder(),
+                  fillColor: const Color(0xFFF1F1F1),
+                  border: const OutlineInputBorder(),
                   suffixIcon: Container(
                     margin: EdgeInsets.only(right: 5),
                     child: IconButton(
@@ -165,7 +180,8 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   Checkbox(
                     value: _isChecked,
-                    activeColor: _isChecked ? Color(0xff2d2d2d) : Colors.white,
+                    activeColor:
+                        _isChecked ? const Color(0xff2d2d2d) : Colors.white,
                     onChanged: (bool? value) {
                       setState(() {
                         _isChecked = value!;
@@ -196,9 +212,9 @@ class _LoginPageState extends State<LoginPage> {
               child: ElevatedButton(
                 onPressed: _login,
                 style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.all(20),
-                    backgroundColor: Color(0xffD7D5EE),
-                    side: BorderSide(
+                    padding: const EdgeInsets.all(20),
+                    backgroundColor: const Color(0xffD7D5EE),
+                    side: const BorderSide(
                       color: Colors.black,
                       width: 1,
                     )),
@@ -228,19 +244,19 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   CircleAvatar(
                     radius: height * 0.09,
-                    backgroundColor: Color(0xFF3A375E),
+                    backgroundColor: const Color(0xFF3A375E),
                   ),
                   CircleAvatar(
                     radius: height * 0.075,
-                    backgroundColor: Color(0xFF56537C),
+                    backgroundColor: const Color(0xFF56537C),
                   ),
                   CircleAvatar(
                     radius: height * 0.06,
-                    backgroundColor: Color(0xFF9C98CB),
+                    backgroundColor: const Color(0xFF9C98CB),
                   ),
                   CircleAvatar(
                     radius: height * 0.045,
-                    backgroundColor: Color(0xFFD7D5EE),
+                    backgroundColor: const Color(0xFFD7D5EE),
                   ),
                 ],
               ),
@@ -253,15 +269,15 @@ class _LoginPageState extends State<LoginPage> {
                   height: height * 0.30,
                   width: width,
                   decoration: BoxDecoration(
-                    color: Color(0xFF3A375E),
+                    color: const Color(0xFF3A375E),
                     borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(500)),
+                        const BorderRadius.vertical(top: Radius.circular(500)),
                   ),
                 ),
                 Container(
                   height: height * 0.27,
                   width: width * 0.85,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Color(0xFF56537C),
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(400)),
@@ -270,7 +286,7 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   height: height * 0.24,
                   width: width * 0.75,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Color(0xFF9C98CB),
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(350)),
@@ -279,7 +295,7 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   height: height * 0.21,
                   width: width * 0.65,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Color(0xFFD7D5EE),
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(300)),
@@ -288,7 +304,7 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   height: height * 0.18,
                   width: width * 0.55,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     color: Color(0xFFEFEEFF),
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(200)),
@@ -297,14 +313,14 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   height: height * 0.05,
                   width: width * 0.50,
-                  margin: EdgeInsets.only(bottom: 10),
-                  decoration: BoxDecoration(color: Colors.transparent),
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: const BoxDecoration(color: Colors.transparent),
                   child: TextButton(
                       onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => RegisterPage(),
+                            builder: (context) => const RegisterPage(),
                           ),
                         );
                       },
