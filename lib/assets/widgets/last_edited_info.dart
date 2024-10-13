@@ -7,10 +7,10 @@ class LastEditedInfo extends StatelessWidget {
   final DateTime editedDate;
 
   const LastEditedInfo({
-    Key? key,
+    super.key,
     required this.creationDate,
     required this.editedDate,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
