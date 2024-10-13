@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:freedfromwalls/models/daily_entry.dart';
-import 'package:freedfromwalls/models/user.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'dart:convert';
 import '../controllers/login_controller.dart';
-import 'package:provider/provider.dart';
 
 class DailyEntryController {
   Client client = http.Client();
