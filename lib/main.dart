@@ -9,12 +9,19 @@ import 'screens/breather_screen.dart';
 import 'screens/feel_screen.dart';
 import 'screens/profile_screen.dart';
 import 'package:provider/provider.dart';
+import './providers/user_provider.dart';
+import './providers/emotion_provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => ThemeProvider(initialTheme: AppThemes.defaultTheme),
-      child: FreedFromWallsApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (_) => ThemeProvider(initialTheme: AppThemes.defaultTheme)),
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => EmotionProvider()),
+      ],
+      child: const FreedFromWallsApp(),
     ),
   );
 }
