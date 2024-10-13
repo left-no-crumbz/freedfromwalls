@@ -32,7 +32,6 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool _isChecked = false; // Remember me button
   bool _isShown = false; // Password visibility
-  final LoginController _loginController = LoginController();
 
   //Controllers
   final TextEditingController _emailController = TextEditingController();
@@ -41,6 +40,8 @@ class _LoginPageState extends State<LoginPage> {
   //Temporary username and pass
   final String _email = 'Kyle';
   final String _password = 'admin12345';
+
+  final LoginController _loginController = LoginController();
 
   //login function
   Future<void> _login() async {
@@ -52,12 +53,22 @@ class _LoginPageState extends State<LoginPage> {
       password: password,
     );
 
-    bool success = await _loginController.login(user);
+    UserModel updatedUser = await _loginController.getUser(email);
+
+    // update the password to use the raw password
+    updatedUser.password = user.password;
+
+    debugPrint("${updatedUser.id}");
+    debugPrint("${updatedUser.email}");
+    debugPrint("${updatedUser.password}");
+
+    bool success = await _loginController.login(updatedUser);
+
     debugPrint("Login is successful: $success");
 
     if (success) {
       if (mounted) {
-        Provider.of<UserProvider>(context, listen: false).setUser(user);
+        Provider.of<UserProvider>(context, listen: false).setUser(updatedUser);
         Navigator.push(
           context,
           MaterialPageRoute(

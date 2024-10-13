@@ -3,12 +3,35 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'dart:convert';
 import '../models/user.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginController {
   final Client _client = http.Client();
   final String _baseUrl = "http://192.168.100.42:8000/api/";
   final String _loginApi = "login/";
   final String _registerApi = "register/";
+  final String _getUser = "user/";
+  static final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
+  // This is needed to update the user
+  Future<UserModel> getUser(String email) async {
+    late UserModel user;
+    Response response = await _client.get(
+      Uri.parse("$_baseUrl$_getUser$email"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      debugPrint("User successfully updated!");
+      var jsonResponse = jsonDecode(response.body);
+      user = UserModel.fromJson(jsonResponse);
+    } else {
+      debugPrint("ERROR: getUser function failed!");
+    }
+    return user;
+  }
 
   Future<bool> login(UserModel user) async {
     try {
@@ -23,9 +46,12 @@ class LoginController {
       debugPrint('Response body: ${response.body}');
 
       final responseData = jsonDecode(response.body);
-      debugPrint(responseData['status']);
 
       if (response.statusCode == 200) {
+        String token = responseData['token'];
+        debugPrint("Token is: $token");
+        await secureStorage.write(key: 'token_${user.email}', value: token);
+        await secureStorage.write(key: 'current_user_email', value: user.email);
         return true;
       } else {
         return false;
