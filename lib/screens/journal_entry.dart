@@ -52,6 +52,11 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
   void _onJournalEntryChanged() {
     editedDate = widget.getCurrentTime();
+
+    debugPrint("journal_entry.dart: ${DateFormat("h:mma").format(editedDate)}");
+    debugPrint("journal_entry.dart: ${DateFormat("h:mma").format(editedDate)}");
+    debugPrint("journal_entry.dart: ${DateFormat("h:mma").format(editedDate)}");
+
     widget.onJournalEntryChanged(
         _journalEntryController.text, creationDate, editedDate);
   }
@@ -72,7 +77,6 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
       emotion.toJson().forEach((key, value) => debugPrint("$key: $value"));
     }
 
-    // FIXME: Emotion is not updating
     DailyEntryModel dailyEntry = DailyEntryModel(
       user: user,
       emotion: emotion,

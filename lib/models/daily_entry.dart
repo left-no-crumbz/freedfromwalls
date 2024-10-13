@@ -44,8 +44,8 @@ class DailyEntryModel {
       additionalNotes: (json['additional_notes'] as List)
           .map((noteJson) => AdditionalNoteModel.fromJson(noteJson))
           .toList(),
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      createdAt: DateTime.parse(json['created_at']).toLocal(),
+      updatedAt: DateTime.parse(json['updated_at']).toLocal(),
     );
   }
 }

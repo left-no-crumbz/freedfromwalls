@@ -7,7 +7,6 @@ import '../controllers/login_controller.dart';
 
 class DailyEntryController {
   Client client = http.Client();
-  List<DailyEntryModel> entries = [];
   final String baseUrl = "http://192.168.100.42:8000/api/";
   final String entriesUrl = "entries/";
   final String createUrl = "create/";
@@ -18,13 +17,22 @@ class DailyEntryController {
   final String addApiUrl = "http://192.168.100.42:8000/api/entries/create/";
 
   Future<List<DailyEntryModel>> fetchEntries() async {
-    final Response response = await client.get(Uri.parse("$baseUrl$entries"));
+    debugPrint("$baseUrl$entriesUrl");
+    final Response response = await client.get(
+      Uri.parse("$baseUrl$entriesUrl"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+    debugPrint("fetchEntries: ${response.statusCode}");
 
     if (response.statusCode == 200) {
       List<dynamic> jsonResponse = json.decode(response.body);
-      return jsonResponse
-          .map((entry) => DailyEntryModel.fromJson(entry))
-          .toList();
+
+      List<DailyEntryModel> entries =
+          jsonResponse.map((entry) => DailyEntryModel.fromJson(entry)).toList();
+
+      return entries;
     } else {
       throw Exception('Failed to load entries.');
     }

@@ -26,7 +26,7 @@ class LastEditedInfo extends StatelessWidget {
               fontFamily: "RethinkSans"),
         ),
         Text(
-          "${DateFormat("yMMMMd").format(editedDate)} | ${DateFormat("jm").format(editedDate)}",
+          "${DateFormat("yMMMMd").format(editedDate)} | ${DateFormat("h:mma").format(editedDate)}",
           style: TextStyle(
               fontSize: AppThemes.getResponsiveFontSize(context, 12),
               color: const Color(0xff746F6F),

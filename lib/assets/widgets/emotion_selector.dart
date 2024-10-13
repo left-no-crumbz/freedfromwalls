@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:freedfromwalls/controllers/emotion_controller.dart';
-import 'package:freedfromwalls/providers/emotion_provider.dart';
+import '../../providers/emotion_provider.dart';
+import '../../controllers/daily_entry_controller.dart';
+import '../../models/daily_entry.dart';
 import './custom_title.dart';
 import 'customThemes.dart';
 import 'package:provider/provider.dart';
@@ -15,25 +17,72 @@ class EmotionSelectorContainer extends StatefulWidget {
 }
 
 class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
-  String _selectedTitle = "";
-  String _selectedName = "";
+  EmotionModel? _emotion;
+  String? _selectedTitle;
+  String? _selectedName;
   String _selectedImagePath = "";
   Color _selectedColor = Colors.white;
+  final DailyEntryController controller = DailyEntryController();
+  List<DailyEntryModel> entries = [];
+
+  final Map<String, String> imagePaths = {
+    "happy": "lib/assets/images/emotions/emotions-happy.png",
+    "sad": "lib/assets/images/emotions/emotions-sad.png",
+    "angry": "lib/assets/images/emotions/emotions-angry.png",
+    "tired": "lib/assets/images/emotions/emotions-tired.png",
+    "energetic": "lib/assets/images/emotions/emotions-energetic.png",
+    "neutral": "lib/assets/images/emotions/emotions-neutral.png",
+    "in love": "lib/assets/images/emotions/emotions-love.png",
+    "curious": "lib/assets/images/emotions/emotions-curious.png",
+    "embarrassed": "lib/assets/images/emotions/emotions-embarrassed.png",
+    "scared": "lib/assets/images/emotions/emotions-scared.png",
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _updateEmotionData();
+    setState(() {});
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _updateEmotionData();
+    setState(() {});
+  }
+
+  void _updateEmotionData() {
+    final emotionProvider =
+        Provider.of<EmotionProvider>(context, listen: false);
+    _emotion = emotionProvider.emotion;
+
+    if (_emotion != null) {
+      setState(() {
+        _selectedTitle = _emotion!.title;
+        _selectedName = _emotion!.name;
+        _selectedColor =
+            Color(int.tryParse(_emotion?.color ?? '0xFFFFFFFF') ?? 0xFFFFFFFF);
+        _selectedImagePath = imagePaths[_emotion!.name] ?? "";
+      });
+    }
+  }
 
   void _showEmotionBottomSheet() {
     showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) => EmotionBottomSheet(
-              onEmotionSelected: (title, name, color, imagePath) {
-                setState(() {
-                  _selectedTitle = title;
-                  _selectedName = name;
-                  _selectedColor = color;
-                  _selectedImagePath = imagePath;
-                });
-              },
-            ));
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) => EmotionBottomSheet(
+        onEmotionSelected: (title, name, color, imagePath) {
+          setState(() {
+            _selectedTitle = title;
+            _selectedName = name;
+            _selectedColor = color;
+            _selectedImagePath = imagePath;
+          });
+        },
+      ),
+    );
   }
 
   @override
@@ -48,9 +97,10 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
           width: MediaQuery.of(context).size.width * 1,
           height: 100,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
-              border: Border.all(color: Colors.black),
-              color: _selectedColor),
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(color: Colors.black),
+            color: _selectedColor,
+          ),
           child: Row(
             children: [
               GestureDetector(
@@ -59,8 +109,9 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
                   height: AppThemes.getResponsiveImageSize(context, 50),
                   width: AppThemes.getResponsiveImageSize(context, 50),
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Colors.black),
+                    borderRadius: BorderRadius.circular(100),
+                    color: Colors.black,
+                  ),
                   child: _selectedImagePath.isEmpty
                       ? const Icon(
                           Icons.question_mark,
@@ -76,22 +127,22 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      _selectedTitle.isEmpty
+                      _selectedImagePath.isEmpty
                           ? "Start selecting what you feel."
                           : "Your word of the day is $_selectedTitle",
                       style: TextStyle(
-                          fontSize:
-                              AppThemes.getResponsiveFontSize(context, 16),
-                          fontFamily: "Jua"),
+                        fontSize: AppThemes.getResponsiveFontSize(context, 16),
+                        fontFamily: "Jua",
+                      ),
                     ),
                     Text(
-                      _selectedTitle.isEmpty
+                      _selectedImagePath.isEmpty
                           ? "Click the question mark to choose an emotion"
                           : "Seems like you are $_selectedName. Share what you feel in the journal.",
                       style: TextStyle(
-                          fontSize:
-                              AppThemes.getResponsiveFontSize(context, 12),
-                          fontFamily: "RethinkSans"),
+                        fontSize: AppThemes.getResponsiveFontSize(context, 12),
+                        fontFamily: "RethinkSans",
+                      ),
                     ),
                   ],
                 ),
