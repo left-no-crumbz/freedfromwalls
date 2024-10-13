@@ -63,7 +63,9 @@ class DailyEntryController {
       },
       body: jsonEncode(dailyEntry.toJson()),
     );
-    debugPrint("Status Code: ${response.statusCode}");
+
+    debugPrint("addEntry: ${response.statusCode}");
+
     if (response.statusCode != 200) {
       throw Exception('Failed to add entry');
     }

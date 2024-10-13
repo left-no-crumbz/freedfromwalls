@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freedfromwalls/controllers/emotion_controller.dart';
 import 'package:freedfromwalls/providers/emotion_provider.dart';
 import './custom_title.dart';
 import 'customThemes.dart';
@@ -103,7 +104,7 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
   }
 }
 
-class Emotion extends StatelessWidget {
+class Emotion extends StatefulWidget {
   final String imagePath;
   final String title;
   final String name;
@@ -120,32 +121,53 @@ class Emotion extends StatelessWidget {
   });
 
   @override
+  State<Emotion> createState() => _EmotionState();
+}
+
+class _EmotionState extends State<Emotion> {
+  final EmotionController emotionController = EmotionController();
+
+  Future<void> _updateEmotion(String title) async {
+    EmotionModel? updatedEmotion = await emotionController.getEmotion(title);
+
+    if (mounted) {
+      Provider.of<EmotionProvider>(context, listen: false)
+          .setEmotion(updatedEmotion);
+
+      if (updatedEmotion != null) {
+        updatedEmotion
+            .toJson()
+            .forEach((key, value) => debugPrint("$key: $value"));
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        EmotionModel emotion =
-            EmotionModel(title: title, name: name, color: color.toString());
-        Provider.of<EmotionProvider>(context, listen: false)
-            .setEmotion(emotion);
-        onSelect(title, name, color, imagePath);
+        _updateEmotion(widget.title);
+
+        widget.onSelect(
+            widget.title, widget.name, widget.color, widget.imagePath);
         Navigator.pop(context);
       },
       child: Column(
         children: [
           Image.asset(
-            imagePath,
+            widget.imagePath,
             width: AppThemes.getResponsiveImageSize(context, 60),
             height: AppThemes.getResponsiveImageSize(context, 60),
           ),
           const SizedBox(height: 8),
           Text(
-            title,
+            widget.title,
             style: TextStyle(
                 fontSize: AppThemes.getResponsiveFontSize(context, 10),
                 fontFamily: "Jua"),
           ),
           Text(
-            "($name)",
+            "(${widget.name})",
             style: TextStyle(
                 fontSize: AppThemes.getResponsiveFontSize(context, 10),
                 fontFamily: "Jua"),

@@ -48,12 +48,6 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
     editedDate = widget.initialEditedDate ?? creationDate;
     _journalEntryController = TextEditingController(text: widget.initialEntry);
     _journalEntryController.addListener(_onJournalEntryChanged);
-    _loadEntries();
-    debugPrint("$entries");
-  }
-
-  Future<void> _loadEntries() async {
-    entries = await controller.fetchEntries();
   }
 
   void _onJournalEntryChanged() {
@@ -74,12 +68,11 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
     if (emotion == null) {
       debugPrint("Emotion is null but that's okay");
+    } else {
+      emotion.toJson().forEach((key, value) => debugPrint("$key: $value"));
     }
 
-    debugPrint("${user.id}");
-    debugPrint("${user.id}");
-    debugPrint("${user.id}");
-
+    // FIXME: Emotion is not updating
     DailyEntryModel dailyEntry = DailyEntryModel(
       user: user,
       emotion: emotion,
@@ -94,40 +87,14 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
     if (response.statusCode == 200) {
       final responseData = jsonDecode(response.body);
 
-      debugPrint(responseData['id'].toString());
-      debugPrint(responseData['id'].toString());
-      debugPrint(responseData['id'].toString());
-      debugPrint(responseData['id'].toString());
+      debugPrint("INFO: Update entry successful!");
 
       await controller.updateEntry(dailyEntry, responseData['id'].toString());
     } else {
-      debugPrint("nagAdd si idol");
+      debugPrint("INFO: Add entry successful!");
       await controller.addEntry(dailyEntry);
     }
   }
-
-  // Future<void> _addEntry() async {
-  //   UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
-  //   EmotionModel? emotion =
-  //       Provider.of<EmotionProvider>(context, listen: false).emotion;
-  //
-  //   if (user == null) {
-  //     debugPrint("ERROR: User is null!");
-  //     return;
-  //   }
-  //
-  //   if (emotion == null) {
-  //     debugPrint("Emotion is null but that's okay");
-  //   }
-  //
-  //   DailyEntryModel dailyEntry = DailyEntryModel(
-  //     user: user,
-  //     emotion: emotion,
-  //     journalEntry: _journalEntryController.text,
-  //     additionalNotes: notes,
-  //   );
-  //   await controller.addEntry(dailyEntry);
-  // }
 
   @override
   void dispose() {

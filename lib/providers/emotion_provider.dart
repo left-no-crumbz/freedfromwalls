@@ -5,7 +5,7 @@ class EmotionProvider with ChangeNotifier {
   EmotionModel? _emotion;
   EmotionModel? get emotion => _emotion;
 
-  void setEmotion(EmotionModel emotion) {
+  void setEmotion(EmotionModel? emotion) {
     _emotion = emotion;
     notifyListeners();
   }
