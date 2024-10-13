@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:freedfromwalls/providers/emotion_provider.dart';
 import './custom_title.dart';
 import 'customThemes.dart';
+import 'package:provider/provider.dart';
+import '../../models/emotion.dart';
 
 class EmotionSelectorContainer extends StatefulWidget {
   const EmotionSelectorContainer({super.key});
@@ -120,6 +123,10 @@ class Emotion extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        EmotionModel emotion =
+            EmotionModel(title: title, name: name, color: color.toString());
+        Provider.of<EmotionProvider>(context, listen: false)
+            .setEmotion(emotion);
         onSelect(title, name, color, imagePath);
         Navigator.pop(context);
       },
