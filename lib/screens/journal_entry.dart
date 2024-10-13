@@ -1,11 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:freedfromwalls/models/additional_note.dart';
 import 'package:freedfromwalls/models/emotion.dart';
+import 'package:freedfromwalls/providers/emotion_provider.dart';
 import 'package:intl/intl.dart';
 import '../assets/widgets/customThemes.dart';
 import '../assets/widgets/last_edited_info.dart';
 import '../controllers/daily_entry_controller.dart';
 import '../models/daily_entry.dart';
+import '../models/user.dart';
+import '../providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class JournalEntryScreen extends StatefulWidget {
   final Function(String, DateTime, DateTime) onJournalEntryChanged;
@@ -43,7 +49,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
     _journalEntryController = TextEditingController(text: widget.initialEntry);
     _journalEntryController.addListener(_onJournalEntryChanged);
     _loadEntries();
-    print(entries);
+    debugPrint("$entries");
   }
 
   Future<void> _loadEntries() async {
@@ -51,26 +57,77 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
   }
 
   void _onJournalEntryChanged() {
-    DailyEntryModel dailyEntry = DailyEntryModel(
-      date: DateTime.now(),
-      journalEntry: _journalEntryController.text,
-      additionalNotes: notes,
-    );
-
     editedDate = widget.getCurrentTime();
     widget.onJournalEntryChanged(
         _journalEntryController.text, creationDate, editedDate);
   }
 
-  Future<void> _addEntry() async {
+  Future<void> _addOrUpdateEntry() async {
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+    EmotionModel? emotion =
+        Provider.of<EmotionProvider>(context, listen: false).emotion;
+
+    if (user == null) {
+      debugPrint("ERROR: User is null!");
+      return;
+    }
+
+    if (emotion == null) {
+      debugPrint("Emotion is null but that's okay");
+    }
+
+    debugPrint("${user.id}");
+    debugPrint("${user.id}");
+    debugPrint("${user.id}");
+
     DailyEntryModel dailyEntry = DailyEntryModel(
-      date: DateTime.now(),
-      emotion: EmotionModel(name: "happy", title: "YAY", color: "0xFFF8E9BB"),
+      user: user,
+      emotion: emotion,
       journalEntry: _journalEntryController.text,
       additionalNotes: notes,
     );
-    await controller.addEntry(dailyEntry);
+
+    final response = await controller.getTodayEntry(user.id.toString());
+
+    debugPrint("Get today entry status: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+
+      debugPrint(responseData['id'].toString());
+      debugPrint(responseData['id'].toString());
+      debugPrint(responseData['id'].toString());
+      debugPrint(responseData['id'].toString());
+
+      await controller.updateEntry(dailyEntry, responseData['id'].toString());
+    } else {
+      debugPrint("nagAdd si idol");
+      await controller.addEntry(dailyEntry);
+    }
   }
+
+  // Future<void> _addEntry() async {
+  //   UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+  //   EmotionModel? emotion =
+  //       Provider.of<EmotionProvider>(context, listen: false).emotion;
+  //
+  //   if (user == null) {
+  //     debugPrint("ERROR: User is null!");
+  //     return;
+  //   }
+  //
+  //   if (emotion == null) {
+  //     debugPrint("Emotion is null but that's okay");
+  //   }
+  //
+  //   DailyEntryModel dailyEntry = DailyEntryModel(
+  //     user: user,
+  //     emotion: emotion,
+  //     journalEntry: _journalEntryController.text,
+  //     additionalNotes: notes,
+  //   );
+  //   await controller.addEntry(dailyEntry);
+  // }
 
   @override
   void dispose() {
@@ -160,7 +217,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                 controller: _journalEntryController,
                 textInputAction: TextInputAction.send,
                 onSubmitted: (String str) {
-                  _addEntry();
+                  _addOrUpdateEntry();
                   FocusManager.instance.primaryFocus?.unfocus();
                   Navigator.pop(context);
                 },

@@ -5,7 +5,6 @@ import './additional_note.dart';
 
 class DailyEntryModel {
   int? id;
-  DateTime date;
   UserModel user;
   EmotionModel? emotion;
   String journalEntry;
@@ -17,7 +16,6 @@ class DailyEntryModel {
   DailyEntryModel({
     this.id,
     required this.user,
-    required this.date,
     this.emotion,
     required this.journalEntry,
     required this.additionalNotes,
@@ -29,7 +27,6 @@ class DailyEntryModel {
     return {
       'id': id,
       'user': user.toJson(),
-      'date': date.toIso8601String(),
       'emotion': emotion?.toJson(),
       'journal_entry': journalEntry,
       'additional_notes': additionalNotes.map((note) => note.toJson()).toList(),
@@ -42,7 +39,6 @@ class DailyEntryModel {
     return DailyEntryModel(
       id: json['id'],
       user: UserModel.fromJson(json['user']),
-      date: DateTime.parse(json['date']),
       emotion: EmotionModel.fromJson(json['emotion']),
       journalEntry: json['journal_entry'],
       additionalNotes: (json['additional_notes'] as List)
