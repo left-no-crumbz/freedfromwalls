@@ -8,8 +8,7 @@ class DailyEntryModel {
   UserModel user;
   EmotionModel? emotion;
   String journalEntry;
-  List<AdditionalNoteModel>
-      additionalNotes; // Representing the one-to-many relationship
+  List<AdditionalNoteModel> additionalNotes;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -39,7 +38,9 @@ class DailyEntryModel {
     return DailyEntryModel(
       id: json['id'],
       user: UserModel.fromJson(json['user']),
-      emotion: EmotionModel.fromJson(json['emotion']),
+      emotion: json['emotion'] != null
+          ? EmotionModel.fromJson(json['emotion'])
+          : null,
       journalEntry: json['journal_entry'],
       additionalNotes: (json['additional_notes'] as List)
           .map((noteJson) => AdditionalNoteModel.fromJson(noteJson))
