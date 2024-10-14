@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:freedfromwalls/models/additional_note.dart';
 import 'package:freedfromwalls/models/emotion.dart';
+import 'package:freedfromwalls/providers/daily_entry_provider.dart';
 import 'package:freedfromwalls/providers/emotion_provider.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import '../assets/widgets/customThemes.dart';
 import '../assets/widgets/last_edited_info.dart';
@@ -50,6 +52,16 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
     editedDate = widget.initialEditedDate ?? widget.getCurrentTime();
     _journalEntryController = TextEditingController(text: widget.initialEntry);
     _journalEntryController.addListener(_onJournalEntryChanged);
+
+    setState(() {
+      DailyEntryModel? dailyEntry =
+          Provider.of<DailyEntryProvider>(context, listen: false).dailyEntry;
+
+      // This might break
+      for (AdditionalNoteModel note in dailyEntry!.additionalNotes) {
+        notes.add(note);
+      }
+    });
   }
 
   void _onJournalEntryChanged() {
@@ -65,13 +77,14 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
   Future<void> _addOrUpdateEntry() async {
     UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
-    EmotionModel? emotion =
-        Provider.of<EmotionProvider>(context, listen: false).emotion;
 
     if (user == null) {
       debugPrint("ERROR: User is null!");
       return;
     }
+
+    EmotionModel? emotion =
+        Provider.of<EmotionProvider>(context, listen: false).emotion;
 
     if (emotion == null) {
       debugPrint("Emotion is null but that's okay");
@@ -89,7 +102,14 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
       additionalNotes: notes,
     );
 
-    final response = await controller.getTodayEntry(user.id.toString());
+    final Response response;
+
+    try {
+      response = await controller.getTodayEntry(user.id.toString());
+    } catch (e) {
+      debugPrint("addOrUpdateEntry Error: $e");
+      throw Exception("ERROR: Failed to get entry!");
+    }
 
     debugPrint("Get today entry status: ${response.statusCode}");
 
@@ -114,23 +134,59 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
     super.dispose();
   }
 
-  void addNote(String note) {
+  Future<void> addNote(String note) async {
+    DailyEntryModel? dailyEntry =
+        Provider.of<DailyEntryProvider>(context, listen: false).dailyEntry;
+
     setState(() {
-      notes.add(AdditionalNoteModel(dailyEntryId: entries.length, note: note));
+      // WARNING: This might break
+      notes.add(AdditionalNoteModel(dailyEntryId: dailyEntry!.id!, note: note));
+      dailyEntry.additionalNotes = notes;
     });
+
+    try {
+      await controller.updateAdditionalNotes(
+          dailyEntry!, dailyEntry.id.toString());
+    } catch (e) {
+      debugPrint("ERROR: $e");
+    }
   }
 
-  void removeNote(int index) {
+  Future<void> removeNote(int index) async {
+    DailyEntryModel? dailyEntry =
+        Provider.of<DailyEntryProvider>(context, listen: false).dailyEntry;
+
     setState(() {
       notes.removeAt(index);
+      // WARNING: This might break
+      dailyEntry!.additionalNotes = notes;
     });
+
+    try {
+      await controller.updateAdditionalNotes(
+          dailyEntry!, dailyEntry.id.toString());
+    } catch (e) {
+      debugPrint("ERROR: $e");
+    }
   }
 
-  void editNote(int index, String newNote) {
+  Future<void> editNote(int index, String newNote) async {
+    DailyEntryModel? dailyEntry =
+        Provider.of<DailyEntryProvider>(context, listen: false).dailyEntry;
+
     setState(() {
       notes[index].note = newNote;
+      // WARNING: This might break
+      dailyEntry!.additionalNotes = notes;
       editedDate = widget.initialEditedDate!;
     });
+
+    try {
+      await controller.updateAdditionalNotes(
+          dailyEntry!, dailyEntry.id.toString());
+    } catch (e) {
+      debugPrint("ERROR: $e");
+    }
   }
 
   @override
