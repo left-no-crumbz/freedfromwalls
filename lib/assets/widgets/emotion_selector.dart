@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freedfromwalls/controllers/emotion_controller.dart';
+import '../../providers/daily_entry_provider.dart';
 import '../../providers/emotion_provider.dart';
 import '../../controllers/daily_entry_controller.dart';
 import '../../models/daily_entry.dart';
@@ -177,6 +178,7 @@ class Emotion extends StatefulWidget {
 
 class _EmotionState extends State<Emotion> {
   final EmotionController emotionController = EmotionController();
+  final DailyEntryController dailyEntryController = DailyEntryController();
 
   Future<void> _updateEmotion(String title) async {
     EmotionModel? updatedEmotion = await emotionController.getEmotion(title);
@@ -184,6 +186,21 @@ class _EmotionState extends State<Emotion> {
     if (mounted) {
       Provider.of<EmotionProvider>(context, listen: false)
           .setEmotion(updatedEmotion);
+
+      DailyEntryModel? dailyEntry =
+          Provider.of<DailyEntryProvider>(context, listen: false).dailyEntry;
+
+      // DailyEntry should never be null because an entry
+      // will be created in the breather screen if so.
+      // The provider will then have that fresh entry.
+      // debugPrint("emotion selector updatedEmotion: ${updatedEmotion.title}");
+      debugPrint("emotion selector daily entry emotion: $dailyEntry");
+      debugPrint("emotion selector: ${dailyEntry!.emotion!.title}");
+
+      dailyEntry.emotion = updatedEmotion;
+
+      await dailyEntryController.updateEntry(
+          dailyEntry, dailyEntry.id.toString());
 
       if (updatedEmotion != null) {
         updatedEmotion
