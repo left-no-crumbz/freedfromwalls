@@ -20,48 +20,58 @@ class DailyEntryController {
   Future<List<DailyEntryModel>> fetchEntries() async {
     debugPrint("$baseUrl$entriesUrl");
 
-    final Response response = await client.get(
-      Uri.parse("$baseUrl$entriesUrl"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+    final Response response;
+
+    try {
+      response = await client.get(
+        Uri.parse("$baseUrl$entriesUrl"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+    } catch (e) {
+      debugPrint("Daily Entry Controller Network error: $e");
+      throw Exception('ERROR: Failed to fetch entries due to a network error.');
+    }
+
     debugPrint("fetchEntries: ${response.statusCode}");
 
     if (response.statusCode == 200) {
       try {
         List<dynamic> jsonResponse = json.decode(response.body);
 
-        debugPrint("$jsonResponse");
-
-        entries = jsonResponse
+        List<DailyEntryModel> entries = jsonResponse
             .map((entry) => DailyEntryModel.fromJson(entry))
             .toList();
 
         return entries;
       } catch (e) {
-        debugPrint("ERROR: $e");
+        debugPrint("Daily Entry Controller Decoding error: $e");
+        throw Exception('ERROR: Failed to decode entries from JSON.');
       }
-      // This is needed to avoid errors
-      return entries;
     } else {
-      throw Exception('Failed to load entries.');
+      throw Exception(
+          'ERROR: Failed to load entries. Server returned status code: ${response.statusCode}');
     }
   }
 
   Future<Response> getTodayEntry(String id) async {
-    debugPrint("Url: $baseUrl$id$todayEntryUrl");
+    try {
+      final response = await http.get(
+        Uri.parse("$baseUrl$id$todayEntryUrl"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
 
-    Response response = await http.get(
-      Uri.parse("$baseUrl$id$todayEntryUrl"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+      debugPrint('Response status: ${response.statusCode}');
 
-    debugPrint('Response status: ${response.statusCode}');
-
-    return response;
+      return response;
+    } catch (e) {
+      debugPrint("ERROR: $e");
+      return Response("null", 500,
+          reasonPhrase: "Error fetching today's entry");
+    }
   }
 
   Future<void> addEntry(DailyEntryModel dailyEntry) async {
@@ -75,33 +85,49 @@ class DailyEntryController {
     String? token =
         await LoginController.secureStorage.read(key: 'token_$email');
 
-    final Response response = await client.post(
-      Uri.parse("$baseUrl$entriesUrl$createUrl"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(dailyEntry.toJson()),
-    );
+    final Response response;
+
+    try {
+      response = await client.post(
+        Uri.parse("$baseUrl$entriesUrl$createUrl"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(dailyEntry.toJson()),
+      );
+    } catch (e) {
+      debugPrint("Network error: $e");
+      throw Exception('ERROR: Failed to add entries due to a network error.');
+    }
 
     debugPrint("addEntry: ${response.statusCode}");
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to add entry');
+      throw Exception('ERROR: Failed to add entry');
     }
   }
 
   Future<void> updateEntry(DailyEntryModel dailyEntry, String id) async {
     debugPrint("$baseUrl$entriesUrl$id$updateUrl");
-    final response = await http.put(
-      Uri.parse("$baseUrl$entriesUrl$id$updateUrl"),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(dailyEntry.toJson()),
-    );
+
+    final Response response;
+
+    try {
+      response = await http.put(
+        Uri.parse("$baseUrl$entriesUrl$id$updateUrl"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(dailyEntry.toJson()),
+      );
+    } catch (e) {
+      debugPrint("Network error: $e");
+      throw Exception(
+          'ERROR: Failed to update entries due to a network error.');
+    }
 
     if (response.statusCode != 200) {
-      throw Exception('Failed to update entry');
+      throw Exception('ERROR: Failed to update entry');
     }
   }
 }
