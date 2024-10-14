@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freedfromwalls/providers/daily_entry_provider.dart';
 import 'package:provider/provider.dart';
 import 'assets/widgets/customThemes.dart';
 import 'assets/widgets/theme_provider.dart';
@@ -18,6 +19,7 @@ void main() {
             create: (_) => ThemeProvider(initialTheme: AppThemes.defaultTheme)),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => EmotionProvider()),
+        ChangeNotifierProvider(create: (_) => DailyEntryProvider()),
       ],
       child: const FreedFromWallsLogin(),
     ),

@@ -11,6 +11,7 @@ import 'screens/profile_screen.dart';
 import 'package:provider/provider.dart';
 import './providers/user_provider.dart';
 import './providers/emotion_provider.dart';
+import './providers/daily_entry_provider.dart';
 
 void main() {
   runApp(
@@ -20,6 +21,7 @@ void main() {
             create: (_) => ThemeProvider(initialTheme: AppThemes.defaultTheme)),
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => EmotionProvider()),
+        ChangeNotifierProvider(create: (_) => DailyEntryProvider()),
       ],
       child: const FreedFromWallsApp(),
     ),
