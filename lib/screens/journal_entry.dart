@@ -191,134 +191,123 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvokedWithResult: (bool didPop, dynamic result) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => const BreatherPage()),
-          (route) => false,
-        );
-      },
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            "FreedFrom Walls",
-            style: TextStyle(
-                fontSize: AppThemes.getResponsiveFontSize(context, 18)),
-          ),
-          backgroundColor: Colors.black,
-          foregroundColor: Colors.white,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "FreedFrom Walls",
+          style:
+              TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 18)),
         ),
-        body: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Journal Entry",
-                style: TextStyle(
-                    fontSize: AppThemes.getResponsiveFontSize(context, 20),
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "Jua"),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  LastEditedInfo(
-                      creationDate: creationDate, editedDate: editedDate),
-                  Container(
-                    height: 45,
-                    padding:
-                        const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).cardColor,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      DateFormat("yMd").format(creationDate),
-                      style: TextStyle(
-                          fontSize:
-                              AppThemes.getResponsiveFontSize(context, 12),
-                          color:
-                              Theme.of(context).textTheme.displaySmall?.color,
-                          fontFamily: "RethinkSans",
-                          fontWeight: FontWeight.bold),
-                    ),
-                  )
-                ],
-              ),
-              const Divider(
-                color: Colors.grey,
-              ),
-              //  A SizedBox was needed to limit the height of the TextField
-              SizedBox(
-                height: 250,
-                child: TextField(
-                  controller: _journalEntryController,
-                  textInputAction: TextInputAction.send,
-                  onSubmitted: (String str) {
-                    _addOrUpdateEntry();
-                    FocusManager.instance.primaryFocus?.unfocus();
-                    Navigator.pop(context);
-                  },
-                  maxLines: 100,
-                  decoration: InputDecoration(
-                    hintText: "Write something here",
-                    hintStyle: TextStyle(
-                      fontSize: AppThemes.getResponsiveFontSize(context, 12),
-                      fontStyle: FontStyle.italic,
-                    ),
-                    border: InputBorder.none,
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+      ),
+      body: Container(
+        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Journal Entry",
+              style: TextStyle(
+                  fontSize: AppThemes.getResponsiveFontSize(context, 20),
+                  fontWeight: FontWeight.bold,
+                  fontFamily: "Jua"),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                LastEditedInfo(
+                    creationDate: creationDate, editedDate: editedDate),
+                Container(
+                  height: 45,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).cardColor,
+                    borderRadius: BorderRadius.circular(5),
                   ),
-                  style: TextStyle(
-                      fontSize: AppThemes.getResponsiveFontSize(context, 14),
-                      fontStyle: FontStyle.italic,
-                      fontFamily: "RethinkSans"),
+                  child: Text(
+                    DateFormat("yMd").format(creationDate),
+                    style: TextStyle(
+                        fontSize: AppThemes.getResponsiveFontSize(context, 12),
+                        color: Theme.of(context).textTheme.displaySmall?.color,
+                        fontFamily: "RethinkSans",
+                        fontWeight: FontWeight.bold),
+                  ),
+                )
+              ],
+            ),
+            const Divider(
+              color: Colors.grey,
+            ),
+            //  A SizedBox was needed to limit the height of the TextField
+            SizedBox(
+              height: 250,
+              child: TextField(
+                controller: _journalEntryController,
+                textInputAction: TextInputAction.send,
+                onSubmitted: (String str) {
+                  _addOrUpdateEntry();
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  Navigator.pop(context);
+                },
+                maxLines: 100,
+                decoration: InputDecoration(
+                  hintText: "Write something here",
+                  hintStyle: TextStyle(
+                    fontSize: AppThemes.getResponsiveFontSize(context, 12),
+                    fontStyle: FontStyle.italic,
+                  ),
+                  border: InputBorder.none,
                 ),
+                style: TextStyle(
+                    fontSize: AppThemes.getResponsiveFontSize(context, 14),
+                    fontStyle: FontStyle.italic,
+                    fontFamily: "RethinkSans"),
               ),
-              const Divider(color: Colors.grey),
-              const SizedBox(height: 4),
-              Container(
-                height: 30,
-                width: 85,
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(5)),
-                child: const Text(
-                  "NOTES",
-                  style: TextStyle(
-                      fontFamily: "RethinkSans", fontWeight: FontWeight.bold),
-                ),
+            ),
+            const Divider(color: Colors.grey),
+            const SizedBox(height: 4),
+            Container(
+              height: 30,
+              width: 85,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  border: Border.all(color: Colors.black),
+                  borderRadius: BorderRadius.circular(5)),
+              child: const Text(
+                "NOTES",
+                style: TextStyle(
+                    fontFamily: "RethinkSans", fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 4),
-              const Divider(color: Colors.grey),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: notes.length + 1,
-                  itemBuilder: (context, index) {
-                    if (index == notes.length) {
-                      return NoteItem(
-                        onAdd: addNote,
-                      );
-                    } else {
-                      return NoteItem(
-                        note: notes[index].note,
-                        onRemove: () => removeNote(index),
-                        onEdit: (String newNote) => editNote(index, newNote),
-                      );
-                    }
-                  },
-                ),
+            ),
+            const SizedBox(height: 4),
+            const Divider(color: Colors.grey),
+            Expanded(
+              child: ListView.builder(
+                itemCount: notes.length + 1,
+                itemBuilder: (context, index) {
+                  if (index == notes.length) {
+                    return NoteItem(
+                      onAdd: addNote,
+                    );
+                  } else {
+                    return NoteItem(
+                      note: notes[index].note,
+                      onRemove: () => removeNote(index),
+                      onEdit: (String newNote) => editNote(index, newNote),
+                    );
+                  }
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

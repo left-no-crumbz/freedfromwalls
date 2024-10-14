@@ -19,6 +19,7 @@ class BreatherPage extends StatefulWidget {
   BreatherPageState createState() => BreatherPageState();
 }
 
+// TODO: edited date does not update in real time
 class BreatherPageState extends State<BreatherPage> {
   final DailyEntryController _controller = DailyEntryController();
   final ValueNotifier<DateTime> _selectedDate = ValueNotifier(DateTime.now());
