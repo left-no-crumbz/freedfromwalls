@@ -6,9 +6,9 @@ import '../assets/widgets/title_description.dart';
 import '../controllers/daily_entry_controller.dart';
 import '../models/daily_entry.dart';
 import '../models/emotion.dart';
-import '../models/user.dart';
 import '../providers/user_provider.dart';
 import '../providers/emotion_provider.dart';
+import '../providers/daily_entry_provider.dart';
 import './journal_entry.dart';
 import '../assets/widgets/journal_entry_container.dart';
 import '../assets/widgets/scrollable_calendar.dart';
@@ -41,8 +41,15 @@ class _BreatherPageState extends State<BreatherPage> {
       _isLoading = true;
     });
 
-    entries = await controller.fetchEntries();
+    try {
+      entries = await controller.fetchEntries();
+    } catch (e) {
+      debugPrint("$e");
+    }
+
     DateTime now = DateTime.now();
+
+    debugPrint("$entries");
 
     DailyEntryModel dailyEntry = entries.firstWhere(
       (entry) =>
@@ -60,17 +67,30 @@ class _BreatherPageState extends State<BreatherPage> {
       Provider.of<EmotionProvider>(context, listen: false)
           .setEmotion(dailyEntry.emotion);
 
+      Provider.of<DailyEntryProvider>(context, listen: false)
+          .setEntry(dailyEntry);
+
       setState(() {
         _currentJournalEntry = dailyEntry.journalEntry;
-        _creationDate = dailyEntry.createdAt;
-        _editedDate = dailyEntry.updatedAt;
 
-        debugPrint(
-            "breather_screen.dart: ${DateFormat("h:mma").format(_editedDate!)}");
-        debugPrint(
-            "breather_screen.dart: ${DateFormat("h:mma").format(_editedDate!)}");
-        debugPrint(
-            "breather_screen.dart: ${DateFormat("h:mma").format(_editedDate!)}");
+        if (dailyEntry.createdAt == null && _editedDate == null) {
+          // For some reason, it has to be like this instead of
+          // `dailyEntry.createdAt != null && _editedDate != null'
+        } else {
+          _creationDate = dailyEntry.createdAt;
+          _editedDate = dailyEntry.updatedAt;
+        }
+
+        if (_editedDate == null) {
+          debugPrint("ERROR: Edited date should not be null!");
+        } else {
+          debugPrint(
+              "breather_screen.dart: ${DateFormat("h:mma").format(_editedDate!)}");
+          debugPrint(
+              "breather_screen.dart: ${DateFormat("h:mma").format(_editedDate!)}");
+          debugPrint(
+              "breather_screen.dart: ${DateFormat("h:mma").format(_editedDate!)}");
+        }
 
         _emotion = Provider.of<EmotionProvider>(context, listen: false).emotion;
         _isLoading = false;
@@ -84,8 +104,6 @@ class _BreatherPageState extends State<BreatherPage> {
       _currentJournalEntry = entry;
       _creationDate = creationDate;
       _editedDate = editedDate;
-
-      debugPrint("$_editedDate");
     });
   }
 
@@ -132,6 +150,7 @@ class _BreatherPageState extends State<BreatherPage> {
                 initialEntry: _currentJournalEntry,
                 initialCreationDate: _creationDate,
                 initialEditedDate: _editedDate,
+                onUpdate: _loadEntries,
               ),
             ),
           );
