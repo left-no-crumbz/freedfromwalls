@@ -6,25 +6,21 @@ import 'dart:convert';
 import '../controllers/login_controller.dart';
 
 class DailyEntryController {
-  Client client = http.Client();
-  final String baseUrl = "http://192.168.100.42:8000/api/";
-  final String entriesUrl = "entries/";
-  final String createUrl = "create/";
-  final String updateUrl = "/update/";
-  final String todayEntryUrl = "/today-entry/";
-
-  final String apiUrl = "http://192.168.100.42:8000/api/entries/";
-  final String addApiUrl = "http://192.168.100.42:8000/api/entries/create/";
-  late List<DailyEntryModel> entries = [];
+  final Client _client = http.Client();
+  final String _baseUrl = "http://192.168.100.42:8000/api/";
+  final String _entriesUrl = "entries/";
+  final String _createUrl = "create/";
+  final String _updateUrl = "/update/";
+  final String _todayEntryUrl = "/today-entry/";
 
   Future<List<DailyEntryModel>> fetchEntries() async {
-    debugPrint("$baseUrl$entriesUrl");
+    debugPrint("$_baseUrl$_entriesUrl");
 
     final Response response;
 
     try {
-      response = await client.get(
-        Uri.parse("$baseUrl$entriesUrl"),
+      response = await _client.get(
+        Uri.parse("$_baseUrl$_entriesUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -58,7 +54,7 @@ class DailyEntryController {
   Future<Response> getTodayEntry(String id) async {
     try {
       final response = await http.get(
-        Uri.parse("$baseUrl$id$todayEntryUrl"),
+        Uri.parse("$_baseUrl$id$_todayEntryUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -88,8 +84,8 @@ class DailyEntryController {
     final Response response;
 
     try {
-      response = await client.post(
-        Uri.parse("$baseUrl$entriesUrl$createUrl"),
+      response = await _client.post(
+        Uri.parse("$_baseUrl$_entriesUrl$_createUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -108,13 +104,13 @@ class DailyEntryController {
   }
 
   Future<void> updateEntry(DailyEntryModel dailyEntry, String id) async {
-    debugPrint("$baseUrl$entriesUrl$id$updateUrl");
+    debugPrint("$_baseUrl$_entriesUrl$id$_updateUrl");
 
     final Response response;
 
     try {
       response = await http.put(
-        Uri.parse("$baseUrl$entriesUrl$id$updateUrl"),
+        Uri.parse("$_baseUrl$_entriesUrl$id$_updateUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
