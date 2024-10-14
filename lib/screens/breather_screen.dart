@@ -21,6 +21,8 @@ class BreatherPage extends StatefulWidget {
   State<BreatherPage> createState() => _BreatherPageState();
 }
 
+// TODO: Update the entry once emotion changes or a note is added.
+
 class _BreatherPageState extends State<BreatherPage> {
   String _currentJournalEntry = "";
   DateTime? _creationDate;
