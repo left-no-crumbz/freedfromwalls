@@ -29,6 +29,21 @@ class BreatherPageState extends State<BreatherPage> {
     _entriesFuture = _loadEntries();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Call _updateCurrentEntry here or in initState
+    _updateCurrentEntry(_selectedDate.value);
+  }
+
+  void _updateCurrentEntry(DateTime date) {
+    final entry = _getEntryForDate(date);
+    Provider.of<DailyEntryProvider>(context, listen: false)
+        .setCurrentEntry(entry);
+    Provider.of<EmotionProvider>(context, listen: false)
+        .setEmotion(entry.emotion);
+  }
+
   Future<void> _loadEntries() async {
     try {
       final entries = await _controller.fetchEntries();
@@ -38,7 +53,11 @@ class BreatherPageState extends State<BreatherPage> {
       }
     } catch (e) {
       debugPrint("Error loading entries: $e");
-      // You might want to show a snackbar or dialog here to inform the user
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Error: Fail to load entries."),
+        ));
+      }
     }
   }
 
@@ -109,9 +128,6 @@ class BreatherPageState extends State<BreatherPage> {
                   builder: (context, date, child) {
                     final entry = _getEntryForDate(date);
 
-                    Provider.of<EmotionProvider>(context, listen: false)
-                        .setEmotion(entry.emotion);
-
                     return EmotionSelectorContainer(emotion: entry.emotion);
                   },
                 ),
@@ -134,9 +150,6 @@ class BreatherPageState extends State<BreatherPage> {
                   valueListenable: _selectedDate,
                   builder: (context, date, child) {
                     final entry = _getEntryForDate(date);
-                    Provider.of<DailyEntryProvider>(context, listen: false)
-                        .setCurrentEntry(entry);
-
                     return JournalEntryContainer(
                       journalEntry: entry.journalEntry,
                       creationDate: entry.createdAt,
