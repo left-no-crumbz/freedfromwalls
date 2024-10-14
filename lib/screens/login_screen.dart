@@ -48,25 +48,26 @@ class _LoginPageState extends State<LoginPage> {
     String email = _emailController.text;
     String password = _passController.text;
 
+    if (email.isEmpty && password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Error: Empty Field."),
+      ));
+    }
     UserModel user = UserModel(
       email: email,
       password: password,
     );
 
-    UserModel updatedUser = await _loginController.getUser(email);
-
-    // update the password to use the raw password
-    updatedUser.password = user.password;
-
-    debugPrint("${updatedUser.id}");
-    debugPrint("${updatedUser.email}");
-    debugPrint("${updatedUser.password}");
-
-    bool success = await _loginController.login(updatedUser);
+    bool success = await _loginController.login(user);
 
     debugPrint("Login is successful: $success");
 
     if (success) {
+      UserModel updatedUser = await _loginController.getUser(email);
+
+      // update the password to use the raw password
+      updatedUser.password = user.password;
+
       if (mounted) {
         Provider.of<UserProvider>(context, listen: false).setUser(updatedUser);
         Navigator.push(
