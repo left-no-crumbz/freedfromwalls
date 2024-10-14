@@ -21,8 +21,6 @@ class BreatherPage extends StatefulWidget {
   State<BreatherPage> createState() => _BreatherPageState();
 }
 
-// TODO: Update the entry once emotion changes or a note is added.
-
 class _BreatherPageState extends State<BreatherPage> {
   String _currentJournalEntry = "";
   DateTime? _creationDate;
@@ -45,13 +43,24 @@ class _BreatherPageState extends State<BreatherPage> {
 
     try {
       entries = await controller.fetchEntries();
+      debugPrint('Fetched entries: $entries');
     } catch (e) {
-      debugPrint("$e");
+      debugPrint("Fetch error: $e");
     }
 
     DateTime now = DateTime.now();
-
-    debugPrint("$entries");
+    try {
+      if (mounted) {
+        Provider.of<DailyEntryProvider>(context, listen: false)
+            .setEntries(entries);
+        debugPrint(
+            'Provider entries: ${Provider.of<DailyEntryProvider>(context, listen: false).entries}'); // Debug print
+      } else {
+        debugPrint("ERROR: Context not mounted!");
+      }
+    } catch (e) {
+      debugPrint("ERROR BREATHER: $e");
+    }
 
     DailyEntryModel dailyEntry = entries.firstWhere(
       (entry) =>
@@ -68,16 +77,12 @@ class _BreatherPageState extends State<BreatherPage> {
     if (mounted) {
       Provider.of<EmotionProvider>(context, listen: false)
           .setEmotion(dailyEntry.emotion);
-
       Provider.of<DailyEntryProvider>(context, listen: false)
           .setEntry(dailyEntry);
-
       setState(() {
         _currentJournalEntry = dailyEntry.journalEntry;
-
         if (dailyEntry.createdAt == null && _editedDate == null) {
-          // For some reason, it has to be like this instead of
-          // `dailyEntry.createdAt != null && _editedDate != null'
+          debugPrint("CreatedAt or EditedDate is null");
         } else {
           _creationDate = dailyEntry.createdAt;
           _editedDate = dailyEntry.updatedAt;
@@ -86,10 +91,6 @@ class _BreatherPageState extends State<BreatherPage> {
         if (_editedDate == null) {
           debugPrint("ERROR: Edited date should not be null!");
         } else {
-          debugPrint(
-              "breather_screen.dart: ${DateFormat("h:mma").format(_editedDate!)}");
-          debugPrint(
-              "breather_screen.dart: ${DateFormat("h:mma").format(_editedDate!)}");
           debugPrint(
               "breather_screen.dart: ${DateFormat("h:mma").format(_editedDate!)}");
         }
