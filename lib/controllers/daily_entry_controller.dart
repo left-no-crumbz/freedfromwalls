@@ -15,9 +15,11 @@ class DailyEntryController {
 
   final String apiUrl = "http://192.168.100.42:8000/api/entries/";
   final String addApiUrl = "http://192.168.100.42:8000/api/entries/create/";
+  late List<DailyEntryModel> entries = [];
 
   Future<List<DailyEntryModel>> fetchEntries() async {
     debugPrint("$baseUrl$entriesUrl");
+
     final Response response = await client.get(
       Uri.parse("$baseUrl$entriesUrl"),
       headers: <String, String>{
@@ -27,11 +29,20 @@ class DailyEntryController {
     debugPrint("fetchEntries: ${response.statusCode}");
 
     if (response.statusCode == 200) {
-      List<dynamic> jsonResponse = json.decode(response.body);
+      try {
+        List<dynamic> jsonResponse = json.decode(response.body);
 
-      List<DailyEntryModel> entries =
-          jsonResponse.map((entry) => DailyEntryModel.fromJson(entry)).toList();
+        debugPrint("$jsonResponse");
 
+        entries = jsonResponse
+            .map((entry) => DailyEntryModel.fromJson(entry))
+            .toList();
+
+        return entries;
+      } catch (e) {
+        debugPrint("ERROR: $e");
+      }
+      // This is needed to avoid errors
       return entries;
     } else {
       throw Exception('Failed to load entries.');
