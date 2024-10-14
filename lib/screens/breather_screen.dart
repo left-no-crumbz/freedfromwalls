@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import '../controllers/daily_entry_controller.dart';
 import '../models/daily_entry.dart';
@@ -32,8 +33,9 @@ class BreatherPageState extends State<BreatherPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // Call _updateCurrentEntry here or in initState
-    _updateCurrentEntry(_selectedDate.value);
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _updateCurrentEntry(_selectedDate.value);
+    });
   }
 
   void _updateCurrentEntry(DateTime date) {
@@ -128,7 +130,10 @@ class BreatherPageState extends State<BreatherPage> {
                   builder: (context, date, child) {
                     final entry = _getEntryForDate(date);
 
-                    return EmotionSelectorContainer(emotion: entry.emotion);
+                    return EmotionSelectorContainer(
+                      emotion: entry.emotion,
+                      selectedDate: date,
+                    );
                   },
                 ),
                 const SizedBox(height: 16),
@@ -167,20 +172,32 @@ class BreatherPageState extends State<BreatherPage> {
         backgroundColor: Colors.black,
         shape: const CircleBorder(),
         onPressed: () {
-          final entry = _getEntryForDate(_selectedDate.value);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => JournalEntryScreen(
-                getCurrentTime: () => DateTime.now(),
-                onJournalEntryChanged: _updateJournalEntry,
-                initialEntry: entry.journalEntry,
-                initialCreationDate: entry.createdAt,
-                initialEditedDate: entry.updatedAt,
-                onUpdate: () => setState(() {}),
+          debugPrint("${_selectedDate.value}");
+          DateTime now = DateTime.now();
+          DateTime currentDate = DateTime(now.year, now.month, now.day);
+          DateTime selectedDateOnly = DateTime(_selectedDate.value.year,
+              _selectedDate.value.month, _selectedDate.value.day);
+          debugPrint("$currentDate");
+          if (selectedDateOnly.isAfter(currentDate)) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Cannot add future entries."),
+            ));
+          } else {
+            final entry = _getEntryForDate(_selectedDate.value);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => JournalEntryScreen(
+                  getCurrentTime: () => DateTime.now(),
+                  onJournalEntryChanged: _updateJournalEntry,
+                  initialEntry: entry.journalEntry,
+                  initialCreationDate: entry.createdAt,
+                  initialEditedDate: entry.updatedAt,
+                  onUpdate: () => setState(() {}),
+                ),
               ),
-            ),
-          );
+            );
+          }
         },
         child: Icon(Provider.of<DailyEntryProvider>(context)
                     .currentEntry

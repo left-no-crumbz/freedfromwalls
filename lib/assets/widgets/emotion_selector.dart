@@ -9,13 +9,11 @@ import 'customThemes.dart';
 import 'package:provider/provider.dart';
 import '../../models/emotion.dart';
 
-// emotion_selector.dart
-
 class EmotionSelectorContainer extends StatefulWidget {
-  final EmotionModel? emotion; // Add this
-
+  final EmotionModel? emotion;
+  final DateTime selectedDate;
   const EmotionSelectorContainer(
-      {super.key, this.emotion}); // Update constructor to accept emotion
+      {super.key, this.emotion, required this.selectedDate});
 
   @override
   State<EmotionSelectorContainer> createState() =>
@@ -50,21 +48,27 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
   @override
   void didUpdateWidget(covariant EmotionSelectorContainer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    // Update emotion data when widget is updated (i.e., new date selected)
     if (oldWidget.emotion != widget.emotion) {
       _updateEmotionData();
     }
   }
 
+  bool get _isEditable {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final selectedDate = DateTime(widget.selectedDate.year,
+        widget.selectedDate.month, widget.selectedDate.day);
+    return selectedDate.isAtSameMomentAs(today) || selectedDate.isBefore(today);
+  }
+
   void _updateEmotionData() {
-    final emotion = widget.emotion; // Use the passed-in emotion
+    final emotion = widget.emotion;
 
     if (emotion != null) {
       setState(() {
         _selectedTitle = emotion.title;
         _selectedName = emotion.name;
-        _selectedColor =
-            Color(int.tryParse(emotion.color ?? '0xFFFFFFFF') ?? 0xFFFFFFFF);
+        _selectedColor = Color(int.tryParse(emotion.color) ?? 0xFFFFFFFF);
         _selectedImagePath = imagePaths[emotion.name] ?? "";
       });
     } else {
@@ -78,6 +82,14 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
   }
 
   void _showEmotionBottomSheet() {
+    debugPrint("$_isEditable");
+    if (!_isEditable) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Cannot edit emotions for future dates.")),
+      );
+      return;
+    }
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -206,6 +218,9 @@ class _EmotionState extends State<Emotion> {
       debugPrint("emotion selector: ${dailyEntry!.emotion!.title}");
 
       dailyEntry.emotion = updatedEmotion;
+
+      debugPrint(
+          "emotion selector daily entry updated emotion: ${dailyEntry.emotion!.title}");
 
       await emotionController.updateEmotion(
           dailyEntry, dailyEntry.id.toString());
