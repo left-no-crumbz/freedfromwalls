@@ -199,7 +199,7 @@ class _EmotionState extends State<Emotion> {
 
       dailyEntry.emotion = updatedEmotion;
 
-      await dailyEntryController.updateEntry(
+      await emotionController.updateEmotion(
           dailyEntry, dailyEntry.id.toString());
 
       if (updatedEmotion != null) {
