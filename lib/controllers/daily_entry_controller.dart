@@ -12,7 +12,7 @@ class DailyEntryController {
   final String _createUrl = "create/";
   final String _updateUrl = "/update/";
   final String _todayEntryUrl = "/today-entry/";
-
+  final String _updateAdditionalNotesUrl = "additional-notes/update/";
   Future<List<DailyEntryModel>> fetchEntries() async {
     debugPrint("$_baseUrl$_entriesUrl");
 
@@ -124,6 +124,34 @@ class DailyEntryController {
 
     if (response.statusCode != 200) {
       throw Exception('ERROR: Failed to update entry');
+    }
+  }
+
+  Future<void> updateAdditionalNotes(
+      DailyEntryModel dailyEntry, String id) async {
+    debugPrint("$_baseUrl$_updateAdditionalNotesUrl$id/");
+
+    final Response response;
+
+    try {
+      response = await http.put(
+        Uri.parse("$_baseUrl$_updateAdditionalNotesUrl$id/"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(dailyEntry.toJson()),
+      );
+    } catch (e) {
+      debugPrint("Network error: $e");
+      throw Exception(
+          'ERROR: Failed to update additional notes due to a network error.');
+    }
+
+    if (response.statusCode == 200) {
+      debugPrint("INFO: Successfully updated additional notes");
+    }
+    if (response.statusCode != 200) {
+      throw Exception('ERROR: Failed to update additional notes');
     }
   }
 }
