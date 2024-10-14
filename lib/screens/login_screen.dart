@@ -70,11 +70,12 @@ class _LoginPageState extends State<LoginPage> {
 
       if (mounted) {
         Provider.of<UserProvider>(context, listen: false).setUser(updatedUser);
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(
             builder: (context) => const FreedFromWallsApp(),
           ),
+          (route) => false,
         );
       } else {
         debugPrint("ERROR: Context not mounted!");
