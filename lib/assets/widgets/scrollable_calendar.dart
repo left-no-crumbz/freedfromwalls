@@ -5,8 +5,13 @@ import 'package:intl/intl.dart';
 // TODO: Refactor in a way that each date would store its state
 class ScrollableCalendar extends StatefulWidget {
   final DateTime initialDate;
+  final Function(DateTime) onDateSelected;
 
-  const ScrollableCalendar({super.key, required this.initialDate});
+  const ScrollableCalendar({
+    super.key,
+    required this.initialDate,
+    required this.onDateSelected,
+  });
 
   @override
   State<ScrollableCalendar> createState() => _ScrollableCalendarState();
@@ -18,6 +23,8 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
   List<DateTime> _dates = [];
   int _daysToGenerate = 365;
   final int _threshold = 30;
+  // ignore: unused_field
+  bool _isInitialJump = true;
 
   @override
   void initState() {
@@ -25,10 +32,18 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
     _scrollController = ScrollController();
     _dates = _generateDates(widget.initialDate, _daysToGenerate);
     _scrollController.addListener(_scrollListener);
-    _selectedIndex = 30;
+    _selectedIndex = _findInitialIndex(widget.initialDate);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToSelectedDate();
+      _jumpToSelectedDate();
     });
+  }
+
+  @override
+  void didUpdateWidget(ScrollableCalendar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.initialDate != widget.initialDate) {
+      _updateSelectedDate(widget.initialDate);
+    }
   }
 
   @override
@@ -38,19 +53,43 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
   }
 
   List<DateTime> _generateDates(DateTime initialDate, int daysToGenerate) {
+    final startDate = initialDate.subtract(Duration(days: 30));
     return List.generate(daysToGenerate, (index) {
-      return initialDate
-          .subtract(Duration(days: 30))
-          .add(Duration(days: index));
+      return startDate.add(Duration(days: index));
     });
   }
 
-  void _scrollToSelectedDate() {
-    _scrollController.animateTo(
-        _selectedIndex *
-            103.85, // 103.85 is a magic number to make the current date scroll to the middle
+  int _findInitialIndex(DateTime date) {
+    return _dates.indexWhere((d) =>
+        d.year == date.year && d.month == date.month && d.day == date.day);
+  }
+
+  void _updateSelectedDate(DateTime date) {
+    final newIndex = _findInitialIndex(date);
+    if (newIndex != -1 && newIndex != _selectedIndex) {
+      setState(() {
+        _selectedIndex = newIndex;
+        _isInitialJump = true;
+      });
+      _jumpToSelectedDate();
+    }
+  }
+
+  void _jumpToSelectedDate() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_selectedIndex * 103.85);
+      _isInitialJump = false;
+    }
+  }
+
+  void _smoothScrollToSelectedDate() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _selectedIndex * 103.85,
         duration: Duration(milliseconds: 300),
-        curve: Curves.easeInOut);
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   void _scrollListener() {
@@ -58,7 +97,7 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
         _scrollController.position.maxScrollExtent - _threshold) {
       setState(() {
         _daysToGenerate += 365;
-        _dates.addAll(_generateDates(_dates.last, 365));
+        _dates.addAll(_generateDates(_dates.last.add(Duration(days: 1)), 365));
       });
     }
   }
@@ -80,7 +119,10 @@ class _ScrollableCalendarState extends State<ScrollableCalendar> {
             onTap: () {
               setState(() {
                 _selectedIndex = index;
+                _isInitialJump = false;
               });
+              _smoothScrollToSelectedDate();
+              widget.onDateSelected(date);
             },
           );
         },

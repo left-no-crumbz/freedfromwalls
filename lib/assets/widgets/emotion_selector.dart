@@ -9,8 +9,13 @@ import 'customThemes.dart';
 import 'package:provider/provider.dart';
 import '../../models/emotion.dart';
 
+// emotion_selector.dart
+
 class EmotionSelectorContainer extends StatefulWidget {
-  const EmotionSelectorContainer({super.key});
+  final EmotionModel? emotion; // Add this
+
+  const EmotionSelectorContainer(
+      {super.key, this.emotion}); // Update constructor to accept emotion
 
   @override
   State<EmotionSelectorContainer> createState() =>
@@ -18,13 +23,10 @@ class EmotionSelectorContainer extends StatefulWidget {
 }
 
 class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
-  EmotionModel? _emotion;
   String? _selectedTitle;
   String? _selectedName;
   String _selectedImagePath = "";
   Color _selectedColor = Colors.white;
-  final DailyEntryController controller = DailyEntryController();
-  List<DailyEntryModel> entries = [];
 
   final Map<String, String> imagePaths = {
     "happy": "lib/assets/images/emotions/emotions-happy.png",
@@ -43,28 +45,34 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
   void initState() {
     super.initState();
     _updateEmotionData();
-    setState(() {});
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _updateEmotionData();
-    setState(() {});
+  void didUpdateWidget(covariant EmotionSelectorContainer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update emotion data when widget is updated (i.e., new date selected)
+    if (oldWidget.emotion != widget.emotion) {
+      _updateEmotionData();
+    }
   }
 
   void _updateEmotionData() {
-    final emotionProvider =
-        Provider.of<EmotionProvider>(context, listen: false);
-    _emotion = emotionProvider.emotion;
+    final emotion = widget.emotion; // Use the passed-in emotion
 
-    if (_emotion != null) {
+    if (emotion != null) {
       setState(() {
-        _selectedTitle = _emotion!.title;
-        _selectedName = _emotion!.name;
+        _selectedTitle = emotion.title;
+        _selectedName = emotion.name;
         _selectedColor =
-            Color(int.tryParse(_emotion?.color ?? '0xFFFFFFFF') ?? 0xFFFFFFFF);
-        _selectedImagePath = imagePaths[_emotion!.name] ?? "";
+            Color(int.tryParse(emotion.color ?? '0xFFFFFFFF') ?? 0xFFFFFFFF);
+        _selectedImagePath = imagePaths[emotion.name] ?? "";
+      });
+    } else {
+      setState(() {
+        _selectedTitle = null;
+        _selectedName = null;
+        _selectedColor = Colors.white;
+        _selectedImagePath = "";
       });
     }
   }
@@ -188,7 +196,7 @@ class _EmotionState extends State<Emotion> {
           .setEmotion(updatedEmotion);
 
       DailyEntryModel? dailyEntry =
-          Provider.of<DailyEntryProvider>(context, listen: false).dailyEntry;
+          Provider.of<DailyEntryProvider>(context, listen: false).currentEntry;
 
       // DailyEntry should never be null because an entry
       // will be created in the breather screen if so.

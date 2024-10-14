@@ -49,4 +49,24 @@ class DailyEntryModel {
       updatedAt: DateTime.parse(json['updated_at']).toLocal(),
     );
   }
+
+  DailyEntryModel copyWith({
+    int? id,
+    UserModel? user,
+    EmotionModel? emotion,
+    String? journalEntry,
+    List<AdditionalNoteModel>? additionalNotes,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return DailyEntryModel(
+      id: id ?? this.id,
+      user: user ?? this.user,
+      emotion: emotion ?? this.emotion,
+      journalEntry: journalEntry ?? this.journalEntry,
+      additionalNotes: additionalNotes ?? this.additionalNotes,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
 }

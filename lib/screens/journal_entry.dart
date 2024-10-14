@@ -36,7 +36,6 @@ class JournalEntryScreen extends StatefulWidget {
   State<JournalEntryScreen> createState() => _JournalEntryScreenState();
 }
 
-// TODO: Work on the additional notes
 class _JournalEntryScreenState extends State<JournalEntryScreen> {
   late DateTime editedDate;
   late final DateTime creationDate;
@@ -55,7 +54,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
     setState(() {
       DailyEntryModel? dailyEntry =
-          Provider.of<DailyEntryProvider>(context, listen: false).dailyEntry;
+          Provider.of<DailyEntryProvider>(context, listen: false).currentEntry;
 
       // This might break
       for (AdditionalNoteModel note in dailyEntry!.additionalNotes) {
@@ -136,7 +135,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
   Future<void> addNote(String note) async {
     DailyEntryModel? dailyEntry =
-        Provider.of<DailyEntryProvider>(context, listen: false).dailyEntry;
+        Provider.of<DailyEntryProvider>(context, listen: false).currentEntry;
 
     setState(() {
       // WARNING: This might break
@@ -154,7 +153,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
   Future<void> removeNote(int index) async {
     DailyEntryModel? dailyEntry =
-        Provider.of<DailyEntryProvider>(context, listen: false).dailyEntry;
+        Provider.of<DailyEntryProvider>(context, listen: false).currentEntry;
 
     setState(() {
       notes.removeAt(index);
@@ -172,7 +171,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
   Future<void> editNote(int index, String newNote) async {
     DailyEntryModel? dailyEntry =
-        Provider.of<DailyEntryProvider>(context, listen: false).dailyEntry;
+        Provider.of<DailyEntryProvider>(context, listen: false).currentEntry;
 
     setState(() {
       notes[index].note = newNote;

@@ -1,16 +1,15 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:freedfromwalls/models/daily_entry.dart';
 
 class DailyEntryProvider with ChangeNotifier {
-  DailyEntryModel? _dailyEntry;
+  DailyEntryModel? _currentEntry;
   List<DailyEntryModel> _entries = [];
 
-  DailyEntryModel? get dailyEntry => _dailyEntry;
-
+  DailyEntryModel? get currentEntry => _currentEntry;
   List<DailyEntryModel> get entries => _entries;
 
-  void setEntry(DailyEntryModel? dailyEntry) {
-    _dailyEntry = dailyEntry;
+  void setCurrentEntry(DailyEntryModel? entry) {
+    _currentEntry = entry;
     notifyListeners();
   }
 
@@ -19,8 +18,19 @@ class DailyEntryProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearEntry() {
-    _dailyEntry = null;
+  void clearCurrentEntry() {
+    _currentEntry = null;
     notifyListeners();
+  }
+
+  void updateEntry(DailyEntryModel updatedEntry) {
+    final index = _entries.indexWhere((entry) => entry.id == updatedEntry.id);
+    if (index != -1) {
+      _entries[index] = updatedEntry;
+      if (_currentEntry?.id == updatedEntry.id) {
+        _currentEntry = updatedEntry;
+      }
+      notifyListeners();
+    }
   }
 }
