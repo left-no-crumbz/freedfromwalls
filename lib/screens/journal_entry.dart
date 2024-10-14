@@ -19,20 +19,22 @@ class JournalEntryScreen extends StatefulWidget {
   final DateTime Function() getCurrentTime;
   final DateTime? initialCreationDate;
   final DateTime? initialEditedDate;
+  final VoidCallback onUpdate;
 
-  const JournalEntryScreen({
-    super.key,
-    required this.onJournalEntryChanged,
-    this.initialEntry = "",
-    required this.getCurrentTime,
-    this.initialCreationDate,
-    this.initialEditedDate,
-  });
+  const JournalEntryScreen(
+      {super.key,
+      required this.onJournalEntryChanged,
+      this.initialEntry = "",
+      required this.getCurrentTime,
+      this.initialCreationDate,
+      this.initialEditedDate,
+      required this.onUpdate});
 
   @override
   State<JournalEntryScreen> createState() => _JournalEntryScreenState();
 }
 
+// TODO: Work on the additional notes
 class _JournalEntryScreenState extends State<JournalEntryScreen> {
   late DateTime editedDate;
   late final DateTime creationDate;
@@ -45,13 +47,13 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
   void initState() {
     super.initState();
     creationDate = widget.initialCreationDate ?? widget.getCurrentTime();
-    editedDate = widget.initialEditedDate ?? creationDate;
+    editedDate = widget.initialEditedDate ?? widget.getCurrentTime();
     _journalEntryController = TextEditingController(text: widget.initialEntry);
     _journalEntryController.addListener(_onJournalEntryChanged);
   }
 
   void _onJournalEntryChanged() {
-    editedDate = widget.getCurrentTime();
+    editedDate = widget.initialEditedDate!;
 
     debugPrint("journal_entry.dart: ${DateFormat("h:mma").format(editedDate)}");
     debugPrint("journal_entry.dart: ${DateFormat("h:mma").format(editedDate)}");
@@ -77,6 +79,9 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
       emotion.toJson().forEach((key, value) => debugPrint("$key: $value"));
     }
 
+    debugPrint("$notes");
+    notes.forEach(((note) => note.toJson));
+
     DailyEntryModel dailyEntry = DailyEntryModel(
       user: user,
       emotion: emotion,
@@ -94,9 +99,11 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
       debugPrint("INFO: Update entry successful!");
 
       await controller.updateEntry(dailyEntry, responseData['id'].toString());
+      widget.onUpdate();
     } else {
       debugPrint("INFO: Add entry successful!");
       await controller.addEntry(dailyEntry);
+      widget.onUpdate();
     }
   }
 
@@ -122,7 +129,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
   void editNote(int index, String newNote) {
     setState(() {
       notes[index].note = newNote;
-      editedDate = DateTime.now();
+      editedDate = widget.initialEditedDate!;
     });
   }
 
