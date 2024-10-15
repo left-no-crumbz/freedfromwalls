@@ -9,15 +9,14 @@ import 'package:http/http.dart';
 
 class EmotionController {
   final String _baseUrl = "http://192.168.100.42:8000/api/";
-  final String _emotionUrl = "emotion/";
-  final String _updateEmotionUrl = "update/";
+  final String _emotionUrl = "emotions/";
   static final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
   Future<EmotionModel?> getEmotion(String title) async {
     final String? token = await secureStorage.read(key: "token");
 
     final Response response = await http.get(
-      Uri.parse("$_baseUrl$_emotionUrl$title/"),
+      Uri.parse("$_baseUrl$title/$_emotionUrl"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         'Authorization': 'Token $token'
@@ -44,14 +43,14 @@ class EmotionController {
   }
 
   Future<void> updateEmotion(DailyEntryModel dailyEntry, String id) async {
-    debugPrint("$_baseUrl$_emotionUrl$_updateEmotionUrl$id/");
+    debugPrint("$_baseUrl$id/$_emotionUrl");
     final String? token = await secureStorage.read(key: "token");
 
     final Response response;
 
     try {
       response = await http.put(
-        Uri.parse("$_baseUrl$_emotionUrl$_updateEmotionUrl$id/"),
+        Uri.parse("$_baseUrl$id/$_emotionUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token'
