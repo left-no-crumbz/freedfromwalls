@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:freedfromwalls/models/daily_entry.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -13,6 +14,8 @@ class DailyEntryController {
   final String _updateUrl = "/update/";
   final String _todayEntryUrl = "/today-entry/";
   final String _updateAdditionalNotesUrl = "additional-notes/update/";
+  static final FlutterSecureStorage secureStorage = FlutterSecureStorage();
+
   Future<List<DailyEntryModel>> fetchEntries() async {
     debugPrint("$_baseUrl$_entriesUrl");
 

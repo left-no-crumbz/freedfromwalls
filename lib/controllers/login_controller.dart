@@ -16,7 +16,7 @@ class LoginController {
   // This is needed to update the user
   Future<UserModel> getUser(String email) async {
     late UserModel user;
-    String? token = await secureStorage.read(key: "token_$email");
+    String? token = await secureStorage.read(key: "token");
     debugPrint("$token");
 
     Response response = await _client.get(
@@ -56,8 +56,8 @@ class LoginController {
       if (response.statusCode == 200) {
         String token = responseData['token'];
         debugPrint("Token is: $token");
-        await secureStorage.write(key: 'token_${user.email}', value: token);
-        await secureStorage.write(key: 'current_user_email', value: user.email);
+        await secureStorage.write(key: 'token', value: token);
+        // await secureStorage.write(key: 'current_user_email', value: user.email);
         return true;
       } else {
         return false;
