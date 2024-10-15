@@ -16,7 +16,7 @@ class LoginController {
   // This is needed to update the user
   Future<UserModel> getUser(String email) async {
     late UserModel user;
-    String? token = await secureStorage.read(key: "token");
+    final String? token = await secureStorage.read(key: "token");
     debugPrint("$token");
 
     Response response = await _client.get(

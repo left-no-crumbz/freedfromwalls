@@ -18,6 +18,7 @@ class DailyEntryController {
 
   Future<List<DailyEntryModel>> fetchEntries() async {
     debugPrint("$_baseUrl$_entriesUrl");
+    final String? token = await secureStorage.read(key: "token");
 
     final Response response;
 
@@ -26,8 +27,15 @@ class DailyEntryController {
         Uri.parse("$_baseUrl$_entriesUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token'
         },
       );
+
+      // This should not happen normally as the user should first log in when
+      // using the app. As such they are automatically authenticated once they log in
+      if (response.statusCode == 403) {
+        debugPrint("ERROR: User is not authenticated");
+      }
     } catch (e) {
       debugPrint("Daily Entry Controller Network error: $e");
       throw Exception('ERROR: Failed to fetch entries due to a network error.');
@@ -55,15 +63,23 @@ class DailyEntryController {
   }
 
   Future<Response> getTodayEntry(String id) async {
+    final String? token = await secureStorage.read(key: "token");
+
     try {
       final response = await http.get(
         Uri.parse("$_baseUrl$id$_todayEntryUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token'
         },
       );
 
       debugPrint('Response status: ${response.statusCode}');
+      // This should not happen normally as the user should first log in when
+      // using the app. As such they are automatically authenticated once they log in
+      if (response.statusCode == 403) {
+        debugPrint("ERROR: User is not authenticated");
+      }
 
       return response;
     } catch (e) {
@@ -81,8 +97,7 @@ class DailyEntryController {
       debugPrint("ERROR: No user logged in");
     }
 
-    String? token =
-        await LoginController.secureStorage.read(key: 'token_$email');
+    String? token = await LoginController.secureStorage.read(key: 'token');
 
     final Response response;
 
@@ -91,6 +106,7 @@ class DailyEntryController {
         Uri.parse("$_baseUrl$_entriesUrl$_createUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token'
         },
         body: jsonEncode(dailyEntry.toJson()),
       );
@@ -101,12 +117,20 @@ class DailyEntryController {
 
     debugPrint("addEntry: ${response.statusCode}");
 
+    // This should not happen normally as the user should first log in when
+    // using the app. As such they are automatically authenticated once they log in
+    if (response.statusCode == 403) {
+      debugPrint("ERROR: User is not authenticated");
+    }
+
     if (response.statusCode != 200) {
       throw Exception('ERROR: Failed to add entry');
     }
   }
 
   Future<void> updateEntry(DailyEntryModel dailyEntry, String id) async {
+    final String? token = await secureStorage.read(key: "token");
+
     debugPrint("$_baseUrl$_entriesUrl$id$_updateUrl");
 
     final Response response;
@@ -116,6 +140,7 @@ class DailyEntryController {
         Uri.parse("$_baseUrl$_entriesUrl$id$_updateUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token'
         },
         body: jsonEncode(dailyEntry.toJson()),
       );
@@ -123,6 +148,12 @@ class DailyEntryController {
       debugPrint("Network error: $e");
       throw Exception(
           'ERROR: Failed to update entries due to a network error.');
+    }
+
+    // This should not happen normally as the user should first log in when
+    // using the app. As such they are automatically authenticated once they log in
+    if (response.statusCode == 403) {
+      debugPrint("ERROR: User is not authenticated");
     }
 
     if (response.statusCode != 200) {
@@ -134,6 +165,7 @@ class DailyEntryController {
       DailyEntryModel dailyEntry, String id) async {
     debugPrint("$_baseUrl$_updateAdditionalNotesUrl$id/");
 
+    String? token = await LoginController.secureStorage.read(key: 'token');
     final Response response;
 
     try {
@@ -141,6 +173,7 @@ class DailyEntryController {
         Uri.parse("$_baseUrl$_updateAdditionalNotesUrl$id/"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Token $token'
         },
         body: jsonEncode(dailyEntry.toJson()),
       );
