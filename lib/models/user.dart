@@ -2,10 +2,9 @@ class UserModel {
   int? id;
   String? username;
   String email;
-  String password;
+  String? password;
 
-  UserModel(
-      {this.id, this.username, required this.email, required this.password});
+  UserModel({this.id, this.username, required this.email, this.password});
 
   Map<String, dynamic> toJson() {
     return {

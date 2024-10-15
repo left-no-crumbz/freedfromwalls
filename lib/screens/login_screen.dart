@@ -66,9 +66,6 @@ class _LoginPageState extends State<LoginPage> {
     if (success) {
       UserModel updatedUser = await _loginController.getUser(email);
 
-      // update the password to use the raw password
-      updatedUser.password = user.password;
-
       if (mounted) {
         Provider.of<UserProvider>(context, listen: false).setUser(updatedUser);
         Navigator.pushAndRemoveUntil(
