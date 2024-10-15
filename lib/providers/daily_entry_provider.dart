@@ -13,6 +13,11 @@ class DailyEntryProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void addEntry(DailyEntryModel entry) {
+    _entries.add(entry);
+    notifyListeners();
+  }
+
   void setEntries(List<DailyEntryModel> entriesArg) {
     _entries = entriesArg;
     notifyListeners();

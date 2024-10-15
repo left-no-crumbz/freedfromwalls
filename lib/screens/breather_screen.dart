@@ -19,12 +19,10 @@ class BreatherPage extends StatefulWidget {
   BreatherPageState createState() => BreatherPageState();
 }
 
-// TODO: edited date does not update in real time
 class BreatherPageState extends State<BreatherPage> {
   final DailyEntryController _controller = DailyEntryController();
   final ValueNotifier<DateTime> _selectedDate = ValueNotifier(DateTime.now());
   late Future<void> _entriesFuture;
-
   @override
   void initState() {
     super.initState();
@@ -34,6 +32,7 @@ class BreatherPageState extends State<BreatherPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    // DANGEROUS!
     SchedulerBinding.instance.addPostFrameCallback((_) {
       _updateCurrentEntry(_selectedDate.value);
     });
@@ -48,6 +47,24 @@ class BreatherPageState extends State<BreatherPage> {
   }
 
   Future<void> _loadEntries() async {
+    // create an entry for today
+    DateTime now = DateTime.now();
+    DateTime currentDate = DateTime(now.year, now.month, now.day);
+
+    DailyEntryModel dailyEntry = _getEntryForDate(currentDate);
+
+    debugPrint("${dailyEntry.toJson()}");
+
+    if (dailyEntry.id == null) {
+      try {
+        await _controller.addEntry(dailyEntry);
+      } catch (e) {
+        debugPrint("ERROR: $e");
+      }
+
+      _updateCurrentEntry(currentDate);
+    }
+
     try {
       final entries = await _controller.fetchEntries();
       if (mounted) {
@@ -158,8 +175,14 @@ class BreatherPageState extends State<BreatherPage> {
                     final entry = _getEntryForDate(date);
                     return JournalEntryContainer(
                       journalEntry: entry.journalEntry,
-                      creationDate: entry.createdAt,
-                      editedDate: entry.updatedAt,
+                      creationDate: (entry.journalEntry.isNotEmpty ||
+                              entry.emotion != null)
+                          ? entry.createdAt
+                          : null,
+                      editedDate: (entry.journalEntry.isNotEmpty ||
+                              entry.emotion != null)
+                          ? entry.updatedAt
+                          : null,
                     );
                   },
                 ),
@@ -194,7 +217,7 @@ class BreatherPageState extends State<BreatherPage> {
                   initialEntry: entry.journalEntry,
                   initialCreationDate: entry.createdAt,
                   initialEditedDate: entry.updatedAt,
-                  onUpdate: () => setState(() {}),
+                  onUpdate: _loadEntries,
                 ),
               ),
             );

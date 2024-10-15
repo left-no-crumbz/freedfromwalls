@@ -214,16 +214,38 @@ class _EmotionState extends State<Emotion> {
       // will be created in the breather screen if so.
       // The provider will then have that fresh entry.
       // debugPrint("emotion selector updatedEmotion: ${updatedEmotion.title}");
-      debugPrint("emotion selector daily entry emotion: $dailyEntry");
-      debugPrint("emotion selector: ${dailyEntry!.emotion!.title}");
+      final entries =
+          Provider.of<DailyEntryProvider>(context, listen: false).entries;
 
-      dailyEntry.emotion = updatedEmotion;
+      debugPrint("$entries");
+      entries.forEach((entry) => debugPrint("${entry.toJson()}"));
 
-      debugPrint(
-          "emotion selector daily entry updated emotion: ${dailyEntry.emotion!.title}");
+      if (dailyEntry != null) {
+        debugPrint("emotion selector daily entry emotion: $dailyEntry");
+        debugPrint("emotion selector: ${dailyEntry.emotion?.title}");
+        debugPrint(
+            "emotion selector daily entry updated emotion: ${dailyEntry.emotion?.title}");
+        debugPrint("${dailyEntry.id}");
+        debugPrint("${dailyEntry.toJson()}");
+      }
 
-      await emotionController.updateEmotion(
-          dailyEntry, dailyEntry.id.toString());
+      if (dailyEntry?.id == null) {
+        await dailyEntryController.addEntry(dailyEntry!);
+      }
+
+      dailyEntry?.emotion = updatedEmotion;
+      // This breaks when there is no daily entry in the backend because by then there is no id yet.
+      try {
+        await emotionController.updateEmotion(
+            dailyEntry!, dailyEntry.id.toString());
+      } catch (e) {
+        // if (mounted) {
+        //   ScaffoldMessenger.of(context).showSnackBar(
+        //     const SnackBar(content: Text("You need to create an entry first!")),
+        //   );
+        // }
+        throw Exception("$e");
+      }
 
       if (updatedEmotion != null) {
         updatedEmotion
