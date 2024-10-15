@@ -64,10 +64,26 @@ class _LoginPageState extends State<LoginPage> {
     debugPrint("Login is successful: $success");
 
     if (success) {
-      UserModel updatedUser = await _loginController.getUser(email);
+      UserModel? updatedUser;
+      try {
+        updatedUser = await _loginController.getUser(email);
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Error: User is not authenticated."),
+          ));
+        }
+        throw Exception("$e");
+      }
 
       if (mounted) {
-        Provider.of<UserProvider>(context, listen: false).setUser(updatedUser);
+        try {
+          Provider.of<UserProvider>(context, listen: false)
+              .setUser(updatedUser);
+        } catch (e) {
+          throw Exception("ERROR: $e");
+        }
+
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(

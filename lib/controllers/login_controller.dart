@@ -16,10 +16,14 @@ class LoginController {
   // This is needed to update the user
   Future<UserModel> getUser(String email) async {
     late UserModel user;
+    String? token = await secureStorage.read(key: "token_$email");
+    debugPrint("$token");
+
     Response response = await _client.get(
-      Uri.parse("$_baseUrl$_getUser$email"),
+      Uri.parse("$_baseUrl$_getUser"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        'Authorization': 'Token $token',
       },
     );
 
@@ -27,6 +31,8 @@ class LoginController {
       debugPrint("User successfully updated!");
       var jsonResponse = jsonDecode(response.body);
       user = UserModel.fromJson(jsonResponse);
+    } else if (response.statusCode == 403) {
+      debugPrint("ERROR: Forbidden request. User is not authenticated");
     } else {
       debugPrint("ERROR: getUser function failed!");
     }
