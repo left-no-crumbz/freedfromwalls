@@ -21,7 +21,10 @@ class BreatherPage extends StatefulWidget {
 
 class BreatherPageState extends State<BreatherPage> {
   final DailyEntryController _controller = DailyEntryController();
-  final ValueNotifier<DateTime> _selectedDate = ValueNotifier(DateTime.now());
+  static final DateTime _now = DateTime.now();
+  static final DateTime _currentDate =
+      DateTime(_now.year, _now.month, _now.day);
+  final ValueNotifier<DateTime> _selectedDate = ValueNotifier(_currentDate);
   late Future<void> _entriesFuture;
   @override
   void initState() {
