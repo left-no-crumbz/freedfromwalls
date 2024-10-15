@@ -42,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
   final String _password = 'admin12345';
 
   final LoginController _loginController = LoginController();
+  final FocusNode _focusNode = FocusNode();
 
   //login function
   Future<void> _login() async {
@@ -133,12 +134,15 @@ class _LoginPageState extends State<LoginPage> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.6),
-                      spreadRadius: 2,
+                      spreadRadius: 1,
                       blurRadius: 4,
-                      offset: const Offset(2, 4),
+                      offset: const Offset(1, 1),
                     ),
                   ]),
               child: TextField(
+                onSubmitted: (value) {
+                  FocusScope.of(context).requestFocus(_focusNode);
+                },
                 controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: "Email Address",
@@ -156,12 +160,15 @@ class _LoginPageState extends State<LoginPage> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.6),
-                      spreadRadius: 2,
+                      spreadRadius: 1,
                       blurRadius: 4,
-                      offset: const Offset(2, 4),
+                      offset: const Offset(1, 1),
                     ),
                   ]),
               child: TextField(
+                focusNode: _focusNode,
+                textInputAction: TextInputAction.send,
+                onSubmitted: (_) => _login(),
                 obscureText: _isShown ? false : true,
                 controller: _passController,
                 decoration: InputDecoration(
@@ -350,5 +357,13 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ],
         ));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passController.dispose();
+    _focusNode.dispose();
   }
 }
