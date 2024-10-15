@@ -67,7 +67,7 @@ class DailyEntryController {
 
     try {
       final response = await http.get(
-        Uri.parse("$_baseUrl$id$_todayEntryUrl"),
+        Uri.parse("$_baseUrl$id/$_entriesUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token'
@@ -137,7 +137,7 @@ class DailyEntryController {
 
     try {
       response = await http.put(
-        Uri.parse("$_baseUrl$_entriesUrl$id$_updateUrl"),
+        Uri.parse("$_baseUrl$id/$_entriesUrl"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token'
