@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:freedfromwalls/providers/bucketlist_provider.dart';
 import './assets/widgets/custom_appbar.dart';
 import './assets/widgets/custom_bottom_navigation_bar.dart';
 import 'assets/widgets/customThemes.dart';
@@ -22,6 +23,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => EmotionProvider()),
         ChangeNotifierProvider(create: (_) => DailyEntryProvider()),
+        ChangeNotifierProvider(create: (_) => BucketListProvider()),
       ],
       child: const FreedFromWallsApp(),
     ),

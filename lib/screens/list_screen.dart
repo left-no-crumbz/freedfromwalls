@@ -3,7 +3,7 @@ import 'package:freedfromwalls/assets/widgets/customThemes.dart';
 import 'package:freedfromwalls/controllers/todo_controller.dart';
 import 'package:freedfromwalls/models/bucketlist.dart';
 import 'package:provider/provider.dart';
-
+import '../providers/bucketlist_provider.dart';
 import '../assets/widgets/title_description.dart';
 import '../models/blacklist.dart';
 import '../models/user.dart';
@@ -17,8 +17,7 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  bool isBucketListSelected =
-      true; // To toggle between Bucketlisted and Blacklisted
+  bool isBucketListSelected = true;
   String message = "Bucketlisted";
 
   static const borderColor = Color(0xff423e3d);
@@ -45,10 +44,10 @@ class _ListPageState extends State<ListPage> {
   @override
   void initState() {
     super.initState();
-    _fetchBucklists();
+    _fetchLists();
   }
 
-  Future<void> _fetchBucklists() async {
+  Future<void> _fetchLists() async {
     setState(() {
       _isLoading = true;
     });
@@ -60,11 +59,17 @@ class _ListPageState extends State<ListPage> {
         if (user != null) {
           List<BucketListModel> fetchedList =
               await _todoController.fetchBucketlists(user.id.toString());
+
+          Provider.of<BucketListProvider>(context, listen: false)
+              .setBucketLists(fetchedList);
+
           setState(() {
             _newBucketList = fetchedList;
             _isLoading = false;
             _bucketListChecked = List.filled(fetchedList.length, false);
           });
+
+          _newBucketList.forEach((item) => debugPrint("${item.toJson()}"));
 
           debugPrint("${_newBucketList.length}");
           debugPrint("${_currentChecked.length}");
@@ -138,6 +143,7 @@ class _ListPageState extends State<ListPage> {
                   isBucketListSelected = true;
                   message = "Bucketlisted";
                 });
+                _fetchLists();
               },
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 200),
@@ -180,6 +186,7 @@ class _ListPageState extends State<ListPage> {
                   isBucketListSelected = false;
                   message = "Blacklisted";
                 });
+                _fetchLists();
               },
               child: AnimatedContainer(
                 duration: Duration(milliseconds: 200),
@@ -222,17 +229,30 @@ class _ListPageState extends State<ListPage> {
         TextEditingController(text: currentItem);
 
     void addToList(String text, String type) {
+      UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
       if (type == "Bucketlist") {
-        UserModel? user =
-            Provider.of<UserProvider>(context, listen: false).user;
+        try {
+          _bucketList.add(text);
+          _bucketListChecked.add(false);
+        } catch (e) {
+          debugPrint("Error: $e");
+        }
 
-        _bucketList.add(text);
-        _bucketListChecked.add(false);
         // IMPORTANT: MIGHT BREAK
         addBucketList(BucketListModel(body: text, userId: user!.id));
+        // load the list after adding
+        _fetchLists();
       } else if (type == "Blacklist") {
-        _blackList.add(text);
-        _blackListChecked.add(false);
+        try {
+          _blackList.add(text);
+          _blackListChecked.add(false);
+        } catch (e) {
+          debugPrint("$e");
+        }
+
+        addBlackList(BlackListModel(body: text, userId: user!.id));
+        // load the list after adding
+        _fetchLists();
       }
     }
 
