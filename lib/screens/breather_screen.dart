@@ -20,9 +20,8 @@ class BreatherPage extends StatefulWidget {
   BreatherPageState createState() => BreatherPageState();
 }
 
-// FIXME: Creates new entries even when there is an existing one. Cannot replicate it as of now.
-// FIXME: I replicated it by disconnectign and reconnecting my device and heading to the breather page as soon as I log in.
-// FIXME: The entries are not exclusive to the user
+// FIXME: Creates new entries even when there is an existing one. Cannot replicate it as of now. Ideally, it should only create an entry when if and only if there is no entry for that day.
+// FIXME: I replicated it by disconnecting and reconnecting my device and heading to the breather page as soon as I log in.
 class BreatherPageState extends State<BreatherPage> {
   final DailyEntryController _controller = DailyEntryController();
   static final DateTime _now = DateTime.now();
@@ -58,27 +57,38 @@ class BreatherPageState extends State<BreatherPage> {
     DateTime now = DateTime.now();
     DateTime currentDate = DateTime(now.year, now.month, now.day);
 
-    DailyEntryModel dailyEntry = _getEntryForDate(currentDate);
-
-    debugPrint("${dailyEntry.toJson()}");
-
-    if (dailyEntry.id == null) {
-      try {
-        await _controller.addEntry(dailyEntry);
-      } catch (e) {
-        debugPrint("ERROR: $e");
-      }
-
-      _updateCurrentEntry(currentDate);
-    }
-
     try {
       UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
 
+      // Upon load of the breather screen, this will fetch all the entries
       final entries = await _controller.fetchEntries(user!.id.toString());
+
       if (mounted) {
+        // This will update the entries in the Provider
         Provider.of<DailyEntryProvider>(context, listen: false)
             .setEntries(entries);
+      }
+      //  This takes the entry of the current date.
+      //  It relies on the values of the Provider
+      DailyEntryModel dailyEntry = _getEntryForDate(currentDate);
+
+      debugPrint("${dailyEntry.toJson()}");
+      // If the entry id is null, which means it hasn't been sent to the backend,
+      // then send a POST request to it
+      if (dailyEntry.id == null) {
+        try {
+          await _controller.addEntry(dailyEntry);
+          // Makes sure that our entries are always updated
+          final entries = await _controller.fetchEntries(user.id.toString());
+          if (mounted) {
+            // As well as our provider
+            Provider.of<DailyEntryProvider>(context, listen: false)
+                .setEntries(entries);
+          }
+        } catch (e) {
+          debugPrint("ERROR: $e");
+        }
+        _updateCurrentEntry(currentDate);
       }
     } catch (e) {
       debugPrint("Error loading entries: $e");
@@ -91,8 +101,11 @@ class BreatherPageState extends State<BreatherPage> {
   }
 
   DailyEntryModel _getEntryForDate(DateTime date) {
+    // _loadEntries();
+
     final entries =
         Provider.of<DailyEntryProvider>(context, listen: false).entries;
+
     return entries.firstWhere(
       (entry) => _isSameDay(entry.createdAt ?? date, date),
       orElse: () => DailyEntryModel(

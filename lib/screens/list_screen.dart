@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:freedfromwalls/assets/widgets/customThemes.dart';
+import 'package:freedfromwalls/controllers/todo_controller.dart';
+import 'package:freedfromwalls/models/bucketlist.dart';
+import 'package:provider/provider.dart';
 
 import '../assets/widgets/title_description.dart';
+import '../models/blacklist.dart';
+import '../models/user.dart';
+import '../providers/user_provider.dart';
 
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
@@ -11,7 +17,8 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-  bool isBucketListSelected = true; // To toggle between Bucketlisted and Blacklisted
+  bool isBucketListSelected =
+      true; // To toggle between Bucketlisted and Blacklisted
   String message = "Bucketlisted";
 
   static const borderColor = Color(0xff423e3d);
@@ -22,12 +29,98 @@ class _ListPageState extends State<ListPage> {
 
   List<String> _blackList = [];
   List<bool> _blackListChecked = [];
+  List<BucketListModel> _newBucketList = [];
+  List<BlackListModel> _newBlackList = [];
+  bool _isLoading = true;
 
   // Method to return the current list (Bucketlisted or Blacklisted)
-  List<String> get _currentList =>
-      isBucketListSelected ? _bucketList : _blackList;
+  List<dynamic> get _currentList =>
+      isBucketListSelected ? _newBucketList : _newBlackList;
+
   List<bool> get _currentChecked =>
       isBucketListSelected ? _bucketListChecked : _blackListChecked;
+
+  final TodoController _todoController = TodoController();
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchBucklists();
+  }
+
+  Future<void> _fetchBucklists() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+    if (isBucketListSelected) {
+      try {
+        if (user != null) {
+          List<BucketListModel> fetchedList =
+              await _todoController.fetchBucketlists(user.id.toString());
+          setState(() {
+            _newBucketList = fetchedList;
+            _isLoading = false;
+            _bucketListChecked = List.filled(fetchedList.length, false);
+          });
+
+          debugPrint("${_newBucketList.length}");
+          debugPrint("${_currentChecked.length}");
+          debugPrint("${_currentList.length}");
+        }
+      } catch (e) {
+        debugPrint("Error encountered while fetching bucketlists: $e");
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    } else {
+      try {
+        if (user != null) {
+          List<BlackListModel> fetchedList =
+              await _todoController.fetchBlacklists(user.id.toString());
+          setState(() {
+            _newBlackList = fetchedList;
+            _isLoading = false;
+            _blackListChecked = List.filled(fetchedList.length, false);
+          });
+
+          debugPrint("${_newBlackList.length}");
+          debugPrint("${_currentChecked.length}");
+          debugPrint("${_currentList.length}");
+        }
+      } catch (e) {
+        debugPrint("Error encountered while fetching blacklists: $e");
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> addBucketList(BucketListModel bucketlist) async {
+    //   TODO: Add add impl here
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+    try {
+      await _todoController.addBucketList(bucketlist, user!.id.toString());
+    } catch (e) {
+      debugPrint("Error while adding a bucketlist: $e");
+    }
+  }
+
+  Future<void> addBlackList(BlackListModel blacklist) async {
+    //   TODO: Add add impl here
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+    try {
+      await _todoController.addBlackList(blacklist, user!.id.toString());
+    } catch (e) {
+      debugPrint("Error while adding a blacklist: $e");
+    }
+  }
 
   Widget screenTitle() {
     final selectedColor = Theme.of(context).cardColor;
@@ -128,6 +221,21 @@ class _ListPageState extends State<ListPage> {
     final TextEditingController _textController =
         TextEditingController(text: currentItem);
 
+    void addToList(String text, String type) {
+      if (type == "Bucketlist") {
+        UserModel? user =
+            Provider.of<UserProvider>(context, listen: false).user;
+
+        _bucketList.add(text);
+        _bucketListChecked.add(false);
+        // IMPORTANT: MIGHT BREAK
+        addBucketList(BucketListModel(body: text, userId: user!.id));
+      } else if (type == "Blacklist") {
+        _blackList.add(text);
+        _blackListChecked.add(false);
+      }
+    }
+
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -144,13 +252,8 @@ class _ListPageState extends State<ListPage> {
                   controller: _textController,
                   decoration: InputDecoration(
                     labelText: 'Item Name',
-                    border: InputBorder.none,
                   ),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Divider(),
               ),
               SizedBox(height: 16),
               Row(
@@ -181,11 +284,9 @@ class _ListPageState extends State<ListPage> {
                               } else {
                                 // Add new item
                                 if (isBucketListSelected) {
-                                  _bucketList.add(_textController.text);
-                                  _bucketListChecked.add(false);
+                                  addToList(_textController.text, "Bucketlist");
                                 } else {
-                                  _blackList.add(_textController.text);
-                                  _blackListChecked.add(false);
+                                  addToList(_textController.text, "Blacklist");
                                 }
                               }
                             }
@@ -230,7 +331,10 @@ class _ListPageState extends State<ListPage> {
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: TitleDescription(title: message, description: "Record the things you want to do over the year."),
+              child: TitleDescription(
+                  title: message,
+                  description:
+                      "Record the things you want to do over the year."),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -260,14 +364,15 @@ class _ListPageState extends State<ListPage> {
                                 });
                               },
                             ),
-                            title: Text(_currentList[index]),
+                            title: Text(_currentList[index].body),
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 ConstrainedBox(
                                   constraints: const BoxConstraints(
                                     maxWidth: 25, // Adjust maxWidth as needed
-                                    maxHeight: 30, // Ensure the buttons are consistent in size
+                                    maxHeight:
+                                        30, // Ensure the buttons are consistent in size
                                   ),
                                   child: IconButton(
                                     iconSize: 20.0,
@@ -306,9 +411,12 @@ class _ListPageState extends State<ListPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: height * 0.08,),
+                  SizedBox(
+                    height: height * 0.08,
+                  ),
                   Image.asset(
-                    isBucketListSelected ? 'lib/assets/images/backgrounds/Default_Bucketlisted.png'
+                    isBucketListSelected
+                        ? 'lib/assets/images/backgrounds/Default_Bucketlisted.png'
                         : 'lib/assets/images/backgrounds/Default_Blacklisted.png',
                     width: AppThemes.getResponsiveImageSize(context, 250),
                     height: AppThemes.getResponsiveImageSize(context, 250),

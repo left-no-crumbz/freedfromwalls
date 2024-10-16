@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:freedfromwalls/controllers/emotion_controller.dart';
+import '../../models/user.dart';
 import '../../providers/daily_entry_provider.dart';
 import '../../providers/emotion_provider.dart';
 import '../../controllers/daily_entry_controller.dart';
 import '../../models/daily_entry.dart';
+import '../../providers/user_provider.dart';
 import './custom_title.dart';
 import 'customThemes.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +27,7 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
   String? _selectedName;
   String _selectedImagePath = "";
   Color _selectedColor = Colors.white;
+  final DailyEntryController _controller = DailyEntryController();
 
   final Map<String, String> imagePaths = {
     "happy": "lib/assets/images/emotions/emotions-happy.png",
@@ -200,15 +203,41 @@ class _EmotionState extends State<Emotion> {
   final EmotionController emotionController = EmotionController();
   final DailyEntryController dailyEntryController = DailyEntryController();
 
+  // TODO: Implement getTodayEntry
+  bool _isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
+
+  DailyEntryModel _getEntryForDate(DateTime date) {
+    final entries =
+        Provider.of<DailyEntryProvider>(context, listen: false).entries;
+
+    return entries.firstWhere(
+      (entry) => _isSameDay(entry.createdAt ?? date, date),
+      orElse: () => DailyEntryModel(
+        user: Provider.of<UserProvider>(context, listen: false).user!,
+        journalEntry: '',
+        emotion: null,
+        additionalNotes: [],
+        createdAt: null,
+        updatedAt: null,
+      ),
+    );
+  }
+
   Future<void> _updateEmotion(String title) async {
     EmotionModel? updatedEmotion = await emotionController.getEmotion(title);
+
+    DateTime now = DateTime.now();
+    DateTime currentDate = DateTime(now.year, now.month, now.day);
 
     if (mounted) {
       Provider.of<EmotionProvider>(context, listen: false)
           .setEmotion(updatedEmotion);
 
-      DailyEntryModel? dailyEntry =
-          Provider.of<DailyEntryProvider>(context, listen: false).currentEntry;
+      DailyEntryModel? dailyEntry = _getEntryForDate(currentDate);
 
       // DailyEntry should never be null because an entry
       // will be created in the breather screen if so.
@@ -229,9 +258,10 @@ class _EmotionState extends State<Emotion> {
         debugPrint("${dailyEntry.toJson()}");
       }
 
-      if (dailyEntry?.id == null) {
-        await dailyEntryController.addEntry(dailyEntry!);
-      }
+      // This is not needed as an entry will be created on page load now.
+      // if (dailyEntry?.id == null) {
+      //   await dailyEntryController.addEntry(dailyEntry!);
+      // }
 
       dailyEntry?.emotion = updatedEmotion;
       // This breaks when there is no daily entry in the backend because by then there is no id yet.
@@ -239,11 +269,6 @@ class _EmotionState extends State<Emotion> {
         await emotionController.updateEmotion(
             dailyEntry!, dailyEntry.id.toString());
       } catch (e) {
-        // if (mounted) {
-        //   ScaffoldMessenger.of(context).showSnackBar(
-        //     const SnackBar(content: Text("You need to create an entry first!")),
-        //   );
-        // }
         throw Exception("$e");
       }
 
