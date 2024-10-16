@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 import '../controllers/daily_entry_controller.dart';
 import '../models/daily_entry.dart';
+import '../models/user.dart';
 import '../providers/user_provider.dart';
 import '../providers/emotion_provider.dart';
 import '../providers/daily_entry_provider.dart';
@@ -21,6 +22,7 @@ class BreatherPage extends StatefulWidget {
 
 // FIXME: Creates new entries even when there is an existing one. Cannot replicate it as of now.
 // FIXME: I replicated it by disconnectign and reconnecting my device and heading to the breather page as soon as I log in.
+// FIXME: The entries are not exclusive to the user
 class BreatherPageState extends State<BreatherPage> {
   final DailyEntryController _controller = DailyEntryController();
   static final DateTime _now = DateTime.now();
@@ -71,7 +73,9 @@ class BreatherPageState extends State<BreatherPage> {
     }
 
     try {
-      final entries = await _controller.fetchEntries();
+      UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+      final entries = await _controller.fetchEntries(user!.id.toString());
       if (mounted) {
         Provider.of<DailyEntryProvider>(context, listen: false)
             .setEntries(entries);

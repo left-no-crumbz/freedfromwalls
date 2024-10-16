@@ -10,21 +10,22 @@ class DailyEntryController {
   final Client _client = http.Client();
   final String _baseUrl = "http://192.168.100.42:8000/api/";
   final String _entriesUrl = "entries/";
-  final String _createUrl = "create/";
+  final String _createUrl = "create/entry/";
   final String _updateUrl = "/update/";
   final String _todayEntryUrl = "/today-entry/";
   final String _updateAdditionalNotesUrl = "additional-notes/update/";
   static final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-  Future<List<DailyEntryModel>> fetchEntries() async {
-    debugPrint("$_baseUrl$_entriesUrl");
+  // TODO: Add user id to filter the entries per user
+  Future<List<DailyEntryModel>> fetchEntries(String userId) async {
+    debugPrint("$_baseUrl$_entriesUrl$userId/");
     final String? token = await secureStorage.read(key: "token");
 
     final Response response;
 
     try {
       response = await _client.get(
-        Uri.parse("$_baseUrl$_entriesUrl"),
+        Uri.parse("$_baseUrl$_entriesUrl$userId/"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token'
@@ -90,6 +91,7 @@ class DailyEntryController {
   }
 
   Future<void> addEntry(DailyEntryModel dailyEntry) async {
+    debugPrint("$_baseUrl$_entriesUrl$_createUrl");
     String? email =
         await LoginController.secureStorage.read(key: 'current_user_email');
 
@@ -98,7 +100,7 @@ class DailyEntryController {
     }
 
     String? token = await LoginController.secureStorage.read(key: 'token');
-
+    debugPrint("$token");
     final Response response;
 
     try {
