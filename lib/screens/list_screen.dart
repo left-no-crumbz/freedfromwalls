@@ -9,6 +9,7 @@ import '../models/blacklist.dart';
 import '../models/user.dart';
 import '../providers/user_provider.dart';
 
+// TODO: Edit and delete list
 class ListPage extends StatefulWidget {
   const ListPage({super.key});
 
