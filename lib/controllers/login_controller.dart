@@ -7,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginController {
   final Client _client = http.Client();
-  final String _baseUrl = "http://192.168.100.42:8000/api/";
+  final String _baseUrl = "http://192.168.100.22:8000/api/";
   final String _loginApi = "login/";
   final String _registerApi = "register/";
   final String _getUser = "user/";
@@ -82,7 +82,10 @@ class LoginController {
 
       final responseData = jsonDecode(response.body);
 
-      if (responseData['status'] == 'success') {
+      if (response.statusCode == 201 && responseData['token'] != null) {
+        String token = responseData['token'];
+        debugPrint("Token is: $token");
+        await secureStorage.write(key: 'token', value: token);
         return true;
       } else {
         return false;

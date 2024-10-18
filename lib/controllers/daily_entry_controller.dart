@@ -8,7 +8,7 @@ import '../controllers/login_controller.dart';
 
 class DailyEntryController {
   final Client _client = http.Client();
-  final String _baseUrl = "http://192.168.100.42:8000/api/";
+  final String _baseUrl = "http://192.168.100.22:8000/api/";
   final String _entriesUrl = "entries/";
   final String _createUrl = "create/entry/";
   final String _updateUrl = "/update/";
@@ -16,7 +16,6 @@ class DailyEntryController {
   final String _updateAdditionalNotesUrl = "additional-notes/update/";
   static final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-  // TODO: Add user id to filter the entries per user
   Future<List<DailyEntryModel>> fetchEntries(String userId) async {
     debugPrint("$_baseUrl$_entriesUrl$userId/");
     final String? token = await secureStorage.read(key: "token");
@@ -191,5 +190,24 @@ class DailyEntryController {
     if (response.statusCode != 200) {
       throw Exception('ERROR: Failed to update additional notes');
     }
+  }
+
+  //For Home
+  Future<List<DailyEntryModel>> fetchThisMonthEntries(String userId) async {
+    // Fetch all entries
+    List<DailyEntryModel> allEntries = await fetchEntries(userId);
+
+    // Get the current month and year
+    DateTime now = DateTime.now();
+    int currentMonth = now.month;
+    int currentYear = now.year;
+
+    // Filter entries for the current month and year
+    List<DailyEntryModel> thisMonthEntries = allEntries.where((entry) {
+      DateTime entryDate = entry.createdAt!; // Assuming `date` is a string in DailyEntryModel
+      return entryDate.month == currentMonth && entryDate.year == currentYear;
+    }).toList();
+
+    return thisMonthEntries;
   }
 }

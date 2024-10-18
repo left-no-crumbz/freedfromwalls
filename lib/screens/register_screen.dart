@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:freedfromwalls/controllers/login_controller.dart';
 import 'package:freedfromwalls/models/user.dart';
 import 'package:freedfromwalls/screens/onboarding_screen.dart';
+import 'package:provider/provider.dart';
 import '../assets/widgets/customThemes.dart';
+import '../providers/user_provider.dart';
 import 'login_screen.dart';
 import '../main.dart';
 
@@ -39,8 +41,16 @@ class _RegisterPageState extends State<RegisterPage> {
       UserModel user = UserModel(email: email, password: password);
       bool success = await _registerController.register(user);
 
-      if (success) {
+      if (success == true) {
+        UserModel? updatedUser;
         if (mounted) {
+          updatedUser = await _registerController.getUser(email);
+
+          Provider.of<UserProvider>(context, listen: false)
+              .setUser(updatedUser);
+
+          print('Navigating to OnboardingPage');
+
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -48,8 +58,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ),
           );
         } else {
-          debugPrint(
-              "Context not mounted! Async function probably caused this.");
+          debugPrint("Context not mounted! Could not navigate.");
         }
       } else {
         if (mounted) {

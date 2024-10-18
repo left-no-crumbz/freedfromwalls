@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:freedfromwalls/controllers/fullfeelment_controller.dart';
+import 'package:freedfromwalls/models/fullfeelment.dart';
+import 'package:provider/provider.dart';
 
 import '../assets/widgets/customThemes.dart';
 import '../assets/widgets/title_description.dart';
+import '../models/user.dart';
+import '../providers/fullfeelment_provider.dart';
+import '../providers/user_provider.dart';
 
 class FeelPage extends StatefulWidget {
   const FeelPage({super.key});
@@ -12,10 +18,10 @@ class FeelPage extends StatefulWidget {
 }
 
 class _FeelPage extends State<FeelPage> {
-  final List<TextEditingController> _titleControllers = [];
-  final List<TextEditingController> _descriptionControllers = [];
-  final List<bool> _isEditableList = [];
+  final FeelController _feelController = FeelController();
+  List<FeelModel> _feels = [];
   String _selectedNotificationTime = 'Never';
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -39,33 +45,96 @@ class _FeelPage extends State<FeelPage> {
       }
     });
     super.initState();
+
+    _fetchFeels();
   }
 
-  @override
-  void dispose() {
-    for (var controller in _titleControllers) {
-      controller.dispose();
+  Future<void> _fetchFeels() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+    try {
+      if (user != null) {
+        List<FeelModel> fetchedFeels = await _feelController.fetchFeels(user.id.toString());
+
+        // You can debug print the fetched list to see the IDs
+        fetchedFeels.forEach((item) => debugPrint("Fetched item: ${item.id} - ${item.title} - ${item.description}"));
+
+        Provider.of<FeelProvider>(context, listen: false)
+            .setFeels(fetchedFeels);
+
+        setState(() {
+          _feels = fetchedFeels;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      debugPrint("Error encountered while fetching feels: $e");
+      setState(() {
+        _isLoading = false;
+      });
     }
-    for (var controller in _descriptionControllers) {
-      controller.dispose();
-    }
-    super.dispose();
   }
 
-  void _showAddReminderBottomSheet() {
-    final titleController = TextEditingController();
-    final descriptionController = TextEditingController();
+
+  Future<void> _editFeelData(FeelModel feel) async {
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+    try {
+      await _feelController.editFeel(
+        feel,
+        user!.id.toString(),
+        feel.id.toString(),
+      );
+    } catch (e) {
+      debugPrint("Error while editing a feel: $e");
+    }
+  }
+
+  Future<void> _addFeelData(FeelModel feel) async {
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+    try {
+      await _feelController.addFeel(feel, user!.id.toString());
+    } catch (e) {
+      debugPrint("Error while adding a Feel: $e");
+    }
+  }
+
+  void _showReminderBottomSheet({String? currentTitle, String? currentDesc, int? index, String? action}) {
+    final titleController = TextEditingController(text: currentTitle);
+    final descriptionController = TextEditingController(text: currentDesc);
+
+    void addFeel(String title, String description) async {
+      UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+      await _addFeelData(FeelModel(title: title, description: description, userId: user!.id));
+
+      await _fetchFeels();
+    }
+
+    void editFeel(String title, String description) async {
+      UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+      FeelModel? feel = _feels[index!];
+
+      if (user != null) {
+        await _editFeelData(FeelModel(id: feel.id, title: title, description: description, userId: user!.id));
+      } else {
+        print("Error in adding feel: No user found.");
+      }
+
+      await _fetchFeels();
+    }
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (context) {
         return Container(
-          padding:
-          EdgeInsets.only(bottom: MediaQuery
-              .of(context)
-              .viewInsets
-              .bottom),
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -74,8 +143,7 @@ class _FeelPage extends State<FeelPage> {
                   controller: titleController,
                   decoration: const InputDecoration(
                     hintText: 'Title of Achievement',
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 12.0, horizontal: 12.0),
+                    contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -83,8 +151,7 @@ class _FeelPage extends State<FeelPage> {
                   controller: descriptionController,
                   decoration: const InputDecoration(
                     hintText: 'Description',
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 12.0, horizontal: 12.0),
+                    contentPadding: EdgeInsets.symmetric(vertical: 12.0, horizontal: 12.0),
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -101,15 +168,16 @@ class _FeelPage extends State<FeelPage> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: IconButton(
-                          icon: const Icon(Icons.send,
-                              color: Colors.white, size: 23),
-                          onPressed: () {
+                          icon: const Icon(Icons.send, color: Colors.white, size: 23),
+                          onPressed: () async {
                             setState(() {
-                              _titleControllers.add(titleController);
-                              _descriptionControllers
-                                  .add(descriptionController);
-                              _isEditableList.add(false);
+                              if (action == "Editing") {
+                                editFeel(titleController.text, descriptionController.text);
+                              } else {
+                                addFeel(titleController.text, descriptionController.text);
+                              }
                             });
+
                             Navigator.pop(context);
                           },
                         ),
@@ -120,6 +188,55 @@ class _FeelPage extends State<FeelPage> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void _editItem(int index) {
+    FeelModel currentItem = _feels[index];
+    String? currentTitle = currentItem.title;
+    String? currentDesc = currentItem.description;
+
+    _showReminderBottomSheet(currentTitle: currentTitle, currentDesc: currentDesc, index: index, action: "Editing");
+  }
+
+  void _deleteFeel(int index) {
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+    // Show confirmation dialog first
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Deletion'),
+          content: Text('Are you sure you want to delete this item?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                // Dismiss the dialog if user cancels
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Dismiss the dialog
+                Navigator.of(context).pop();
+
+                // Call Delete
+                try {
+                  FeelModel feel = _feels[index];
+                  await _feelController.deleteFeel(user!.id.toString(), feel.id.toString());
+                } catch (e) {
+                  debugPrint("Error: $e");
+                }
+
+                await _fetchFeels();
+              },
+              child: Text('Delete'),
+            ),
+          ],
         );
       },
     );
@@ -138,7 +255,7 @@ class _FeelPage extends State<FeelPage> {
             children: [
               const Text(
                 "Get notifications of your wins.",
-                style: const TextStyle(fontSize: 18),
+                style: TextStyle(fontSize: 18),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
@@ -152,7 +269,8 @@ class _FeelPage extends State<FeelPage> {
               const SizedBox(height: 16),
               RadioListTile<String>(
                 title: Text('24 hours',
-                    style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 12))),
+                    style: TextStyle(
+                        fontSize: AppThemes.getResponsiveFontSize(context, 12))),
                 value: '24 hours',
                 groupValue: _selectedNotificationTime,
                 onChanged: (value) {
@@ -164,9 +282,8 @@ class _FeelPage extends State<FeelPage> {
               ),
               RadioListTile<String>(
                 title: Text('48 hours',
-                    style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 12)
-                    )
-                ),
+                    style: TextStyle(
+                        fontSize: AppThemes.getResponsiveFontSize(context, 12))),
                 value: '48 hours',
                 groupValue: _selectedNotificationTime,
                 onChanged: (value) {
@@ -177,9 +294,9 @@ class _FeelPage extends State<FeelPage> {
                 },
               ),
               RadioListTile<String>(
-                title:
-                Text('1 week', style: TextStyle(
-                    fontSize: AppThemes.getResponsiveFontSize(context, 12))),
+                title: Text('1 week',
+                    style: TextStyle(
+                        fontSize: AppThemes.getResponsiveFontSize(context, 12))),
                 value: '1 week',
                 groupValue: _selectedNotificationTime,
                 onChanged: (value) {
@@ -190,9 +307,9 @@ class _FeelPage extends State<FeelPage> {
                 },
               ),
               RadioListTile<String>(
-                title:
-                Text('2 weeks', style: TextStyle(
-                    fontSize: AppThemes.getResponsiveFontSize(context, 12))),
+                title: Text('2 weeks',
+                    style: TextStyle(
+                        fontSize: AppThemes.getResponsiveFontSize(context, 12))),
                 value: '2 weeks',
                 groupValue: _selectedNotificationTime,
                 onChanged: (value) {
@@ -203,9 +320,9 @@ class _FeelPage extends State<FeelPage> {
                 },
               ),
               RadioListTile<String>(
-                title:
-                Text('Never', style: TextStyle(
-                    fontSize: AppThemes.getResponsiveFontSize(context, 12))),
+                title: Text('Never',
+                    style: TextStyle(
+                        fontSize: AppThemes.getResponsiveFontSize(context, 12))),
                 value: 'Never',
                 groupValue: _selectedNotificationTime,
                 onChanged: (value) {
@@ -218,15 +335,16 @@ class _FeelPage extends State<FeelPage> {
               SimpleDialogOption(
                 onPressed: () {
                   Navigator.of(context).pop();
-                  if (_titleControllers.isNotEmpty &&
-                      _descriptionControllers.isNotEmpty) {
-                    _scheduleNotification(_titleControllers.last.text,
-                        _descriptionControllers.last.text);
+                  // Check if the list of feels is not empty before scheduling the notification
+                  if (_feels.isNotEmpty) {
+                    FeelModel lastFeel = _feels.last;
+                    _scheduleNotification(lastFeel.title ?? 'No title',
+                        lastFeel.description ?? 'No description');
                   }
                 },
                 child: Text('Schedule Notification',
-                    style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(
-                        context, 14))),
+                    style: TextStyle(
+                        fontSize: AppThemes.getResponsiveFontSize(context, 14))),
               ),
             ],
           ),
@@ -269,14 +387,6 @@ class _FeelPage extends State<FeelPage> {
     );
   }
 
-  void _deleteReminder(int index) {
-    setState(() {
-      _titleControllers.removeAt(index);
-      _descriptionControllers.removeAt(index);
-      _isEditableList.removeAt(index);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -305,7 +415,7 @@ class _FeelPage extends State<FeelPage> {
                     border: Border.all(color: Colors.black, width: 1.0),
                   ),
                   child: Text(
-                    'WIN COUNT: ${_titleControllers.length}',
+                    'WIN COUNT: ${_feels.length}',
                     textAlign: TextAlign.left,
                     style: TextStyle(
                       fontSize: AppThemes.getResponsiveFontSize(context, 18),
@@ -338,7 +448,7 @@ class _FeelPage extends State<FeelPage> {
             ),
 
             // Empty state message when no items are present
-            if (_titleControllers.isEmpty) ...[
+            if (_feels.isEmpty) ...[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: const Divider(),
@@ -390,7 +500,7 @@ class _FeelPage extends State<FeelPage> {
             ],
 
             // List of reminders
-            for (int index = 0; index < _titleControllers.length; index++) ...[
+            for (int index = 0; index < _feels.length; index++) ...[
               const Divider(color: Colors.grey),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -432,58 +542,36 @@ class _FeelPage extends State<FeelPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Title TextField
-                        TextField(
-                          controller: _titleControllers[index],
+                        // Title Text Display
+                        Text(
+                          _feels[index].title!,
                           style: TextStyle(
                             fontSize: AppThemes.getResponsiveFontSize(context, 18),
                             color: Colors.black,
                           ),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Title for reminder ${index + 1}',
-                            hintStyle: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
-                              fontSize: AppThemes.getResponsiveFontSize(context, 18),
-                            ),
-                          ),
-                          readOnly: !_isEditableList[index],
                         ),
 
-                        // Description TextField
-                        TextField(
-                          controller: _descriptionControllers[index],
+                        // Description Text Display
+                        Text(
+                          _feels[index].description!,
                           style: TextStyle(
                             fontSize: AppThemes.getResponsiveFontSize(context, 12),
                             color: Colors.black,
                           ),
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            hintText: 'Description for reminder ${index + 1}',
-                            hintStyle: TextStyle(
-                              color: Colors.black.withOpacity(0.6),
-                              fontSize: AppThemes.getResponsiveFontSize(context, 12),
-                            ),
-                            isDense: true, // Reduces the padding within the input field
-                          ),
-                          readOnly: !_isEditableList[index],
                         ),
                       ],
                     ),
                   ),
 
+
                   // Edit/Check Icon
                   IconButton(
                     icon: Icon(
-                      _isEditableList[index] ? Icons.check : Icons.edit,
+                      Icons.edit,
                       color: Colors.black,
                       size: 15,
                     ),
-                    onPressed: () {
-                      setState(() {
-                        _isEditableList[index] = !_isEditableList[index];
-                      });
-                    },
+                    onPressed: () => _editItem(index),
                   ),
 
                   // Delete Icon
@@ -494,7 +582,7 @@ class _FeelPage extends State<FeelPage> {
                         size: 15
                     ),
                     onPressed: () {
-                      _deleteReminder(index);
+                      _deleteFeel(index);
                     },
                   ),
                 ],
@@ -505,7 +593,7 @@ class _FeelPage extends State<FeelPage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _showAddReminderBottomSheet,
+        onPressed: _showReminderBottomSheet,
         backgroundColor: Colors.black,
         elevation: 0,
         shape: const CircleBorder(),
