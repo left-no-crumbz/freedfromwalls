@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:freedfromwalls/providers/blacklist_provider.dart';
 import 'package:freedfromwalls/providers/bucketlist_provider.dart';
+import 'package:freedfromwalls/providers/fullfeelment_provider.dart';
 import './assets/widgets/custom_appbar.dart';
 import './assets/widgets/custom_bottom_navigation_bar.dart';
 import 'assets/widgets/customThemes.dart';
@@ -24,6 +26,8 @@ void main() {
         ChangeNotifierProvider(create: (_) => EmotionProvider()),
         ChangeNotifierProvider(create: (_) => DailyEntryProvider()),
         ChangeNotifierProvider(create: (_) => BucketListProvider()),
+        ChangeNotifierProvider(create: (_) => BlackListProvider()),
+        ChangeNotifierProvider(create: (_) => FeelProvider()),
       ],
       child: const FreedFromWallsApp(),
     ),
@@ -82,3 +86,7 @@ class AppStateStates extends State<AppState> {
     );
   }
 }
+
+// kadizon4@student.hau.edu.ph |||| root
+
+// TODO: Remember me button, Themes sharedPref(remember selected theme), Register going to Onboarding
