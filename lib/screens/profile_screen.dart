@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../assets/widgets/title_description.dart';
 import './edit_profile.dart';
 
@@ -25,6 +26,13 @@ class _ProfilePageState extends State<ProfilePage> {
     "Color": "Favorite Color",
   };
 
+  final FlutterSecureStorage localStorage = FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +57,15 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   );
                   if (result != null) {
+                    localStorage.write(key: 'name', value: result['name']);
+                    localStorage.write(key: 'bio', value: result['bio']);
+                    localStorage.write(
+                        key: 'avatarPath', value: result['avatarPath']);
+
+                    result['favorites'].forEach((key, value) {
+                      localStorage.write(key: 'key', value: value);
+                    });
+
                     setState(() {
                       name = result['name'];
                       bio = result['bio'];
@@ -57,6 +74,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     });
                   }
                 },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).cardColor,
+                    side: BorderSide(color: Colors.black, width: 1.5)),
                 child: Text(
                   "EDIT",
                   style: TextStyle(
@@ -64,9 +84,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontFamily: "RethinkSans",
                       fontWeight: FontWeight.bold),
                 ),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).cardColor,
-                    side: BorderSide(color: Colors.black, width: 1.5)),
               ),
               const SizedBox(width: 16),
             ],

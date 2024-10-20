@@ -85,6 +85,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       });
                     }
                   },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).cardColor,
+                      side: const BorderSide(color: Colors.black, width: 1.5)),
                   child: Text(
                     "SAVE",
                     style: TextStyle(
@@ -92,9 +95,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         fontFamily: "RethinkSans",
                         fontWeight: FontWeight.bold),
                   ),
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).cardColor,
-                      side: const BorderSide(color: Colors.black, width: 1.5)),
                 ),
               ],
             ),
@@ -158,7 +158,7 @@ class _AvatarSelectorState extends State<AvatarSelector> {
         children: [
           const Text(
             "Choose Your Avatar",
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 15,
               fontFamily: "RethinkSans",
               fontWeight: FontWeight.bold,
@@ -306,8 +306,7 @@ class PersonalContainer extends StatelessWidget {
       children: [
         const SizedBox(height: 32),
         const Align(
-            alignment: Alignment.center,
-            child: const Text("Personal Information")),
+            alignment: Alignment.center, child: Text("Personal Information")),
         const SizedBox(height: 16),
         InformationField(
           hintText: "Name cannot be blank",
@@ -330,8 +329,7 @@ class PersonalContainer extends StatelessWidget {
         ),
         const SizedBox(height: 32),
         const Align(
-            alignment: Alignment.center,
-            child: const Text("Personal Preference")),
+            alignment: Alignment.center, child: Text("Personal Preference")),
         const SizedBox(height: 16),
         ...favoritesControllers.entries
             .map((entry) => Column(
