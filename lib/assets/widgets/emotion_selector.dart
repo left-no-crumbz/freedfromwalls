@@ -64,6 +64,28 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
     return selectedDate.isAtSameMomentAs(today) || selectedDate.isBefore(today);
   }
 
+  bool get _isEntryExisting {
+    final List<DailyEntryModel> entries =
+        Provider.of<DailyEntryProvider>(context, listen: false).entries;
+
+    final selectedDate = DateTime(widget.selectedDate.year,
+        widget.selectedDate.month, widget.selectedDate.day);
+
+    debugPrint("Selected Date: $selectedDate");
+
+    // Iterate through the entries and compare the createdDate with selectedDate
+    for (var entry in entries) {
+      final createdDate = DateTime.parse("${entry.createdAt}".substring(0, 10));
+
+      debugPrint("Created Date: $createdDate");
+
+      if (createdDate == selectedDate) {
+        return true; // Return true if a match is found
+      }
+    }
+    return false; // Return false if no match is found
+  }
+
   void _updateEmotionData() {
     final emotion = widget.emotion;
 
@@ -89,6 +111,12 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
     if (!_isEditable) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Cannot edit emotions for future dates.")),
+      );
+      return;
+    } else if (_isEntryExisting == false) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text("Cannot edit emotions for non-existing entries.")),
       );
       return;
     }

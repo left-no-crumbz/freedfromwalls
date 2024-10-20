@@ -8,7 +8,8 @@ import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 
 class EmotionController {
-  final String _baseUrl = "http://192.168.100.22:8000/api/";
+  final String _baseUrl =
+      "https://congenial-tribble-xjq9w997x76h6995-8000.app.github.dev/api/";
   final String _emotionUrl = "emotions/";
   static final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 

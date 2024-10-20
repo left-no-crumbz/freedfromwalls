@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 import '../models/fullfeelment.dart';
 
 class FeelController {
-  final String _baseUrl = "http://192.168.100.22:8000/api/";
+  final String _baseUrl =
+      "https://congenial-tribble-xjq9w997x76h6995-8000.app.github.dev/api/";
   final String _feel = "fullfeelment/";
   final Client _client = http.Client();
   static final FlutterSecureStorage secureStorage = FlutterSecureStorage();
@@ -42,9 +43,8 @@ class FeelController {
       try {
         List<dynamic> jsonResponse = json.decode(response.body);
 
-        List<FeelModel> feels = jsonResponse
-            .map((entry) => FeelModel.fromJson(entry))
-            .toList();
+        List<FeelModel> feels =
+            jsonResponse.map((entry) => FeelModel.fromJson(entry)).toList();
 
         return feels;
       } catch (e) {
@@ -74,8 +74,7 @@ class FeelController {
       );
     } catch (e) {
       debugPrint("Network error: $e");
-      throw Exception(
-          'ERROR: Failed to add feel due to a network error.');
+      throw Exception('ERROR: Failed to add feel due to a network error.');
     }
 
     debugPrint("addfeellist: ${response.statusCode}");
@@ -90,8 +89,8 @@ class FeelController {
     }
   }
 
-
-  Future<void> editFeel(FeelModel feelItem, String? userId, String feelId) async {
+  Future<void> editFeel(
+      FeelModel feelItem, String? userId, String feelId) async {
     String? token = await secureStorage.read(key: 'token');
 
     if (token == null) {
@@ -113,7 +112,8 @@ class FeelController {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token'
         },
-        body: jsonEncode(feelItem.toJson()), // Ensure the model is serialized correctly
+        body: jsonEncode(
+            feelItem.toJson()), // Ensure the model is serialized correctly
       );
     } catch (e) {
       debugPrint("Network error: $e");
@@ -130,11 +130,13 @@ class FeelController {
   }
 
   Future<void> deleteFeel(String userId, String feelId) async {
-    String? token = await secureStorage.read(key: 'token'); // Assuming you are using secure storage for tokens
+    String? token = await secureStorage.read(
+        key: 'token'); // Assuming you are using secure storage for tokens
 
     try {
       final Response response = await _client.delete(
-        Uri.parse("$_baseUrl$userId/$_feel$feelId/"), // Construct the URL with user ID and note ID
+        Uri.parse(
+            "$_baseUrl$userId/$_feel$feelId/"), // Construct the URL with user ID and note ID
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token',
@@ -151,5 +153,4 @@ class FeelController {
       throw Exception('Error deleting feel item');
     }
   }
-
 }

@@ -8,7 +8,8 @@ import '../models/blacklist.dart';
 import '../models/bucketlist.dart';
 
 class TodoController {
-  final String _baseUrl = "http://192.168.100.22:8000/api/";
+  final String _baseUrl =
+      "https://congenial-tribble-xjq9w997x76h6995-8000.app.github.dev/api/";
   final String _bucketList = "bucketlist/";
   final String _blackList = "blacklist/";
   final Client _client = http.Client();
@@ -172,7 +173,8 @@ class TodoController {
     }
   }
 
-  Future<void> editBucketList(BucketListModel bucketlist, String userId, String noteId) async {
+  Future<void> editBucketList(
+      BucketListModel bucketlist, String userId, String noteId) async {
     String? token = await secureStorage.read(key: 'token');
 
     if (token == null) {
@@ -194,11 +196,13 @@ class TodoController {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token'
         },
-        body: jsonEncode(bucketlist.toJson()), // Ensure the model is serialized correctly
+        body: jsonEncode(
+            bucketlist.toJson()), // Ensure the model is serialized correctly
       );
     } catch (e) {
       debugPrint("Network error: $e");
-      throw Exception('ERROR: Failed to edit bucketlist due to a network error.');
+      throw Exception(
+          'ERROR: Failed to edit bucketlist due to a network error.');
     }
 
     debugPrint("editBucketlist: ${response.statusCode}");
@@ -210,8 +214,8 @@ class TodoController {
     }
   }
 
-
-  Future<void> editBlackList(BlackListModel blacklist, String userId, String noteId) async {
+  Future<void> editBlackList(
+      BlackListModel blacklist, String userId, String noteId) async {
     String? token = await secureStorage.read(key: 'token');
 
     if (token == null) {
@@ -233,11 +237,13 @@ class TodoController {
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token'
         },
-        body: jsonEncode(blacklist.toJson()), // Ensure the model is serialized correctly
+        body: jsonEncode(
+            blacklist.toJson()), // Ensure the model is serialized correctly
       );
     } catch (e) {
       debugPrint("Network error: $e");
-      throw Exception('ERROR: Failed to edit blacklist due to a network error.');
+      throw Exception(
+          'ERROR: Failed to edit blacklist due to a network error.');
     }
 
     debugPrint("editBlacklist: ${response.statusCode}");
@@ -250,7 +256,8 @@ class TodoController {
   }
 
   Future<void> deleteBucketList(String userId, String noteId) async {
-    String? token = await secureStorage.read(key: 'token'); // Assuming you are using secure storage for tokens
+    String? token = await secureStorage.read(
+        key: 'token'); // Assuming you are using secure storage for tokens
 
     print("$userId and $noteId");
 
@@ -258,7 +265,8 @@ class TodoController {
 
     try {
       final Response response = await _client.delete(
-        Uri.parse("$_baseUrl$userId/$_bucketList$noteId/"), // Construct the URL with user ID and note ID
+        Uri.parse(
+            "$_baseUrl$userId/$_bucketList$noteId/"), // Construct the URL with user ID and note ID
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token',
@@ -277,11 +285,13 @@ class TodoController {
   }
 
   Future<void> deleteBlackList(String userId, String noteId) async {
-    String? token = await secureStorage.read(key: 'token'); // Assuming you are using secure storage for tokens
+    String? token = await secureStorage.read(
+        key: 'token'); // Assuming you are using secure storage for tokens
 
     try {
       final Response response = await _client.delete(
-        Uri.parse("$_baseUrl$userId/$_blackList$noteId/"), // Construct the URL with user ID and note ID
+        Uri.parse(
+            "$_baseUrl$userId/$_blackList$noteId/"), // Construct the URL with user ID and note ID
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Token $token',
@@ -298,5 +308,4 @@ class TodoController {
       throw Exception('Error deleting black list item');
     }
   }
-
 }

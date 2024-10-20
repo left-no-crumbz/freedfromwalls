@@ -52,6 +52,25 @@ class BreatherPageState extends State<BreatherPage> {
         .setEmotion(entry.emotion);
   }
 
+  bool get _isEntryExisting {
+    final List<DailyEntryModel> entries =
+        Provider.of<DailyEntryProvider>(context, listen: false).entries;
+
+    debugPrint("Selected Date: ${_selectedDate.value}");
+
+    // Iterate through the entries and compare the createdDate with selectedDate
+    for (var entry in entries) {
+      final createdDate = DateTime.parse("${entry.createdAt}".substring(0, 10));
+
+      debugPrint("Created Date: $createdDate");
+
+      if (createdDate == _selectedDate.value) {
+        return true; // Return true if a match is found
+      }
+    }
+    return false; // Return false if no match is found
+  }
+
   Future<void> _loadEntries() async {
     // create an entry for today
     DateTime now = DateTime.now();
@@ -227,6 +246,10 @@ class BreatherPageState extends State<BreatherPage> {
           if (selectedDateOnly.isAfter(currentDate)) {
             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
               content: Text("Cannot add future entries."),
+            ));
+          } else if (_isEntryExisting == false) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text("Cannot add to non-existing entries."),
             ));
           } else {
             final entry = _getEntryForDate(_selectedDate.value);

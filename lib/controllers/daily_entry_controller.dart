@@ -8,7 +8,8 @@ import '../controllers/login_controller.dart';
 
 class DailyEntryController {
   final Client _client = http.Client();
-  final String _baseUrl = "http://192.168.100.22:8000/api/";
+  final String _baseUrl =
+      "https://congenial-tribble-xjq9w997x76h6995-8000.app.github.dev/api/";
   final String _entriesUrl = "entries/";
   final String _createUrl = "create/entry/";
   final String _updateUrl = "/update/";
@@ -204,7 +205,8 @@ class DailyEntryController {
 
     // Filter entries for the current month and year
     List<DailyEntryModel> thisMonthEntries = allEntries.where((entry) {
-      DateTime entryDate = entry.createdAt!; // Assuming `date` is a string in DailyEntryModel
+      DateTime entryDate =
+          entry.createdAt!; // Assuming `date` is a string in DailyEntryModel
       return entryDate.month == currentMonth && entryDate.year == currentYear;
     }).toList();
 

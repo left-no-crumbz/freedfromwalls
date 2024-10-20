@@ -7,7 +7,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class LoginController {
   final Client _client = http.Client();
-  final String _baseUrl = "http://192.168.100.22:8000/api/";
+  final String _baseUrl =
+      "https://congenial-tribble-xjq9w997x76h6995-8000.app.github.dev/api/";
   final String _loginApi = "login/";
   final String _registerApi = "register/";
   final String _getUser = "user/";
