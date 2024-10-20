@@ -13,16 +13,16 @@ class CustomAppBar extends StatelessWidget implements PreferredSize {
     return AppBar(
       backgroundColor: backgroundColor,
       title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Image.asset("lib/assets/images/logo.png"),
-          const SizedBox(width: 16,),
           Text(
             "FreedFromWalls",
             style: TextStyle(
               color: Colors.white,
               fontSize: AppThemes.getResponsiveFontSize(context, 16),
               fontWeight: FontWeight.bold,
-              fontFamily: "Inter",
+              fontFamily: "Jua",
             ),
           ),
         ],
