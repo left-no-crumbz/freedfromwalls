@@ -11,9 +11,9 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  String name = "Name";
-  String bio = "Bio";
-  String avatarPath = "lib/assets/images/avatars/avatar-1.png";
+  String name = "";
+  String bio = "";
+  String avatarPath = "lib/assets/images/avatars/avatar-placeholder.png";
   Map<String, String> favorites = {
     "Motto": "Favorite Motto",
     "Food": "Favorite Food",
@@ -31,6 +31,30 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
+    _loadProfile();
+  }
+
+  Future<void> _loadProfile() async {
+    String? storedName = await localStorage.read(key: 'name');
+    String? storedBio = await localStorage.read(key: 'bio');
+    String? storedAvatarPath = await localStorage.read(key: 'avatarPath');
+
+    Map<String, String> storedFavorites = {};
+
+    // Load favorites one by one
+    for (var key in favorites.keys) {
+      String? storedValue = await localStorage.read(key: key);
+      if (storedValue != null) {
+        storedFavorites[key] = storedValue;
+      }
+    }
+
+    setState(() {
+      name = storedName ?? name;
+      bio = storedBio ?? bio;
+      avatarPath = storedAvatarPath ?? avatarPath;
+      favorites = storedFavorites.isNotEmpty ? storedFavorites : favorites;
+    });
   }
 
   @override
@@ -63,7 +87,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         key: 'avatarPath', value: result['avatarPath']);
 
                     result['favorites'].forEach((key, value) {
-                      localStorage.write(key: 'key', value: value);
+                      localStorage.write(
+                          key: key, value: value); // Save each favorite
                     });
 
                     setState(() {

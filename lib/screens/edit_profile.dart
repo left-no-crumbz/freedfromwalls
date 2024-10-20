@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late TextEditingController bioController;
   late String chosenImagePath;
   late Map<String, TextEditingController> favoritesControllers;
+  final FlutterSecureStorage localStorage = FlutterSecureStorage();
 
   @override
   void initState() {
