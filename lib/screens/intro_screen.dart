@@ -8,7 +8,6 @@ class IntroPage extends StatefulWidget {
 }
 
 class _IntroPageState extends State<IntroPage> {
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -31,7 +30,10 @@ class _IntroPageState extends State<IntroPage> {
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
                 "Seems like your all set!",
-                style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 18), fontWeight: FontWeight.w500, color: Colors.black),
+                style: TextStyle(
+                    fontSize: AppThemes.getResponsiveFontSize(context, 18),
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),
               ),
             ),
 
@@ -39,7 +41,10 @@ class _IntroPageState extends State<IntroPage> {
               margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
                 "Ready to spill your guts?",
-                style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 24), fontWeight: FontWeight.w500, color: Colors.black),
+                style: TextStyle(
+                    fontSize: AppThemes.getResponsiveFontSize(context, 24),
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black),
               ),
             ),
 
@@ -48,11 +53,14 @@ class _IntroPageState extends State<IntroPage> {
               margin: EdgeInsets.only(top: 15),
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
+                  // TODO: PushandRemoveUntil
+
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(
                       builder: (context) => FreedFromWallsApp(),
                     ),
+                    (route) => false,
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -61,15 +69,13 @@ class _IntroPageState extends State<IntroPage> {
                     side: BorderSide(
                       color: Colors.black,
                       width: 1,
-                    )
-                ),
+                    )),
                 child: Text(
                   "Let's Go!",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: AppThemes.getResponsiveFontSize(context, 16)
-                  ),
+                      fontSize: AppThemes.getResponsiveFontSize(context, 16)),
                 ),
               ),
             ),
@@ -116,7 +122,8 @@ class _IntroPageState extends State<IntroPage> {
                   width: width,
                   decoration: BoxDecoration(
                     color: Color(0xFF3A375E),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(500)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(500)),
                   ),
                 ),
                 Container(
@@ -124,7 +131,8 @@ class _IntroPageState extends State<IntroPage> {
                   width: width * 0.85,
                   decoration: BoxDecoration(
                     color: Color(0xFF56537C),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(400)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(400)),
                   ),
                 ),
                 Container(
@@ -132,7 +140,8 @@ class _IntroPageState extends State<IntroPage> {
                   width: width * 0.75,
                   decoration: BoxDecoration(
                     color: Color(0xFF9C98CB),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(350)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(350)),
                   ),
                 ),
                 Container(
@@ -140,7 +149,8 @@ class _IntroPageState extends State<IntroPage> {
                   width: width * 0.65,
                   decoration: BoxDecoration(
                     color: Color(0xFFD7D5EE),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(300)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(300)),
                   ),
                 ),
                 Container(
@@ -148,7 +158,8 @@ class _IntroPageState extends State<IntroPage> {
                   width: width * 0.55,
                   decoration: BoxDecoration(
                     color: Color(0xFFEFEEFF),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(200)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(200)),
                   ),
                 ),
               ],
