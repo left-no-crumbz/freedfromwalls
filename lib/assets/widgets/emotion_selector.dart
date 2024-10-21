@@ -125,6 +125,7 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) => EmotionBottomSheet(
+        selectedDate: widget.selectedDate,
         onEmotionSelected: (title, name, color, imagePath) {
           setState(() {
             _selectedTitle = title;
@@ -213,6 +214,7 @@ class Emotion extends StatefulWidget {
   final String name;
   final Color color;
   final Function(String, String, Color, String) onSelect;
+  final DateTime selectedDate;
 
   const Emotion({
     super.key,
@@ -221,6 +223,7 @@ class Emotion extends StatefulWidget {
     required this.imagePath,
     required this.color,
     required this.onSelect,
+    required this.selectedDate,
   });
 
   @override
@@ -270,13 +273,10 @@ class _EmotionState extends State<Emotion> {
   Future<void> _updateEmotion(String title) async {
     EmotionModel? updatedEmotion = await emotionController.getEmotion(title);
 
-    DateTime now = DateTime.now();
-    DateTime currentDate = DateTime(now.year, now.month, now.day);
-
     Provider.of<EmotionProvider>(context, listen: false)
         .setEmotion(updatedEmotion);
 
-    DailyEntryModel? dailyEntry = _getEntryForDate(currentDate);
+    DailyEntryModel? dailyEntry = _getEntryForDate(widget.selectedDate);
 
     // DailyEntry should never be null because an entry
     // will be created in the breather screen if so.
@@ -357,7 +357,12 @@ class _EmotionState extends State<Emotion> {
 
 class EmotionBottomSheet extends StatefulWidget {
   final Function(String, String, Color, String) onEmotionSelected;
-  const EmotionBottomSheet({super.key, required this.onEmotionSelected});
+  final DateTime selectedDate;
+  const EmotionBottomSheet({
+    super.key,
+    required this.onEmotionSelected,
+    required this.selectedDate,
+  });
 
   @override
   State<EmotionBottomSheet> createState() => _EmotionBottomSheetState();
@@ -406,6 +411,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                           widget.onEmotionSelected(
                               title, name, color, imagePath);
                         },
+                        selectedDate: widget.selectedDate,
                       ),
                       Emotion(
                         title: "HUHU",
@@ -417,6 +423,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                           widget.onEmotionSelected(
                               title, name, color, imagePath);
                         },
+                        selectedDate: widget.selectedDate,
                       ),
                       Emotion(
                         title: "GRAH",
@@ -428,6 +435,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                           widget.onEmotionSelected(
                               title, name, color, imagePath);
                         },
+                        selectedDate: widget.selectedDate,
                       )
                     ],
                   ),
@@ -447,6 +455,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                           widget.onEmotionSelected(
                               title, name, color, imagePath);
                         },
+                        selectedDate: widget.selectedDate,
                       ),
                       Emotion(
                         title: "WOAH",
@@ -458,6 +467,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                           widget.onEmotionSelected(
                               title, name, color, imagePath);
                         },
+                        selectedDate: widget.selectedDate,
                       ),
                       Emotion(
                         title: "MEH",
@@ -469,6 +479,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                           widget.onEmotionSelected(
                               title, name, color, imagePath);
                         },
+                        selectedDate: widget.selectedDate,
                       ),
                       Emotion(
                         title: "YIE",
@@ -480,6 +491,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                           widget.onEmotionSelected(
                               title, name, color, imagePath);
                         },
+                        selectedDate: widget.selectedDate,
                       ),
                     ],
                   ),
@@ -500,6 +512,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                           widget.onEmotionSelected(
                               title, name, color, imagePath);
                         },
+                        selectedDate: widget.selectedDate,
                       ),
                       Emotion(
                         title: "WOMP",
@@ -511,6 +524,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                           widget.onEmotionSelected(
                               title, name, color, imagePath);
                         },
+                        selectedDate: widget.selectedDate,
                       ),
                       Emotion(
                         title: "AAA",
@@ -522,6 +536,7 @@ class _EmotionBottomSheetState extends State<EmotionBottomSheet> {
                           widget.onEmotionSelected(
                               title, name, color, imagePath);
                         },
+                        selectedDate: widget.selectedDate,
                       )
                     ],
                   ),

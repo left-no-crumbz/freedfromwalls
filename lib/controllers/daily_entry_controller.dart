@@ -13,7 +13,6 @@ class DailyEntryController {
   final String _entriesUrl = "entries/";
   final String _createUrl = "create/entry/";
   final String _updateUrl = "/update/";
-  final String _todayEntryUrl = "/today-entry/";
   final String _updateAdditionalNotesUrl = "additional-notes/update/";
   static final FlutterSecureStorage secureStorage = FlutterSecureStorage();
 

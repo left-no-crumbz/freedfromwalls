@@ -20,8 +20,6 @@ class BreatherPage extends StatefulWidget {
   BreatherPageState createState() => BreatherPageState();
 }
 
-// FIXME: Creates new entries even when there is an existing one. Cannot replicate it as of now. Ideally, it should only create an entry when if and only if there is no entry for that day.
-// FIXME: I replicated it by disconnecting and reconnecting my device and heading to the breather page as soon as I log in.
 class BreatherPageState extends State<BreatherPage> {
   final DailyEntryController _controller = DailyEntryController();
   static final DateTime _now = DateTime.now();
