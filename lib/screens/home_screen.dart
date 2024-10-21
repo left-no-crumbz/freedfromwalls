@@ -311,7 +311,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Text(
                           _selectedTitle.isEmpty
-                              ? "Why don't you feel anything..."
+                              ? "Why don't you feel anything?"
                               : "Your word of the month is $_selectedTitle",
                           style: TextStyle(
                               fontSize:
@@ -319,7 +319,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         Text(
                           _selectedTitle.isEmpty
-                              ? "Hopefully, you're still alive"
+                              ? "Hopefully, you're still alive!"
                               : "Seems like you are $_selectedName during the month of $_currentMonth.",
                           style: TextStyle(
                               fontSize:

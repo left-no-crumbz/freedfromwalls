@@ -58,7 +58,7 @@ class LoginController {
         String token = responseData['token'];
         debugPrint("Token is: $token");
         await secureStorage.write(key: 'token', value: token);
-        // await secureStorage.write(key: 'current_user_email', value: user.email);
+        await secureStorage.write(key: 'current_user_email', value: user.email);
         return true;
       } else {
         return false;

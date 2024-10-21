@@ -63,6 +63,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  // FIXME: Login not working in release mode
+  // FIXME: Login not redirecting to main screen
   //login function
   Future<void> _login() async {
     String email = _emailController.text;
@@ -82,17 +84,23 @@ class _LoginPageState extends State<LoginPage> {
     bool success = await _loginController.login(user);
 
     debugPrint("Login is successful: $success");
+    debugPrint("Umaabot ba here after ng login");
 
     if (success) {
       if (_isChecked) {
         await _authService.saveCredentials(email, password);
+        debugPrint("Credentials saved!");
       } else {
         await _authService.clearRememberedCredentials();
+        debugPrint("Credentials removed!");
       }
 
       UserModel? updatedUser;
+
       try {
+        debugPrint("Attempting to update the user");
         updatedUser = await _loginController.getUser(email);
+        debugPrint("User updated successfully");
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -102,6 +110,8 @@ class _LoginPageState extends State<LoginPage> {
         throw Exception("$e");
       }
 
+      debugPrint("Umaabot ba here");
+
       if (mounted) {
         try {
           Provider.of<UserProvider>(context, listen: false)
@@ -109,7 +119,7 @@ class _LoginPageState extends State<LoginPage> {
         } catch (e) {
           throw Exception("ERROR: $e");
         }
-
+        debugPrint("How about here Umaabot ba here");
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(

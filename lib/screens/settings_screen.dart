@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 import '../assets/widgets/customThemes.dart';
 import '../assets/widgets/theme_provider.dart';
+import '../models/user.dart';
+import '../providers/user_provider.dart';
 
 class SettingsPage extends StatelessWidget {
   @override
@@ -10,10 +13,8 @@ class SettingsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.black,
         title: Text(
-              'Theme Settings',
-              style: TextStyle(
-                color: Colors.white
-              ),
+          'Theme Settings',
+          style: TextStyle(color: Colors.white),
         ),
         iconTheme: IconThemeData(
           color: Colors.white,
@@ -27,22 +28,26 @@ class SettingsPage extends StatelessWidget {
           mainAxisSpacing: 16.0,
           children: [
             _buildThemeOption(context, 'Default', AppThemes.defaultTheme),
-            _buildThemeOption(context, 'Sunset',  AppThemes.sunsetTheme),
-            _buildThemeOption(context, 'Sunrise',  AppThemes.sunriseTheme),
-            _buildThemeOption(context, 'Midnight',  AppThemes.midnightTheme),
+            _buildThemeOption(context, 'Sunset', AppThemes.sunsetTheme),
+            _buildThemeOption(context, 'Sunrise', AppThemes.sunriseTheme),
+            _buildThemeOption(context, 'Midnight', AppThemes.midnightTheme),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildThemeOption(BuildContext context, String themeName, ThemeData theme) {
+  Widget _buildThemeOption(
+      BuildContext context, String themeName, ThemeData theme) {
     ThemeProvider themeProvider = Provider.of<ThemeProvider>(context);
+    final FlutterSecureStorage localStorage = FlutterSecureStorage();
 
     return Container(
       padding: EdgeInsets.all(6),
       decoration: BoxDecoration(
-        color: themeProvider.theme == theme ? theme.primaryColor : Color(0xFFE5E5EA),
+        color: themeProvider.theme == theme
+            ? theme.primaryColor
+            : Color(0xFFE5E5EA),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: themeProvider.theme == theme ? theme.cardColor : Colors.black,
@@ -55,13 +60,19 @@ class SettingsPage extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
-                  colors: [theme.primaryColor, theme.cardColor, theme.scaffoldBackgroundColor],
+                  colors: [
+                    theme.primaryColor,
+                    theme.cardColor,
+                    theme.scaffoldBackgroundColor
+                  ],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
-                  color: themeProvider.theme == theme ? theme.cardColor : Colors.black,
+                  color: themeProvider.theme == theme
+                      ? theme.cardColor
+                      : Colors.black,
                   width: 1,
                 ),
               ),
@@ -80,9 +91,15 @@ class SettingsPage extends StatelessWidget {
           Radio<ThemeData>(
             value: theme,
             groupValue: themeProvider.theme,
-            onChanged: (ThemeData? value) {
+            onChanged: (ThemeData? value) async {
               if (value != null) {
-                themeProvider.swapTheme(value);
+                UserModel? user =
+                    Provider.of<UserProvider>(context, listen: false).user;
+
+                themeProvider.swapTheme(value, user!.email);
+
+                String themeKey = '${user.email}_theme';
+                await localStorage.write(key: themeKey, value: themeName);
               }
             },
           ),

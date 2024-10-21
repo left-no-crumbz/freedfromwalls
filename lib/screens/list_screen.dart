@@ -60,10 +60,12 @@ class _ListPageState extends State<ListPage> {
     if (isBucketListSelected) {
       try {
         if (user != null) {
-          List<BucketListModel> fetchedList = await _todoController.fetchBucketlists(user.id.toString());
+          List<BucketListModel> fetchedList =
+              await _todoController.fetchBucketlists(user.id.toString());
 
           // You can debug print the fetched list to see the IDs
-          fetchedList.forEach((item) => debugPrint("Fetched item: ${item.id} - ${item.body}"));
+          fetchedList.forEach(
+              (item) => debugPrint("Fetched item: ${item.id} - ${item.body}"));
 
           Provider.of<BucketListProvider>(context, listen: false)
               .setBucketLists(fetchedList);
@@ -83,17 +85,21 @@ class _ListPageState extends State<ListPage> {
     } else {
       try {
         if (user != null) {
-          List<BlackListModel> fetchedList = await _todoController.fetchBlacklists(user.id.toString());
+          List<BlackListModel> fetchedList =
+              await _todoController.fetchBlacklists(user.id.toString());
 
           // You can debug print the fetched list to see the IDs
-          fetchedList.forEach((item) => debugPrint("Fetched item: ${item.id} - ${item.body}"));
+          fetchedList.forEach(
+              (item) => debugPrint("Fetched item: ${item.id} - ${item.body}"));
 
-          Provider.of<BlackListProvider>(context, listen: false).setBlackLists(fetchedList);
+          Provider.of<BlackListProvider>(context, listen: false)
+              .setBlackLists(fetchedList);
 
           setState(() {
             _newBlackList = fetchedList;
             _isLoading = false;
-            _blackListChecked = List.filled(fetchedList.length, false, growable: true);
+            _blackListChecked =
+                List.filled(fetchedList.length, false, growable: true);
           });
         }
       } catch (e) {
@@ -251,7 +257,8 @@ class _ListPageState extends State<ListPage> {
   }
 
   void _showItemBottomSheet({String? currentItem, int? index}) {
-    final TextEditingController _textController = TextEditingController(text: currentItem);
+    final TextEditingController _textController =
+        TextEditingController(text: currentItem);
 
     void addToList(String text, String type) async {
       UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
@@ -259,7 +266,6 @@ class _ListPageState extends State<ListPage> {
         try {
           await addBucketList(BucketListModel(body: text, userId: user!.id));
           _bucketListChecked.add(false);
-
         } catch (e) {
           debugPrint("Error: $e");
         }
@@ -280,7 +286,8 @@ class _ListPageState extends State<ListPage> {
       if (type == "Bucketlist") {
         try {
           BucketListModel bucketItem = _newBucketList[index!];
-          await editBucketList(BucketListModel(id: bucketItem.id, body: text, userId: user!.id));
+          await editBucketList(
+              BucketListModel(id: bucketItem.id, body: text, userId: user!.id));
         } catch (e) {
           debugPrint("Error: $e");
         }
@@ -289,7 +296,8 @@ class _ListPageState extends State<ListPage> {
           BlackListModel blackItem = _newBlackList[index!];
           blackItem.body = text;
 
-          await editBlackList(BlackListModel(id: blackItem.id, body: text, userId: user!.id));
+          await editBlackList(
+              BlackListModel(id: blackItem.id, body: text, userId: user!.id));
         } catch (e) {
           debugPrint("Error: $e");
         }
@@ -301,8 +309,8 @@ class _ListPageState extends State<ListPage> {
       context: context,
       builder: (BuildContext context) {
         return Padding(
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -342,11 +350,13 @@ class _ListPageState extends State<ListPage> {
                               if (index != null) {
                                 // Edit existing item
                                 if (_currentList[index] is BucketListModel) {
-                                  (_currentList[index] as BucketListModel).body = _textController.text;
+                                  (_currentList[index] as BucketListModel)
+                                      .body = _textController.text;
                                   editList(_textController.text, "Bucketlist");
                                 } else if (_currentList[index]
-                                is BlackListModel) {
-                                  (_currentList[index] as BlackListModel).body = _textController.text;
+                                    is BlackListModel) {
+                                  (_currentList[index] as BlackListModel).body =
+                                      _textController.text;
                                   editList(_textController.text, "Blacklist");
                                 }
                               } else {
@@ -395,7 +405,8 @@ class _ListPageState extends State<ListPage> {
           print(bucketItem.id);
 
           // Call delete method from your controller
-          await _todoController.deleteBucketList(user!.id.toString(), bucketItem.id.toString());
+          await _todoController.deleteBucketList(
+              user!.id.toString(), bucketItem.id.toString());
 
           // Remove the item from the local list
           setState(() {
@@ -409,7 +420,8 @@ class _ListPageState extends State<ListPage> {
           BlackListModel blackItem = _newBlackList[index!];
 
           // Call delete method from your controller
-          await _todoController.deleteBlackList(user!.id.toString(), blackItem.id.toString());
+          await _todoController.deleteBlackList(
+              user!.id.toString(), blackItem.id.toString());
 
           // Remove the item from the local list
           setState(() {
@@ -432,7 +444,8 @@ class _ListPageState extends State<ListPage> {
               BucketListModel bucketItem = _newBucketList[i];
 
               // Call delete method from your controller
-              await _todoController.deleteBucketList(user!.id.toString(), bucketItem.id.toString());
+              await _todoController.deleteBucketList(
+                  user!.id.toString(), bucketItem.id.toString());
             }
           }
         } catch (e) {
@@ -445,7 +458,8 @@ class _ListPageState extends State<ListPage> {
               BlackListModel blackItem = _newBlackList[i];
 
               // Call delete method from your controller
-              await _todoController.deleteBlackList(user!.id.toString(), blackItem.id.toString());
+              await _todoController.deleteBlackList(
+                  user!.id.toString(), blackItem.id.toString());
             }
           }
         } catch (e) {
@@ -480,7 +494,7 @@ class _ListPageState extends State<ListPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    "Are you sure you want to delete the selected items?",
+                    "Are you sure you want to delete the selected item(s)?",
                     style: TextStyle(fontSize: 18),
                     textAlign: TextAlign.center,
                   ),
@@ -538,8 +552,9 @@ class _ListPageState extends State<ListPage> {
               alignment: Alignment.centerLeft,
               child: TitleDescription(
                   title: message,
-                  description:
-                      "Record the things you want to do over the year."),
+                  description: isBucketListSelected
+                      ? "Record the things you want to do over the year."
+                      : "Record the things you do not want to do over the year."),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -584,8 +599,12 @@ class _ListPageState extends State<ListPage> {
                                     iconSize: 20.0,
                                     padding: EdgeInsets.zero,
                                     icon: Icon(Icons.edit,
-                                        color: _isAnyItemSelected ? Colors.grey : Colors.black),
-                                    onPressed: _isAnyItemSelected ? null : () => _editItem(index),
+                                        color: _isAnyItemSelected
+                                            ? Colors.grey
+                                            : Colors.black),
+                                    onPressed: _isAnyItemSelected
+                                        ? null
+                                        : () => _editItem(index),
                                   ),
                                 ),
                                 ConstrainedBox(
@@ -597,8 +616,13 @@ class _ListPageState extends State<ListPage> {
                                     iconSize: 20.0,
                                     padding: EdgeInsets.zero,
                                     icon: Icon(Icons.delete,
-                                        color: _isAnyItemSelected ? Colors.grey : Colors.black),
-                                    onPressed: _isAnyItemSelected ? null : () => _showDeleteConfirmationDialog(index: index),
+                                        color: _isAnyItemSelected
+                                            ? Colors.grey
+                                            : Colors.black),
+                                    onPressed: _isAnyItemSelected
+                                        ? null
+                                        : () => _showDeleteConfirmationDialog(
+                                            index: index),
                                   ),
                                 ),
                               ],
@@ -642,29 +666,29 @@ class _ListPageState extends State<ListPage> {
           ],
         ),
       ),
-      floatingActionButton: _isAnyItemSelected ?
-      FloatingActionButton(
-        onPressed: _showDeleteConfirmationDialog,
-        backgroundColor: Colors.red,
-        elevation: 0,
-        shape: const CircleBorder(),
-        child: Icon(
-          Icons.delete,
-          color: Colors.white,
-          size: 26,
-        ),
-      ) :
-      FloatingActionButton(
-        onPressed: _showItemBottomSheet,
-        backgroundColor: Colors.black,
-        elevation: 0,
-        shape: const CircleBorder(),
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 26,
-        ),
-      ),
+      floatingActionButton: _isAnyItemSelected
+          ? FloatingActionButton(
+              onPressed: _showDeleteConfirmationDialog,
+              backgroundColor: Colors.red,
+              elevation: 0,
+              shape: const CircleBorder(),
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+                size: 26,
+              ),
+            )
+          : FloatingActionButton(
+              onPressed: _showItemBottomSheet,
+              backgroundColor: Colors.black,
+              elevation: 0,
+              shape: const CircleBorder(),
+              child: const Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 26,
+              ),
+            ),
     );
   }
 }

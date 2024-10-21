@@ -87,7 +87,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 children: [
                   Center(
                     child: Text(
-                      "Welcome to FreedFrom Walls!",
+                      "Welcome to FreedFromWalls!",
                       style: TextStyle(
                           fontSize:
                               AppThemes.getResponsiveFontSize(context, 16),

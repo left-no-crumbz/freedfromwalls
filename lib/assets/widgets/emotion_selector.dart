@@ -190,7 +190,7 @@ class _EmotionSelectorContainerState extends State<EmotionSelectorContainer> {
                     ),
                     Text(
                       _selectedImagePath.isEmpty
-                          ? "Click the question mark to choose an emotion"
+                          ? "Click the question mark to choose an emotion."
                           : "Seems like you are $_selectedName. Share what you feel in the journal.",
                       style: TextStyle(
                         fontSize: AppThemes.getResponsiveFontSize(context, 12),
