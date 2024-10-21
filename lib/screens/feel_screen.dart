@@ -26,7 +26,7 @@ class _FeelPage extends State<FeelPage> {
   @override
   void initState() {
     AwesomeNotifications().initialize(
-      'resource_key',
+      null,
       [
         NotificationChannel(
           channelKey: 'basic_channel',
@@ -34,7 +34,7 @@ class _FeelPage extends State<FeelPage> {
           channelDescription: 'Notification channel for basic tests',
           defaultColor: Color(0xFF9D50DD),
           ledColor: Colors.white,
-          icon: 'resource://drawable/res_app_icon',
+          // icon: 'resource://drawable/res_app_icon',
         ),
       ],
     );
@@ -42,6 +42,8 @@ class _FeelPage extends State<FeelPage> {
     AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
       if (!isAllowed) {
         AwesomeNotifications().requestPermissionToSendNotifications();
+      } else {
+        debugPrint("Notifications already allowed");
       }
     });
     super.initState();
