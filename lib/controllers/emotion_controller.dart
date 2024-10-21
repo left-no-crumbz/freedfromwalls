@@ -69,6 +69,9 @@ class EmotionController {
       debugPrint("ERROR: User is not authenticated");
     }
 
+    debugPrint("updateEmotion: ${response.body}");
+    debugPrint("updateEmotion: ${response.statusCode}");
+
     if (response.statusCode != 200) {
       debugPrint("${response.statusCode}");
       throw Exception('ERROR: Failed to update entry');

@@ -231,6 +231,18 @@ class _EmotionState extends State<Emotion> {
   final EmotionController emotionController = EmotionController();
   final DailyEntryController dailyEntryController = DailyEntryController();
 
+  @override
+  void initState() {
+    super.initState();
+    debugPrint("Emotion widget mounted");
+  }
+
+  @override
+  void dispose() {
+    debugPrint("Emotion widget disposed");
+    super.dispose();
+  }
+
   // TODO: Implement getTodayEntry
   bool _isSameDay(DateTime date1, DateTime date2) {
     return date1.year == date2.year &&
@@ -261,58 +273,57 @@ class _EmotionState extends State<Emotion> {
     DateTime now = DateTime.now();
     DateTime currentDate = DateTime(now.year, now.month, now.day);
 
-    if (mounted) {
-      Provider.of<EmotionProvider>(context, listen: false)
-          .setEmotion(updatedEmotion);
+    Provider.of<EmotionProvider>(context, listen: false)
+        .setEmotion(updatedEmotion);
 
-      DailyEntryModel? dailyEntry = _getEntryForDate(currentDate);
+    DailyEntryModel? dailyEntry = _getEntryForDate(currentDate);
 
-      // DailyEntry should never be null because an entry
-      // will be created in the breather screen if so.
-      // The provider will then have that fresh entry.
-      // debugPrint("emotion selector updatedEmotion: ${updatedEmotion.title}");
-      final entries =
-          Provider.of<DailyEntryProvider>(context, listen: false).entries;
+    // DailyEntry should never be null because an entry
+    // will be created in the breather screen if so.
+    // The provider will then have that fresh entry.
+    // debugPrint("emotion selector updatedEmotion: ${updatedEmotion.title}");
 
-      debugPrint("$entries");
-      entries.forEach((entry) => debugPrint("${entry.toJson()}"));
+    // final entries =
+    //     Provider.of<DailyEntryProvider>(context, listen: false).entries;
+    //
+    // debugPrint("$entries");
+    // entries.forEach((entry) => debugPrint("${entry.toJson()}"));
 
-      if (dailyEntry != null) {
-        debugPrint("emotion selector daily entry emotion: $dailyEntry");
-        debugPrint("emotion selector: ${dailyEntry.emotion?.title}");
-        debugPrint(
-            "emotion selector daily entry updated emotion: ${dailyEntry.emotion?.title}");
-        debugPrint("${dailyEntry.id}");
-        debugPrint("${dailyEntry.toJson()}");
-      }
+    if (dailyEntry != null) {
+      debugPrint("emotion selector daily entry emotion: $dailyEntry");
+      debugPrint("emotion selector: ${dailyEntry.emotion?.title}");
+      debugPrint(
+          "emotion selector daily entry updated emotion: ${dailyEntry.emotion?.title}");
+      debugPrint("${dailyEntry.id}");
+      debugPrint("${dailyEntry.toJson()}");
+    }
 
-      // This is not needed as an entry will be created on page load now.
-      // if (dailyEntry?.id == null) {
-      //   await dailyEntryController.addEntry(dailyEntry!);
-      // }
+    // This is not needed as an entry will be created on page load now.
+    // if (dailyEntry?.id == null) {
+    //   await dailyEntryController.addEntry(dailyEntry!);
+    // }
 
-      dailyEntry?.emotion = updatedEmotion;
-      // This breaks when there is no daily entry in the backend because by then there is no id yet.
-      try {
-        await emotionController.updateEmotion(
-            dailyEntry!, dailyEntry.id.toString());
-      } catch (e) {
-        throw Exception("$e");
-      }
+    dailyEntry?.emotion = updatedEmotion;
+    // This breaks when there is no daily entry in the backend because by then there is no id yet.
+    try {
+      await emotionController.updateEmotion(
+          dailyEntry!, dailyEntry.id.toString());
+    } catch (e) {
+      throw Exception("$e");
+    }
 
-      if (updatedEmotion != null) {
-        updatedEmotion
-            .toJson()
-            .forEach((key, value) => debugPrint("$key: $value"));
-      }
+    if (updatedEmotion != null) {
+      updatedEmotion
+          .toJson()
+          .forEach((key, value) => debugPrint("$key: $value"));
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        _updateEmotion(widget.title);
+      onTap: () async {
+        await _updateEmotion(widget.title);
 
         widget.onSelect(
             widget.title, widget.name, widget.color, widget.imagePath);
