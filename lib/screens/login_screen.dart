@@ -8,6 +8,7 @@ import 'register_screen.dart';
 import '../providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+// TODO: Attempt to do remember me.
 void main() {
   AwesomeNotifications().initialize(
     null,
