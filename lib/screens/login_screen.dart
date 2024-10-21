@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:freedfromwalls/assets/widgets/customThemes.dart';
 import 'package:freedfromwalls/controllers/login_controller.dart';
 import 'package:freedfromwalls/models/user.dart';
+import '../controllers/auth_service.dart';
 import '../main.dart';
 import 'register_screen.dart';
 import '../providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-// TODO: Attempt to do remember me.
 void main() {
   AwesomeNotifications().initialize(
     null,
@@ -44,17 +44,36 @@ class _LoginPageState extends State<LoginPage> {
 
   final LoginController _loginController = LoginController();
   final FocusNode _focusNode = FocusNode();
+  final AuthService _authService = AuthService();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRememberedCredentials();
+  }
+
+  Future<void> _loadRememberedCredentials() async {
+    final credentials = await _authService.getRememberedCredentials();
+    if (credentials['email'] != null && credentials['password'] != null) {
+      setState(() {
+        _emailController.text = credentials['email']!;
+        _passController.text = credentials['password']!;
+        _isChecked = true;
+      });
+    }
+  }
 
   //login function
   Future<void> _login() async {
     String email = _emailController.text;
     String password = _passController.text;
 
-    if (email.isEmpty && password.isEmpty) {
+    if (email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error: Empty Field."),
       ));
     }
+
     UserModel user = UserModel(
       email: email,
       password: password,
@@ -65,6 +84,12 @@ class _LoginPageState extends State<LoginPage> {
     debugPrint("Login is successful: $success");
 
     if (success) {
+      if (_isChecked) {
+        await _authService.saveCredentials(email, password);
+      } else {
+        await _authService.clearRememberedCredentials();
+      }
+
       UserModel? updatedUser;
       try {
         updatedUser = await _loginController.getUser(email);
