@@ -69,6 +69,8 @@ class BreatherPageState extends State<BreatherPage> {
     return false; // Return false if no match is found
   }
 
+  // FIXME: Hay may bug na naman
+
   Future<void> _loadEntries() async {
     // create an entry for today
     DateTime now = DateTime.now();
@@ -98,6 +100,8 @@ class BreatherPageState extends State<BreatherPage> {
           // Makes sure that our entries are always updated
           final entries = await _controller.fetchEntries(user.id.toString());
           if (mounted) {
+            debugPrint("Di siguro umaabot dito");
+
             // As well as our provider
             Provider.of<DailyEntryProvider>(context, listen: false)
                 .setEntries(entries);
@@ -261,6 +265,7 @@ class BreatherPageState extends State<BreatherPage> {
                   initialCreationDate: entry.createdAt,
                   initialEditedDate: entry.updatedAt,
                   onUpdate: _loadEntries,
+                  selectedDate: _selectedDate.value,
                 ),
               ),
             );

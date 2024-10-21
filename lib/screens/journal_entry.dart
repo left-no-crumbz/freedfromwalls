@@ -23,6 +23,7 @@ class JournalEntryScreen extends StatefulWidget {
   final DateTime? initialCreationDate;
   final DateTime? initialEditedDate;
   final VoidCallback onUpdate;
+  final DateTime selectedDate;
 
   const JournalEntryScreen(
       {super.key,
@@ -31,25 +32,25 @@ class JournalEntryScreen extends StatefulWidget {
       required this.getCurrentTime,
       this.initialCreationDate,
       this.initialEditedDate,
-      required this.onUpdate});
+      required this.onUpdate,
+      required this.selectedDate});
 
   @override
   State<JournalEntryScreen> createState() => _JournalEntryScreenState();
 }
 
 class _JournalEntryScreenState extends State<JournalEntryScreen> {
-  late DateTime editedDate;
-  late final DateTime creationDate;
+  late DateTime _editedDate;
+  late final DateTime _creationDate;
   late final TextEditingController _journalEntryController;
-  List<AdditionalNoteModel> notes = [];
-  final DailyEntryController controller = DailyEntryController();
-  List<DailyEntryModel> entries = [];
+  List<AdditionalNoteModel> _notes = [];
+  final DailyEntryController _controller = DailyEntryController();
 
   @override
   void initState() {
     super.initState();
-    creationDate = widget.initialCreationDate ?? widget.getCurrentTime();
-    editedDate = widget.initialEditedDate ?? widget.getCurrentTime();
+    _creationDate = widget.initialCreationDate ?? widget.getCurrentTime();
+    _editedDate = widget.initialEditedDate ?? widget.getCurrentTime();
     _journalEntryController = TextEditingController(text: widget.initialEntry);
     _journalEntryController.addListener(_onJournalEntryChanged);
 
@@ -59,20 +60,48 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
       // This might break
       for (AdditionalNoteModel note in dailyEntry!.additionalNotes) {
-        notes.add(note);
+        _notes.add(note);
       }
     });
   }
 
   void _onJournalEntryChanged() {
-    editedDate = widget.initialEditedDate!;
+    _editedDate = widget.initialEditedDate!;
 
-    debugPrint("journal_entry.dart: ${DateFormat("h:mma").format(editedDate)}");
-    debugPrint("journal_entry.dart: ${DateFormat("h:mma").format(editedDate)}");
-    debugPrint("journal_entry.dart: ${DateFormat("h:mma").format(editedDate)}");
+    debugPrint(
+        "journal_entry.dart: ${DateFormat("h:mma").format(_editedDate)}");
+    debugPrint(
+        "journal_entry.dart: ${DateFormat("h:mma").format(_editedDate)}");
+    debugPrint(
+        "journal_entry.dart: ${DateFormat("h:mma").format(_editedDate)}");
 
     widget.onJournalEntryChanged(
-        _journalEntryController.text, creationDate, editedDate);
+        _journalEntryController.text, _creationDate, _editedDate);
+  }
+
+  bool _isSameDay(DateTime date1, DateTime date2) {
+    return date1.year == date2.year &&
+        date1.month == date2.month &&
+        date1.day == date2.day;
+  }
+
+  DailyEntryModel _getEntryForDate(DateTime date) {
+    // _loadEntries();
+
+    final entries =
+        Provider.of<DailyEntryProvider>(context, listen: false).entries;
+
+    return entries.firstWhere(
+      (entry) => _isSameDay(entry.createdAt ?? date, date),
+      orElse: () => DailyEntryModel(
+        user: Provider.of<UserProvider>(context, listen: false).user!,
+        journalEntry: '',
+        emotion: null,
+        additionalNotes: [],
+        createdAt: null,
+        updatedAt: null,
+      ),
+    );
   }
 
   Future<void> _addOrUpdateEntry() async {
@@ -86,45 +115,18 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
     EmotionModel? emotion =
         Provider.of<EmotionProvider>(context, listen: false).emotion;
 
+    debugPrint("journal entry emotion: $emotion");
+
     if (emotion == null) {
       debugPrint("Emotion is null but that's okay");
     } else {
       emotion.toJson().forEach((key, value) => debugPrint("$key: $value"));
     }
 
-    debugPrint("$notes");
-    notes.forEach(((note) => note.toJson));
-
-    DailyEntryModel dailyEntry = DailyEntryModel(
-      user: user,
-      emotion: emotion,
-      journalEntry: _journalEntryController.text,
-      additionalNotes: notes,
-    );
-
-    final Response response;
-
-    try {
-      response = await controller.getTodayEntry(user.id.toString());
-    } catch (e) {
-      debugPrint("addOrUpdateEntry Error: $e");
-      throw Exception("ERROR: Failed to get entry!");
-    }
-
-    debugPrint("Get today entry status: ${response.statusCode}");
-
-    if (response.statusCode == 200) {
-      final responseData = jsonDecode(response.body);
-
-      debugPrint("INFO: Update entry successful!");
-
-      await controller.updateEntry(dailyEntry, responseData['id'].toString());
-      widget.onUpdate();
-    } else {
-      debugPrint("INFO: Add entry successful!");
-      await controller.addEntry(dailyEntry);
-      widget.onUpdate();
-    }
+    final entry = _getEntryForDate(widget.selectedDate);
+    debugPrint("INFO: Update entry successful!");
+    await _controller.updateEntry(entry, entry.id.toString());
+    widget.onUpdate();
   }
 
   @override
@@ -140,12 +142,13 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
 
     setState(() {
       // WARNING: This might break
-      notes.add(AdditionalNoteModel(dailyEntryId: dailyEntry!.id!, note: note));
-      dailyEntry.additionalNotes = notes;
+      _notes
+          .add(AdditionalNoteModel(dailyEntryId: dailyEntry!.id!, note: note));
+      dailyEntry.additionalNotes = _notes;
     });
 
     try {
-      await controller.updateAdditionalNotes(
+      await _controller.updateAdditionalNotes(
           dailyEntry!, dailyEntry.id.toString());
     } catch (e) {
       debugPrint("ERROR: $e");
@@ -157,13 +160,13 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
         Provider.of<DailyEntryProvider>(context, listen: false).currentEntry;
 
     setState(() {
-      notes.removeAt(index);
+      _notes.removeAt(index);
       // WARNING: This might break
-      dailyEntry!.additionalNotes = notes;
+      dailyEntry!.additionalNotes = _notes;
     });
 
     try {
-      await controller.updateAdditionalNotes(
+      await _controller.updateAdditionalNotes(
           dailyEntry!, dailyEntry.id.toString());
     } catch (e) {
       debugPrint("ERROR: $e");
@@ -175,14 +178,14 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
         Provider.of<DailyEntryProvider>(context, listen: false).currentEntry;
 
     setState(() {
-      notes[index].note = newNote;
+      _notes[index].note = newNote;
       // WARNING: This might break
-      dailyEntry!.additionalNotes = notes;
-      editedDate = widget.initialEditedDate!;
+      dailyEntry!.additionalNotes = _notes;
+      _editedDate = widget.initialEditedDate!;
     });
 
     try {
-      await controller.updateAdditionalNotes(
+      await _controller.updateAdditionalNotes(
           dailyEntry!, dailyEntry.id.toString());
     } catch (e) {
       debugPrint("ERROR: $e");
@@ -220,7 +223,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 LastEditedInfo(
-                    creationDate: creationDate, editedDate: editedDate),
+                    creationDate: _creationDate, editedDate: _editedDate),
                 Container(
                   height: 45,
                   padding:
@@ -231,7 +234,7 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    DateFormat("yMd").format(creationDate),
+                    DateFormat("yMd").format(_creationDate),
                     style: TextStyle(
                         fontSize: AppThemes.getResponsiveFontSize(context, 12),
                         color: Theme.of(context).textTheme.displaySmall?.color,
@@ -291,15 +294,15 @@ class _JournalEntryScreenState extends State<JournalEntryScreen> {
             const Divider(color: Colors.grey),
             Expanded(
               child: ListView.builder(
-                itemCount: notes.length + 1,
+                itemCount: _notes.length + 1,
                 itemBuilder: (context, index) {
-                  if (index == notes.length) {
+                  if (index == _notes.length) {
                     return NoteItem(
                       onAdd: addNote,
                     );
                   } else {
                     return NoteItem(
-                      note: notes[index].note,
+                      note: _notes[index].note,
                       onRemove: () => removeNote(index),
                       onEdit: (String newNote) => editNote(index, newNote),
                     );
