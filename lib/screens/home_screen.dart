@@ -27,7 +27,8 @@ class _HomePageState extends State<HomePage> {
   DateTime today = DateTime.now();
   late String _currentMonth;
   late String _currentYear;
-  DateTime firstDayOfMonth = DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime firstDayOfMonth =
+      DateTime(DateTime.now().year, DateTime.now().month, 1);
 
   //Emotions
   List<DailyEntryModel> _entriesMonth = [];
@@ -123,7 +124,6 @@ class _HomePageState extends State<HomePage> {
     print(_usedEmotions);
   }
 
-
   // Fetch entries on this month
   Future<void> _fetchMonthlyEntries() async {
     setState(() {
@@ -132,9 +132,11 @@ class _HomePageState extends State<HomePage> {
 
     UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
 
-    List<DailyEntryModel> fetchedEntries = await  _controller.fetchThisMonthEntries(user!.id.toString());
+    List<DailyEntryModel> fetchedEntries =
+        await _controller.fetchThisMonthEntries(user!.id.toString());
 
-    fetchedEntries.forEach((item) => debugPrint("Fetched item: ${item.id} - ${item.createdAt} - ${item.emotion}"));
+    fetchedEntries.forEach((item) => debugPrint(
+        "Fetched item: ${item.id} - ${item.createdAt} - ${item.emotion}"));
 
     for (int i = 0; i < fetchedEntries.length; i++) {
       DailyEntryModel currentEntry = fetchedEntries[i];
@@ -198,7 +200,7 @@ class _HomePageState extends State<HomePage> {
 
     // Find the emotion details based on the most frequent image path
     _mostFreqMood = _usedEmotions.firstWhere(
-          (emotion) => emotion['imagePath'] == mostFrequentImagePath,
+      (emotion) => emotion['imagePath'] == mostFrequentImagePath,
       orElse: () => {
         'title': '',
         'name': '',
@@ -245,7 +247,7 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           children: [
             // Intro section
-            Container(
+            SizedBox(
               width: width,
               height: height * 0.14,
               child: Column(
@@ -254,7 +256,10 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const TitleDescription(title: "Home", description: "Your Virtual Diary, Your Virtual Company."),
+                      const TitleDescription(
+                          title: "Home",
+                          description:
+                              "Your Virtual Diary, Your Virtual Company."),
                       IconButton(
                         onPressed: () {
                           Navigator.push(
@@ -278,25 +283,25 @@ class _HomePageState extends State<HomePage> {
               width: MediaQuery.of(context).size.width * 1,
               height: height * 0.12,
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.black),
-                  color: _selectedColor,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(color: Colors.black),
+                color: _selectedColor,
               ),
               child: Row(
                 children: [
                   Container(
                     height: AppThemes.getResponsiveImageSize(context, 50),
                     width: AppThemes.getResponsiveImageSize(context, 50),
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
                     child: _selectedImagePath.isEmpty
                         ? const Icon(
-                      Icons.question_mark,
-                      color: Colors.white,
-                    )
+                            Icons.question_mark,
+                            color: Colors.white,
+                          )
                         : Image.asset(_selectedImagePath),
-                    decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(100),
-                    ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -308,13 +313,17 @@ class _HomePageState extends State<HomePage> {
                           _selectedTitle.isEmpty
                               ? "Why don't you feel anything..."
                               : "Your word of the month is $_selectedTitle",
-                          style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 14)),
+                          style: TextStyle(
+                              fontSize:
+                                  AppThemes.getResponsiveFontSize(context, 14)),
                         ),
                         Text(
                           _selectedTitle.isEmpty
                               ? "Hopefully, you're still alive"
                               : "Seems like you are $_selectedName during the month of $_currentMonth.",
-                          style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 10)),
+                          style: TextStyle(
+                              fontSize:
+                                  AppThemes.getResponsiveFontSize(context, 10)),
                         ),
                       ],
                     ),
@@ -331,15 +340,13 @@ class _HomePageState extends State<HomePage> {
                   style: TextStyle(
                       color: Theme.of(context).textTheme.bodyLarge?.color,
                       fontSize: AppThemes.getResponsiveFontSize(context, 16),
-                      fontWeight: FontWeight.bold
-                  ),
+                      fontWeight: FontWeight.bold),
                 ),
                 Text(
                   '$_currentYear',
                   style: TextStyle(
                       color: Theme.of(context).textTheme.bodyLarge?.color,
-                      fontSize: AppThemes.getResponsiveFontSize(context, 14)
-                  ),
+                      fontSize: AppThemes.getResponsiveFontSize(context, 14)),
                 ),
 
                 SizedBox(
@@ -361,12 +368,15 @@ class _HomePageState extends State<HomePage> {
                       DateTime date = daysInMonth[index];
 
                       // Normalize the date to remove the time part
-                      DateTime normalizedDate = DateTime(date.year, date.month, date.day);
+                      DateTime normalizedDate =
+                          DateTime(date.year, date.month, date.day);
 
                       // Check if an entry exists for the current date and if it has a mood
                       // Check if an entry exists for the current date and if it has a mood
                       DailyEntryModel entryForDate = _entriesMonth.firstWhere(
-                            (entry) => entry.createdAt != null && isSameDay(entry.createdAt!, normalizedDate),
+                        (entry) =>
+                            entry.createdAt != null &&
+                            isSameDay(entry.createdAt!, normalizedDate),
                         orElse: () => DailyEntryModel(
                           id: -1,
                           user: user!,
@@ -381,29 +391,41 @@ class _HomePageState extends State<HomePage> {
                       bool hasMood = entryForDate.emotion != null;
 
                       return Container(
-                          margin: EdgeInsets.all(4.0),
-                          width: width * 0.12,
-                          height: width * 0.12,
-                          decoration: BoxDecoration(
-                            color: isSameDay(today, date) ? Theme.of(context).cardColor : Theme.of(context).primaryColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: hasMood ? Image.asset(
-                              imagePaths[entryForDate!.emotion!.name]!,
-                              width: width * 0.10,
-                              height: width * 0.10,
-                              fit: BoxFit.cover,
-                            )
-                                : Text(
+                        margin: EdgeInsets.all(4.0),
+                        width: width * 0.12,
+                        height: width * 0.12,
+                        decoration: BoxDecoration(
+                          color: isSameDay(today, date)
+                              ? Theme.of(context).cardColor
+                              : Theme.of(context).primaryColor,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: hasMood
+                              ? Image.asset(
+                                  imagePaths[entryForDate!.emotion!.name]!,
+                                  width: width * 0.10,
+                                  height: width * 0.10,
+                                  fit: BoxFit.cover,
+                                )
+                              : Text(
                                   '${date.day}',
                                   style: TextStyle(
-                                      color: isSameDay(today, date) ? Theme.of(context).textTheme.displaySmall?.color : Theme.of(context).textTheme.displayMedium?.color,
-                                      fontSize:  AppThemes.getResponsiveFontSize(context, 12),
-                                      fontWeight: FontWeight.bold,
+                                    color: isSameDay(today, date)
+                                        ? Theme.of(context)
+                                            .textTheme
+                                            .displaySmall
+                                            ?.color
+                                        : Theme.of(context)
+                                            .textTheme
+                                            .displayMedium
+                                            ?.color,
+                                    fontSize: AppThemes.getResponsiveFontSize(
+                                        context, 12),
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                          ),
+                        ),
                       );
                     },
                   ),
