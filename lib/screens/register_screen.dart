@@ -23,6 +23,9 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController _confPassController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+
+  final _regexPass = RegExp(r"^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$");
+
   //Register function
   Future<void> _register() async {
     String confirmPass = _confPassController.text;
@@ -36,6 +39,11 @@ class _RegisterPageState extends State<RegisterPage> {
     } else if (password.isEmpty || confirmPass.isEmpty || email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error: Empty field."),
+      ));
+    } else if (!_regexPass.hasMatch(password)) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text(
+            "Invalid password. Password should at least have 4 characters and at least one number, and uppercase and lowercase characters."),
       ));
     } else {
       UserModel user = UserModel(email: email, password: password);
