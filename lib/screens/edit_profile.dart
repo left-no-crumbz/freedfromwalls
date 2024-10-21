@@ -26,7 +26,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   late String chosenImagePath;
   late Map<String, TextEditingController> favoritesControllers;
   final FlutterSecureStorage localStorage = FlutterSecureStorage();
-
+  String _birthday = '';
   @override
   void initState() {
     super.initState();
@@ -35,6 +35,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     chosenImagePath = widget.avatarPath;
     favoritesControllers = widget.favorites
         .map((key, value) => MapEntry(key, TextEditingController(text: value)));
+    _loadBirthday();
+  }
+
+  Future<void> _loadBirthday() async {
+    String? storedBirthday = await localStorage.read(key: 'birthday');
+    if (storedBirthday != null) {
+      setState(() {
+        _birthday = storedBirthday;
+      });
+    }
+  }
+
+  void _updateBirthday(String newBirthday) {
+    setState(() {
+      _birthday = newBirthday;
+    });
+    localStorage.write(key: 'birthday', value: newBirthday);
   }
 
   bool _validateInputs() {
@@ -114,6 +131,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             nameController: nameController,
             bioController: bioController,
             favoritesControllers: favoritesControllers,
+            birthday: _birthday,
+            onBirthdayChanged: _updateBirthday,
           )
         ],
       ),
@@ -210,6 +229,7 @@ class InformationField extends StatefulWidget {
   final TextEditingController informationController;
   final Icon? prefixIcon;
   final bool readOnly;
+  final Function(String)? onDateChanged;
 
   const InformationField({
     super.key,
@@ -218,6 +238,7 @@ class InformationField extends StatefulWidget {
     required this.informationController,
     this.prefixIcon,
     this.readOnly = false,
+    this.onDateChanged,
   });
 
   @override
@@ -233,9 +254,11 @@ class _InformationFieldState extends State<InformationField> {
       lastDate: DateTime.now(),
     );
     if (picked != null) {
+      final formattedDate = DateFormat('yMMMMd').format(picked);
       setState(() {
-        widget.informationController.text = DateFormat('yMMMMd').format(picked);
+        widget.informationController.text = formattedDate;
       });
+      widget.onDateChanged?.call(formattedDate);
     }
   }
 
@@ -294,12 +317,15 @@ class PersonalContainer extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController bioController;
   final Map<String, TextEditingController> favoritesControllers;
-
+  final String birthday;
+  final Function(String) onBirthdayChanged;
   const PersonalContainer({
     super.key,
     required this.nameController,
     required this.bioController,
     required this.favoritesControllers,
+    required this.birthday,
+    required this.onBirthdayChanged,
   });
 
   @override
@@ -325,26 +351,25 @@ class PersonalContainer extends StatelessWidget {
         InformationField(
           hintText: "",
           field: "Birthday",
-          informationController: TextEditingController(),
+          informationController: TextEditingController(text: birthday),
           readOnly: true,
           prefixIcon: const Icon(Icons.calendar_month, size: 20),
+          onDateChanged: onBirthdayChanged,
         ),
         const SizedBox(height: 32),
         const Align(
             alignment: Alignment.center, child: Text("Personal Preference")),
         const SizedBox(height: 16),
-        ...favoritesControllers.entries
-            .map((entry) => Column(
-                  children: [
-                    InformationField(
-                      hintText: "Insert something here.",
-                      field: entry.key,
-                      informationController: entry.value,
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                ))
-            .toList(),
+        ...favoritesControllers.entries.map((entry) => Column(
+              children: [
+                InformationField(
+                  hintText: "Insert something here.",
+                  field: entry.key,
+                  informationController: entry.value,
+                ),
+                const SizedBox(height: 16),
+              ],
+            )),
         const SizedBox(height: 32),
       ],
     );

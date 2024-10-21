@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:freedfromwalls/screens/intro_screen.dart';
 import '../assets/widgets/customThemes.dart';
 import '../main.dart';
@@ -11,15 +12,14 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingPageState extends State<OnboardingPage> {
   //Controllers
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _dateController= TextEditingController();
-
+  final TextEditingController _dateController = TextEditingController();
+  final _localStorage = FlutterSecureStorage();
   Future<void> _selectDate() async {
     DateTime? _picked = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(1950),
-        lastDate: DateTime(2200)
-    );
+        lastDate: DateTime(2200));
 
     if (_picked != null) {
       setState(() {
@@ -28,24 +28,27 @@ class _OnboardingPageState extends State<OnboardingPage> {
     }
   }
 
-  void _confirm() {
+  void _confirm() async {
     String username = _usernameController.text;
     String birthday = _dateController.text;
 
     if (username.isNotEmpty && birthday.isNotEmpty) {
+      // Store birthday in secure storage
+      await _localStorage.write(key: 'birthday', value: birthday);
+
+      // TODO: PushandRemoveUntil
+
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => IntroPage(),
         ),
       );
-    }
-    else {
+    } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Error: Empty Field."),
       ));
     }
-
   }
 
   @override
@@ -69,13 +72,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   Center(
                     child: Text(
                       "Welcome to FreedFrom Walls!",
-                      style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 16), fontWeight: FontWeight.w500, color: Colors.black),
+                      style: TextStyle(
+                          fontSize:
+                              AppThemes.getResponsiveFontSize(context, 16),
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black),
                     ),
                   ),
                   Center(
                     child: Text(
                       "Your Virtual Diary and Virtual Company~",
-                      style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 16), fontWeight: FontWeight.w500, color: Colors.black),
+                      style: TextStyle(
+                          fontSize:
+                              AppThemes.getResponsiveFontSize(context, 16),
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black),
                     ),
                   ),
                 ],
@@ -100,13 +111,16 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       margin: EdgeInsets.symmetric(horizontal: 20),
                       color: Colors.transparent,
                       child: Text(
-                          "Please enter your name:",
-                          style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 12), fontWeight: FontWeight.w500, color: Colors.black),
+                        "Please enter your name:",
+                        style: TextStyle(
+                            fontSize:
+                                AppThemes.getResponsiveFontSize(context, 12),
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black),
                       ),
                     ),
                   ],
                 ),
-
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
@@ -118,8 +132,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           blurRadius: 4,
                           offset: Offset(2, 4),
                         ),
-                      ]
-                  ),
+                      ]),
                   child: TextField(
                     controller: _usernameController,
                     decoration: InputDecoration(
@@ -151,12 +164,15 @@ class _OnboardingPageState extends State<OnboardingPage> {
                       color: Colors.transparent,
                       child: Text(
                         "Your Birthday",
-                        style: TextStyle(fontSize: AppThemes.getResponsiveFontSize(context, 12), fontWeight: FontWeight.w500, color: Colors.black),
+                        style: TextStyle(
+                            fontSize:
+                                AppThemes.getResponsiveFontSize(context, 12),
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black),
                       ),
                     ),
                   ],
                 ),
-
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
@@ -168,8 +184,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                           blurRadius: 4,
                           offset: Offset(2, 4),
                         ),
-                      ]
-                  ),
+                      ]),
                   child: TextField(
                     controller: _dateController,
                     readOnly: true,
@@ -204,15 +219,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     side: BorderSide(
                       color: Colors.black,
                       width: 1,
-                    )
-                ),
+                    )),
                 child: Text(
                   "CONTINUE",
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
-                      fontSize: AppThemes.getResponsiveFontSize(context, 16)
-                  ),
+                      fontSize: AppThemes.getResponsiveFontSize(context, 16)),
                 ),
               ),
             ),
@@ -259,7 +272,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   width: width,
                   decoration: BoxDecoration(
                     color: Color(0xFF3A375E),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(500)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(500)),
                   ),
                 ),
                 Container(
@@ -267,7 +281,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   width: width * 0.85,
                   decoration: BoxDecoration(
                     color: Color(0xFF56537C),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(400)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(400)),
                   ),
                 ),
                 Container(
@@ -275,7 +290,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   width: width * 0.75,
                   decoration: BoxDecoration(
                     color: Color(0xFF9C98CB),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(350)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(350)),
                   ),
                 ),
                 Container(
@@ -283,7 +299,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   width: width * 0.65,
                   decoration: BoxDecoration(
                     color: Color(0xFFD7D5EE),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(300)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(300)),
                   ),
                 ),
                 Container(
@@ -291,7 +308,8 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   width: width * 0.55,
                   decoration: BoxDecoration(
                     color: Color(0xFFEFEEFF),
-                    borderRadius: BorderRadius.vertical(top: Radius.circular(200)),
+                    borderRadius:
+                        BorderRadius.vertical(top: Radius.circular(200)),
                   ),
                 ),
               ],
