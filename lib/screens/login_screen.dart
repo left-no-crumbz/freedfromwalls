@@ -363,7 +363,7 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                             color: Colors.black,
                             fontSize:
-                                AppThemes.getResponsiveFontSize(context, 12)),
+                                AppThemes.getResponsiveFontSize(context, 11.5)),
                       )),
                 )
               ],

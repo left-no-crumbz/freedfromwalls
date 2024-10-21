@@ -59,11 +59,12 @@ class _RegisterPageState extends State<RegisterPage> {
 
           print('Navigating to OnboardingPage');
 
-          Navigator.push(
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => OnboardingPage(),
             ),
+            (route) => false,
           );
         } else {
           debugPrint("Context not mounted! Could not navigate.");
@@ -113,9 +114,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.6),
-                      spreadRadius: 2,
+                      spreadRadius: 1,
                       blurRadius: 4,
-                      offset: Offset(2, 4),
+                      offset: Offset(1, 1),
                     ),
                   ]),
               child: TextField(
@@ -136,9 +137,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.6),
-                      spreadRadius: 2,
+                      spreadRadius: 1,
                       blurRadius: 4,
-                      offset: Offset(2, 4),
+                      offset: Offset(1, 1),
                     ),
                   ]),
               child: TextField(
@@ -173,9 +174,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.6),
-                      spreadRadius: 2,
+                      spreadRadius: 1,
                       blurRadius: 4,
-                      offset: Offset(2, 4),
+                      offset: Offset(1, 1),
                     ),
                   ]),
               child: TextField(

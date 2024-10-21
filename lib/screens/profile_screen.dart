@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:provider/provider.dart';
 import '../assets/widgets/title_description.dart';
+import '../models/user.dart';
+import '../providers/user_provider.dart';
 import './edit_profile.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -35,15 +38,18 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _loadProfile() async {
-    String? storedName = await localStorage.read(key: 'name');
-    String? storedBio = await localStorage.read(key: 'bio');
-    String? storedAvatarPath = await localStorage.read(key: 'avatarPath');
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+    String? storedName = await localStorage.read(key: '${user!.email}_name');
+    String? storedBio = await localStorage.read(key: '${user.email}_bio');
+    String? storedAvatarPath =
+        await localStorage.read(key: '${user.email}_avatarPath');
 
     Map<String, String> storedFavorites = {};
 
     // Load favorites one by one
     for (var key in favorites.keys) {
-      String? storedValue = await localStorage.read(key: key);
+      String? storedValue = await localStorage.read(key: '${user.email}_$key');
       if (storedValue != null) {
         storedFavorites[key] = storedValue;
       }
@@ -81,14 +87,21 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   );
                   if (result != null) {
-                    localStorage.write(key: 'name', value: result['name']);
-                    localStorage.write(key: 'bio', value: result['bio']);
+                    UserModel? user =
+                        Provider.of<UserProvider>(context, listen: false).user;
+
                     localStorage.write(
-                        key: 'avatarPath', value: result['avatarPath']);
+                        key: '${user!.email}_name', value: result['name']);
+                    localStorage.write(
+                        key: '${user.email}_bio', value: result['bio']);
+                    localStorage.write(
+                        key: '${user.email}_avatarPath',
+                        value: result['avatarPath']);
 
                     result['favorites'].forEach((key, value) {
                       localStorage.write(
-                          key: key, value: value); // Save each favorite
+                          key: '${user.email}_$key',
+                          value: value); // Save each favorite
                     });
 
                     setState(() {

@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:freedfromwalls/providers/user_provider.dart';
 import 'package:freedfromwalls/screens/intro_screen.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import '../assets/widgets/customThemes.dart';
 import '../main.dart';
+import '../models/user.dart';
 
 class OnboardingPage extends StatefulWidget {
   @override
@@ -14,6 +18,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final _localStorage = FlutterSecureStorage();
+
   Future<void> _selectDate() async {
     DateTime? _picked = await showDatePicker(
         context: context,
@@ -22,6 +27,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
         lastDate: DateTime(2200));
 
     if (_picked != null) {
+      UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+      final formattedDate = DateFormat('yMMMMd').format(_picked);
+      await _localStorage.write(
+          key: '${user!.email}_birthday', value: formattedDate);
+
       setState(() {
         _dateController.text = _picked.toString().split(" ")[0];
       });
@@ -33,16 +44,21 @@ class _OnboardingPageState extends State<OnboardingPage> {
     String birthday = _dateController.text;
 
     if (username.isNotEmpty && birthday.isNotEmpty) {
+      UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+      await _localStorage.write(key: '${user!.email}_name', value: username);
+
       // Store birthday in secure storage
-      await _localStorage.write(key: 'birthday', value: birthday);
+      // await _localStorage.write(key: '${user.email}_birthday', value: birthday);
 
       // TODO: PushandRemoveUntil
 
-      Navigator.push(
+      Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
           builder: (context) => IntroPage(),
         ),
+        (route) => false,
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(

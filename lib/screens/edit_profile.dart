@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../models/user.dart';
+import '../providers/user_provider.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final String name;
@@ -39,7 +43,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   Future<void> _loadBirthday() async {
-    String? storedBirthday = await localStorage.read(key: 'birthday');
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+    String? storedBirthday =
+        await localStorage.read(key: '${user!.email}_birthday');
     if (storedBirthday != null) {
       setState(() {
         _birthday = storedBirthday;
@@ -48,10 +55,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   void _updateBirthday(String newBirthday) {
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
     setState(() {
       _birthday = newBirthday;
     });
-    localStorage.write(key: 'birthday', value: newBirthday);
+    localStorage.write(key: '${user!.email}_birthday', value: newBirthday);
   }
 
   bool _validateInputs() {
