@@ -9,6 +9,15 @@ import '../providers/user_provider.dart';
 class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    // Access the current user's email from the UserProvider
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).user;
+
+    // Pass the user's email to ThemeProvider to load or store the theme
+    if (user != null) {
+      Provider.of<ThemeProvider>(context, listen: false)
+          .setUserEmail(user.email);
+    }
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
@@ -96,9 +105,9 @@ class SettingsPage extends StatelessWidget {
                 UserModel? user =
                     Provider.of<UserProvider>(context, listen: false).user;
 
-                themeProvider.swapTheme(value, user!.email);
+                themeProvider.swapTheme(value);
 
-                String themeKey = '${user.email}_theme';
+                String themeKey = '${user!.email}_theme';
                 await localStorage.write(key: themeKey, value: themeName);
               }
             },

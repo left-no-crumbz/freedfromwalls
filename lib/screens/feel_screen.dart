@@ -5,6 +5,7 @@ import 'package:freedfromwalls/models/fullfeelment.dart';
 import 'package:provider/provider.dart';
 
 import '../assets/widgets/customThemes.dart';
+import '../assets/widgets/theme_provider.dart';
 import '../assets/widgets/title_description.dart';
 import '../models/user.dart';
 import '../providers/fullfeelment_provider.dart';
@@ -424,6 +425,8 @@ class _FeelPage extends State<FeelPage> {
 
   @override
   Widget build(BuildContext context) {
+    var currentTheme = Provider.of<ThemeProvider>(context).theme;
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       body: SingleChildScrollView(
@@ -514,7 +517,7 @@ class _FeelPage extends State<FeelPage> {
                   Align(
                     alignment: Alignment.center,
                     child: Image.asset(
-                      'lib/assets/images/backgrounds/Default_Fullfeelment.png',
+                      AppThemes.getFeelImages(currentTheme),
                       width: AppThemes.getResponsiveImageSize(context, 320),
                       height: AppThemes.getResponsiveImageSize(context, 320),
                     ),

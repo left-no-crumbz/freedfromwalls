@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:freedfromwalls/assets/widgets/customThemes.dart';
+import 'package:freedfromwalls/providers/user_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/user.dart';
 
 // TODO: Testing
 class ThemeProvider extends ChangeNotifier {
   ThemeData _selectedTheme;
   final FlutterSecureStorage _localStorage = FlutterSecureStorage();
-
+  String? _userEmail;
   ThemeProvider({required ThemeData initialTheme})
       : _selectedTheme = initialTheme {
     _loadTheme();
@@ -14,19 +18,24 @@ class ThemeProvider extends ChangeNotifier {
 
   ThemeData get theme => _selectedTheme;
 
-  void swapTheme(ThemeData newTheme, String email) async {
-    _selectedTheme = newTheme;
-    notifyListeners();
+  void setUserEmail(String email) async {
+    _userEmail = email;
+    await _loadTheme();
+  }
 
-    // Store the selected theme with the user's email as the key
-    await _localStorage.write(
-        key: '${email}_theme', value: _themeName(newTheme));
+  void swapTheme(ThemeData newTheme) async {
+    if (_userEmail != null) {
+      _selectedTheme = newTheme;
+      notifyListeners();
+      await _localStorage.write(
+          key: '${_userEmail}_theme', value: _themeName(newTheme));
+    }
   }
 
   Future<void> _loadTheme() async {
-    String? email = await _localStorage.read(key: 'current_user_email');
-    if (email != null) {
-      String? storedTheme = await _localStorage.read(key: '${email}_theme');
+    if (_userEmail != null) {
+      String? storedTheme =
+          await _localStorage.read(key: '${_userEmail}_theme');
 
       if (storedTheme != null) {
         switch (storedTheme) {

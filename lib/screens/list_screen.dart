@@ -4,6 +4,7 @@ import 'package:freedfromwalls/assets/widgets/customThemes.dart';
 import 'package:freedfromwalls/controllers/todo_controller.dart';
 import 'package:freedfromwalls/models/bucketlist.dart';
 import 'package:provider/provider.dart';
+import '../assets/widgets/theme_provider.dart';
 import '../providers/blacklist_provider.dart';
 import '../providers/bucketlist_provider.dart';
 import '../assets/widgets/title_description.dart';
@@ -543,6 +544,7 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
+    var currentTheme = Provider.of<ThemeProvider>(context).theme;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -645,9 +647,7 @@ class _ListPageState extends State<ListPage> {
                     height: height * 0.08,
                   ),
                   Image.asset(
-                    isBucketListSelected
-                        ? 'lib/assets/images/backgrounds/Default_Bucketlisted.png'
-                        : 'lib/assets/images/backgrounds/Default_Blacklisted.png',
+                    AppThemes.getListImages(isBucketListSelected, currentTheme),
                     width: AppThemes.getResponsiveImageSize(context, 250),
                     height: AppThemes.getResponsiveImageSize(context, 250),
                   ),
