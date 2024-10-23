@@ -30,8 +30,8 @@ FreedFromWalls is a digital journaling and mood tracking application that serves
 
 <table>
 <tr>
-<th> Good </th>
-<th> Bad </th>
+<th> Bucketlisted </th>
+<th> Blacklisted </th>
 </tr>
 <tr>
 <td>
