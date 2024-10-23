@@ -7,6 +7,7 @@ FreedFromWalls is a digital journaling and mood tracking application that serves
 ## Features
 
 ### 🏠 Home
+![Home Screen](lib/assets/images/readme-images/home-screen.jpg)
 
 - Monthly mood tracking dashboard
 
@@ -15,6 +16,7 @@ FreedFromWalls is a digital journaling and mood tracking application that serves
 - Multiple theme options (Default, Sunrise, Sunset, Midnight)
 
 ### 🌬️ Breather
+![Breather Screen](lib/assets/images/readme-images/breather-screen.jpg)
 
 - Daily mood selection with 10 emotion options
 
@@ -26,6 +28,25 @@ FreedFromWalls is a digital journaling and mood tracking application that serves
 
 ### 📝 Bucketlisted/Blacklisted
 
+<table>
+<tr>
+<th> Good </th>
+<th> Bad </th>
+</tr>
+<tr>
+<td>
+
+![Bucketlisted Screen](lib/assets/images/readme-images/bucketlisted-screen.jpg)
+
+</td>
+<td>
+
+![Blacklisted Screen](lib/assets/images/readme-images/blacklisted-screen.jpg)
+
+</td>
+</tr>
+</table>
+
 - To-do list management
 
 - Not-to-do list tracking
@@ -33,6 +54,7 @@ FreedFromWalls is a digital journaling and mood tracking application that serves
 - Easy item creation, modification, and deletion
 
 ### 🏆 Fullfeelment
+![Fullfeelment Screen](lib/assets/images/readme-images/fulfeelment-screen.jpg)
 
 - Achievement tracking system
 
@@ -43,6 +65,7 @@ FreedFromWalls is a digital journaling and mood tracking application that serves
 - Achievement management tools
 
 ### 👤 Profile
+![Profile Screen](lib/assets/images/readme-images/profile-screen.jpg)
 
 - Customizable avatars (12 options)
 
