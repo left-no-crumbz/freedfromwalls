@@ -40,10 +40,16 @@ class FreedFromWallsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var currentTheme = Provider.of<ThemeProvider>(context).theme;
+    final userProvider = Provider.of<UserProvider>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
+    // Set the user's email in the ThemeProvider if available
+    if (userProvider.user?.email != null) {
+      themeProvider.setUserEmail(userProvider.user!.email);
+    }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: currentTheme,
+      theme: themeProvider.theme,
       home: const AppState(),
     );
   }
